@@ -3,9 +3,9 @@ package com.foxminded.university;
 import java.util.Objects;
 
 public class Teacher{
-    private final int id;
-    private final String firstName;
-    private final String lastName;
+    private int id;
+    private String firstName;
+    private String lastName;
 
     public Teacher(int id, String firstName, String lastName) {
         this.id = id;

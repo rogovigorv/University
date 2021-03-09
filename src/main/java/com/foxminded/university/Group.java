@@ -3,8 +3,8 @@ package com.foxminded.university;
 import java.util.Objects;
 
 public class Group {
-    private final int id;
-    private final String groupName;
+    private int id;
+    private String groupName;
 
     public Group(int id, String groupName) {
         this.id = id;

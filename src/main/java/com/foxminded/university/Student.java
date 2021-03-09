@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class Student {
-    private final int id;
-    private final String firstName;
-    private final String lastName;
-    private final Group group;
-    private final List<Lecture> timeTable;
+    private int id;
+    private String firstName;
+    private String lastName;
+    private Group group;
+    private List<Lecture> timeTable;
 
     public Student(int id, String firstName, String lastName, Group group, List<Lecture> timeTable) {
         this.id = id;

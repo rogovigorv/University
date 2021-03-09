@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Timetable {
-    private final int id;
-    private final LocalDate start;
-    private final LocalDate duration;
+    private int id;
+    private LocalDate start;
+    private LocalDate duration;
 
     public Timetable(int id, LocalDate start, LocalDate duration) {
         this.id = id;

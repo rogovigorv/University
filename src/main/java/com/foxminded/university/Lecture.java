@@ -3,11 +3,11 @@ package com.foxminded.university;
 import java.util.Objects;
 
 public class Lecture {
-    private final int id;
-    private final Teacher teacher;
-    private final String lectureName;
-    private final String description;
-    private final Timetable timeTable;
+    private int id;
+    private Teacher teacher;
+    private String lectureName;
+    private String description;
+    private Timetable timeTable;
 
     public Lecture(int id, Teacher teacher, String lectureName, String description, Timetable timeTable) {
         this.id = id;
