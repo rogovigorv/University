@@ -1,1 +1,4 @@
-﻿*.mdj
+﻿.idea
+*.iml
+target
+*.mdj
