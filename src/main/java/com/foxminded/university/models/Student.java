@@ -1,4 +1,4 @@
-package com.foxminded.university;
+package com.foxminded.university.models;
 
 import java.util.List;
 import java.util.Objects;
@@ -9,6 +9,10 @@ public class Student {
     private String lastName;
     private Group group;
     private List<Lecture> timeTable;
+
+    public Student() {
+
+    }
 
     public Student(int id, String firstName, String lastName, Group group, List<Lecture> timeTable) {
         this.id = id;
@@ -22,20 +26,40 @@ public class Student {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public Group getGroup() {
         return group;
     }
 
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     public List<Lecture> getTimeTable() {
         return timeTable;
+    }
+
+    public void setTimeTable(List<Lecture> timeTable) {
+        this.timeTable = timeTable;
     }
 
     @Override
