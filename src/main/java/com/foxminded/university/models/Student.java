@@ -1,25 +1,26 @@
 package com.foxminded.university.models;
 
-import java.util.List;
+import org.springframework.stereotype.Component;
 import java.util.Objects;
 
+@Component
 public class Student {
+    private static final String LINE_BREAK = "\n";
+
     private int id;
     private String firstName;
     private String lastName;
     private Group group;
-    private List<Lecture> timeTable;
 
     public Student() {
 
     }
 
-    public Student(int id, String firstName, String lastName, Group group, List<Lecture> timeTable) {
+    public Student(int id, String firstName, String lastName, Group group) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.group = group;
-        this.timeTable = timeTable;
     }
 
     public int getId() {
@@ -54,14 +55,6 @@ public class Student {
         this.group = group;
     }
 
-    public List<Lecture> getTimeTable() {
-        return timeTable;
-    }
-
-    public void setTimeTable(List<Lecture> timeTable) {
-        this.timeTable = timeTable;
-    }
-
     @Override
     public boolean equals(Object otherStudent) {
         if (this == otherStudent) {
@@ -74,21 +67,19 @@ public class Student {
         return id == student.id &&
                 firstName.equals(student.firstName) &&
                 lastName.equals(student.lastName) &&
-                group == student.group &&
-                timeTable == student.timeTable;
+                group == student.group;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, group, timeTable);
+        return Objects.hash(id, firstName, lastName, group);
     }
 
     @Override
     public String toString() {
-        return "Student id: " + id +
-                " First name: " + firstName +
-                " Last name: " + lastName +
-                " Group: " + group.toString() +
-                " TimeTable: " + timeTable.toString();
+        return "Student id: " + id + LINE_BREAK +
+                "First name: " + firstName + LINE_BREAK +
+                "Last name: " + lastName + LINE_BREAK +
+                "Group: " + group.toString();
     }
 }
