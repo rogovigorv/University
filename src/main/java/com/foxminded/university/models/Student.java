@@ -80,6 +80,7 @@ public class Student {
         return "Student id: " + id + LINE_BREAK +
                 "First name: " + firstName + LINE_BREAK +
                 "Last name: " + lastName + LINE_BREAK +
-                "Group: " + group.toString();
+                "Group: " + LINE_BREAK +
+                group.toString();
     }
 }

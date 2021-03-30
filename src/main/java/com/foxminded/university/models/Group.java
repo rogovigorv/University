@@ -9,16 +9,14 @@ public class Group {
 
     private int id;
     private String groupName;
-    private Lecture lecture;
 
     public Group() {
 
     }
 
-    public Group(int id, String groupName, Lecture lecture) {
+    public Group(int id, String groupNamee) {
         this.id = id;
         this.groupName = groupName;
-        this.lecture = lecture;
     }
 
     public int getId() {
@@ -37,14 +35,6 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public void setLecture(Lecture lecture) {
-        this.lecture = lecture;
-    }
-
-    public Lecture getLecture() {
-        return lecture;
-    }
-
     @Override
     public boolean equals(Object otherGroup) {
         if (this == otherGroup) {
@@ -55,8 +45,7 @@ public class Group {
         }
         Group group = (Group) otherGroup;
         return id == group.id &&
-                groupName.equals(group.groupName) &&
-                lecture == group.lecture;
+                groupName.equals(group.groupName);
     }
 
     @Override
@@ -69,7 +58,6 @@ public class Group {
     @Override
     public String toString() {
         return "Group id: " + id + LINE_BREAK +
-                "Group name: " + groupName + LINE_BREAK +
-                lecture.toString();
+                "Group name: " + groupName;
     }
 }
