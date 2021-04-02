@@ -2,6 +2,7 @@ package com.foxminded.university.dao;
 
 import com.foxminded.university.mapper.GroupMapper;
 import com.foxminded.university.models.Group;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import static com.foxminded.university.dao.Queries.GROUP_CREATE;
@@ -15,6 +16,7 @@ public class GroupDao implements UniversityDao<Group> {
 
     private final JdbcTemplate jdbcTemplate;
 
+    @Autowired
     public GroupDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

@@ -1,5 +1,6 @@
 package com.foxminded.university.generate;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.jdbc.datasource.init.ScriptUtils;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import java.sql.SQLException;
 public class SqlRunner extends ScriptUtils {
     private final DataSource dataSource;
 
+    @Autowired
     public SqlRunner(DataSource dataSource) {
                 this.dataSource = dataSource;
     }
