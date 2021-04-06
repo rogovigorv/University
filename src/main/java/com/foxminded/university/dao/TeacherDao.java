@@ -17,6 +17,9 @@ public class TeacherDao implements UniversityDao<Teacher> {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
+    private TeacherMapper teacherMapper;
+
+    @Autowired
     public TeacherDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -27,7 +30,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
 
     @Override
     public Teacher getById(int id) {
-        return jdbcTemplate.query(TEACHER_SELECT_BY_ID, new TeacherMapper(), new Object[]{id})
+        return jdbcTemplate.query(TEACHER_SELECT_BY_ID, teacherMapper, new Object[]{id})
                 .stream()
                 .findAny()
                 .orElseThrow(() -> new ExceptionDao(EXCEPTION_MESSAGE + id));

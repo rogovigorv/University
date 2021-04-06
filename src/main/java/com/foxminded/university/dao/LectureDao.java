@@ -18,6 +18,9 @@ public class LectureDao implements UniversityDao<Lecture> {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
+    private LectureMapper lectureMapper;
+
+    @Autowired
     public LectureDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -29,14 +32,14 @@ public class LectureDao implements UniversityDao<Lecture> {
 
     @Override
     public Lecture getById(int id) {
-        return jdbcTemplate.query(LECTURE_SELECT_BY_ID, new LectureMapper(), new Object[]{id})
+        return jdbcTemplate.query(LECTURE_SELECT_BY_ID, lectureMapper, new Object[]{id})
                 .stream()
                 .findAny()
                 .orElseThrow(() -> new ExceptionDao(EXCEPTION_MESSAGE + id));
     }
 
     public Lecture getByGroupId(int id) {
-        return jdbcTemplate.query(LECTURE_SELECT_BY_GROUP_ID, new LectureMapper(), new Object[]{id})
+        return jdbcTemplate.query(LECTURE_SELECT_BY_GROUP_ID, lectureMapper, new Object[]{id})
                 .stream()
                 .findAny()
                 .orElseThrow(() -> new ExceptionDao(EXCEPTION_MESSAGE + id));

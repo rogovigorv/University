@@ -1,33 +1,55 @@
 package com.foxminded.university.config;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
-import javax.sql.DataSource;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 @Configuration
 @ComponentScan("com.foxminded.university")
-@ConfigurationProperties
-@PropertySource("file:src\\main\\resources\\application.properties")
+@PropertySource("classpath:postgres.properties")
+@PropertySource("classpath:h2.properties")
 public class SpringConfig {
 
     @Bean
-    public DataSource dataSource() {
-//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-//        dataSource.setDriverClassName("org.postgresql.Driver");
-//        dataSource.setUrl("jdbc:postgresql://localhost:5432/university");
-//        dataSource.setUsername("jhon_doe");
-//        dataSource.setPassword("829893");
+    public JdbcTemplate jdbcTemplate(
+            @Value("${postgres.driver}") String driver,
+            @Value("${postgres.url}") String url,
+            @Value("${postgres.user}") String user,
+            @Value("${postgres.password}") String password) {
 
-        return DataSourceBuilder.create().build();
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setPassword(password);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.setDataSource(dataSource);
+
+        return jdbcTemplate;
     }
 
+    @Profile("test")
     @Bean
-    public JdbcTemplate jdbcTemplate() {
-        return new JdbcTemplate(dataSource());
+    public JdbcTemplate jdbcTemplateTest(
+            @Value("${h2.driver}") String driver,
+            @Value("${h2.url}") String url,
+            @Value("${h2.user}") String user,
+            @Value("${h2.password}") String password) {
+
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setPassword(password);
+        JdbcTemplate jdbcTemplate = new JdbcTemplate();
+        jdbcTemplate.setDataSource(dataSource);
+
+        return jdbcTemplate;
     }
+
 }
