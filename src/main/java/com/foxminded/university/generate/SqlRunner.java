@@ -13,8 +13,8 @@ public class SqlRunner extends ScriptUtils {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public SqlRunner(JdbcTemplate jdbcTemplat) {
-                this.jdbcTemplate = jdbcTemplat;
+    public SqlRunner(JdbcTemplate jdbcTemplate) {
+                this.jdbcTemplate = jdbcTemplate;
     }
 
     public void runScript(String scriptFile) {
