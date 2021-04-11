@@ -3,7 +3,7 @@ package com.foxminded.university.dao;
 public class Queries {
     public static final String GROUP_CREATE = "INSERT INTO groups VALUES (?, ?)";
     public static final String GROUP_SELECT_BY_ID = "SELECT * FROM groups WHERE id=?";
-    public static final String GROUP_UPDATE_BY_ID = "UPDATE groups SET groupName=?, lecture_id=? WHERE id=?";
+    public static final String GROUP_UPDATE_BY_ID = "UPDATE groups SET groupName=? WHERE id=?";
     public static final String GROUP_DELETE_BY_ID = "DELETE FROM groups WHERE id=?";
 
     public static final String LECTURE_CREATE = "INSERT INTO lecture VALUES (?, ?, ?, ?, ?)";
