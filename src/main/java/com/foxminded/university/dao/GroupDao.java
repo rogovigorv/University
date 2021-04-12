@@ -17,9 +17,6 @@ public class GroupDao implements UniversityDao<Group> {
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private GroupMapper groupMapper;
-
-    @Autowired
     public GroupDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -30,7 +27,7 @@ public class GroupDao implements UniversityDao<Group> {
 
     @Override
     public Group getById(int id) {
-        return jdbcTemplate.query(GROUP_SELECT_BY_ID, groupMapper, new Object[]{id})
+        return jdbcTemplate.query(GROUP_SELECT_BY_ID, new GroupMapper(), new Object[]{id})
                 .stream()
                 .findAny()
                 .orElseThrow(() -> new ExceptionDao(EXCEPTION_MESSAGE + id));

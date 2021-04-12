@@ -1,36 +1,26 @@
 package com.foxminded.university.mapper;
 
+import com.foxminded.university.Main;
 import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Teacher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-@Component
 public class LectureMapper implements RowMapper<Lecture> {
-    @Autowired
-    private Lecture lecture;
-
-    @Autowired
-    private TeacherDao teacherDao;
-
-    @Autowired
-    private GroupDao groupDao;
-
     @Override
     public Lecture mapRow(ResultSet resultSet, int i) throws SQLException {
 
         int teacherID = resultSet.getInt("teacher_id");
-        Teacher teacher = teacherDao.getById(teacherID);
+        Teacher teacher = Main.context.getBean(TeacherDao.class).getById(teacherID);
 
         int groupID = resultSet.getInt("group_id");
-        Group group = groupDao.getById(groupID);
+        Group group = Main.context.getBean(GroupDao.class).getById(groupID);
 
+        Lecture lecture = new Lecture();
         lecture.setId(resultSet.getInt("id"));
         lecture.setTeacher(teacher);
         lecture.setLectureName(resultSet.getString("lectureName"));

@@ -17,9 +17,6 @@ public class StudentDao implements UniversityDao<Student>{
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private StudentMapper studentMapper;
-
-    @Autowired
     public StudentDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -31,7 +28,7 @@ public class StudentDao implements UniversityDao<Student>{
 
     @Override
     public Student getById(int id) {
-        return jdbcTemplate.query(STUDENT_SELECT_BY_ID, studentMapper, new Object[]{id})
+        return jdbcTemplate.query(STUDENT_SELECT_BY_ID, new StudentMapper(), new Object[]{id})
                 .stream()
                 .findAny()
                 .orElseThrow(() -> new ExceptionDao(EXCEPTION_MESSAGE + id));
