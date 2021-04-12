@@ -1,19 +1,11 @@
 package com.foxminded.university.models;
 
-import org.springframework.stereotype.Component;
 import java.util.Objects;
 
-@Component
 public class Teacher{
-    private static final String LINE_BREAK = "\n";
-
     private int id;
     private String firstName;
     private String lastName;
-
-    public Teacher() {
-
-    }
 
     public Teacher(int id, String firstName, String lastName) {
         this.id = id;
@@ -66,8 +58,8 @@ public class Teacher{
 
     @Override
     public String toString() {
-        return "Teacher id: " + id + LINE_BREAK +
-                "First name: " + firstName + LINE_BREAK +
-                "Last name: " + lastName;
+        return "Teacher id: " + id +
+                " First name: " + firstName +
+                " Last name: " + lastName;
     }
 }

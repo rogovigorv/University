@@ -1,24 +1,18 @@
 package com.foxminded.university.models;
 
-import org.springframework.stereotype.Component;
 import java.util.Objects;
 
-@Component
 public class Group {
-    private static final String LINE_BREAK = "\n";
-
     private int id;
     private String groupName;
-    private Lecture lecture;
 
     public Group() {
 
     }
 
-    public Group(int id, String groupName, Lecture lecture) {
+    public Group(int id, String groupName) {
         this.id = id;
         this.groupName = groupName;
-        this.lecture = lecture;
     }
 
     public int getId() {
@@ -37,14 +31,6 @@ public class Group {
         this.groupName = groupName;
     }
 
-    public void setLecture(Lecture lecture) {
-        this.lecture = lecture;
-    }
-
-    public Lecture getLecture() {
-        return lecture;
-    }
-
     @Override
     public boolean equals(Object otherGroup) {
         if (this == otherGroup) {
@@ -55,8 +41,7 @@ public class Group {
         }
         Group group = (Group) otherGroup;
         return id == group.id &&
-                groupName.equals(group.groupName) &&
-                lecture == group.lecture;
+                groupName.equals(group.groupName);
     }
 
     @Override
@@ -64,12 +49,8 @@ public class Group {
         return Objects.hash(id, groupName);
     }
 
-
-
     @Override
     public String toString() {
-        return "Group id: " + id + LINE_BREAK +
-                "Group name: " + groupName + LINE_BREAK +
-                lecture.toString();
+        return "Group id: " + id + " Group name: " + groupName;
     }
 }
