@@ -37,7 +37,7 @@ public class StudentDao implements UniversityDao<Student>{
                 .orElseThrow(() -> new ExceptionDao(EXCEPTION_MESSAGE + id));
     }
 
-    public void update(Student student, int id) {
+    public void update(int id, Student student) {
         jdbcTemplate.update(STUDENT_UPDATE_BY_ID, student.getFirstName(), student.getLastName(),
                 student.getGroup().getId(), id);
     }
