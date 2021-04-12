@@ -1,4 +1,4 @@
-package com.foxminded.university.models;
+package com.foxminded.university;
 
 import java.util.Objects;
 
@@ -17,24 +17,12 @@ public class Teacher{
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     @Override

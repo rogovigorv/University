@@ -1,4 +1,4 @@
-package com.foxminded.university.models;
+package com.foxminded.university;
 
 import java.util.Objects;
 
@@ -8,10 +8,6 @@ public class Lecture {
     private String lectureName;
     private String description;
     private Timetable timeTable;
-
-    public Lecture() {
-
-    }
 
     public Lecture(int id, Teacher teacher, String lectureName, String description, Timetable timeTable) {
         this.id = id;
@@ -25,40 +21,20 @@ public class Lecture {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public Teacher getTeacher() {
         return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
     }
 
     public String getLectureName() {
         return lectureName;
     }
 
-    public void setLectureName(String lectureName) {
-        this.lectureName = lectureName;
-    }
-
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Timetable getTimeTable() {
         return timeTable;
-    }
-
-    public void setTimeTable(Timetable timeTable) {
-        this.timeTable = timeTable;
     }
 
     @Override

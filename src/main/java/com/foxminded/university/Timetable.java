@@ -1,4 +1,4 @@
-package com.foxminded.university.models;
+package com.foxminded.university;
 
 import java.time.LocalDate;
 import java.util.Objects;
@@ -18,24 +18,12 @@ public class Timetable {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public LocalDate getStart() {
         return start;
     }
 
-    public void setStart(LocalDate start) {
-        this.start = start;
-    }
-
     public LocalDate getDuration() {
         return duration;
-    }
-
-    public void setDuration(LocalDate duration) {
-        this.duration = duration;
     }
 
     @Override
