@@ -2,7 +2,6 @@ package com.foxminded.university.dao;
 
 import com.foxminded.university.mapper.TeacherMapper;
 import com.foxminded.university.models.Teacher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import static com.foxminded.university.dao.Queries.TEACHER_CREATE;
@@ -16,7 +15,6 @@ public class TeacherDao implements UniversityDao<Teacher> {
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public TeacherDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

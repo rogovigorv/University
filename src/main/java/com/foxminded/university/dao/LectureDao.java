@@ -2,7 +2,6 @@ package com.foxminded.university.dao;
 
 import com.foxminded.university.mapper.LectureMapper;
 import com.foxminded.university.models.Lecture;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import static com.foxminded.university.dao.Queries.LECTURE_DELETE_BY_ID;
@@ -17,7 +16,6 @@ public class LectureDao implements UniversityDao<Lecture> {
 
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
     public LectureDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
