@@ -15,13 +15,12 @@ public class GroupDao implements UniversityDao<Group> {
     private static final String EXCEPTION_MESSAGE = "Can't find group with id: ";
 
     private final JdbcTemplate jdbcTemplate;
+    private final GroupMapper groupMapper;
 
     @Autowired
-    private GroupMapper groupMapper;
-
-    @Autowired
-    public GroupDao(JdbcTemplate jdbcTemplate) {
+    public GroupDao(JdbcTemplate jdbcTemplate, GroupMapper groupMapper) {
         this.jdbcTemplate = jdbcTemplate;
+        this.groupMapper = groupMapper;
     }
 
     public void create(Group group) {

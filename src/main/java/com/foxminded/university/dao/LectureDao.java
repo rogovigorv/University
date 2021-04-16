@@ -16,13 +16,12 @@ public class LectureDao implements UniversityDao<Lecture> {
     private static final String EXCEPTION_MESSAGE = "Can't find lecture with id: ";
 
     private final JdbcTemplate jdbcTemplate;
+    private final LectureMapper lectureMapper;
 
     @Autowired
-    private LectureMapper lectureMapper;
-
-    @Autowired
-    public LectureDao(JdbcTemplate jdbcTemplate) {
+    public LectureDao(JdbcTemplate jdbcTemplate, LectureMapper lectureMapper) {
         this.jdbcTemplate = jdbcTemplate;
+        this.lectureMapper = lectureMapper;
     }
 
     public void create(Lecture lecture, int groupID) {

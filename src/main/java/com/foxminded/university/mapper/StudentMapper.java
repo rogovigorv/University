@@ -11,11 +11,14 @@ import java.sql.SQLException;
 
 @Component
 public class StudentMapper implements RowMapper<Student> {
-    @Autowired
-    private GroupDao groupDao;
+    private final GroupDao groupDao;
+    private final Student student;
 
     @Autowired
-    private Student student;
+    public StudentMapper(GroupDao groupDao, Student student) {
+        this.groupDao = groupDao;
+        this.student = student;
+    }
 
     @Override
     public Student mapRow(ResultSet resultSet, int i) throws SQLException {

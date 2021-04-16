@@ -5,8 +5,6 @@ import java.util.Objects;
 
 @Component
 public class Lecture {
-    private static final String LINE_BREAK = "\n";
-
     private int id;
     private Teacher teacher;
     private String lectureName;
@@ -89,12 +87,12 @@ public class Lecture {
 
     @Override
     public String toString() {
-        return "Lecture id: " + id + LINE_BREAK +
-                "Teacher: " + LINE_BREAK +
-                teacher.toString() + LINE_BREAK +
-                "Lecture name: " + lectureName + LINE_BREAK +
-                "Description: " + description  + LINE_BREAK +
-                "Group: " + LINE_BREAK +
+        return "Lecture id: " + id + "\n" +
+                "Teacher: " + "\n" +
+                teacher.toString() + "\n" +
+                "Lecture name: " + lectureName + "\n" +
+                "Description: " + description  + "\n" +
+                "Group: " + "\n" +
                 group.toString();
     }
 }

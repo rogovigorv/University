@@ -5,8 +5,6 @@ import java.util.Objects;
 
 @Component
 public class Teacher{
-    private static final String LINE_BREAK = "\n";
-
     private int id;
     private String firstName;
     private String lastName;
@@ -66,8 +64,8 @@ public class Teacher{
 
     @Override
     public String toString() {
-        return "Teacher id: " + id + LINE_BREAK +
-                "First name: " + firstName + LINE_BREAK +
+        return "Teacher id: " + id + "\n" +
+                "First name: " + firstName + "\n" +
                 "Last name: " + lastName;
     }
 }

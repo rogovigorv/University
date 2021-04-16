@@ -5,8 +5,6 @@ import java.util.Objects;
 
 @Component
 public class Group {
-    private static final String LINE_BREAK = "\n";
-
     private int id;
     private String groupName;
 
@@ -57,7 +55,7 @@ public class Group {
 
     @Override
     public String toString() {
-        return "Group id: " + id + LINE_BREAK +
+        return "Group id: " + id + "\n" +
                 "Group name: " + groupName;
     }
 }

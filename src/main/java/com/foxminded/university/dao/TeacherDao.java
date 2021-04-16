@@ -15,13 +15,12 @@ public class TeacherDao implements UniversityDao<Teacher> {
     private static final String EXCEPTION_MESSAGE = "Can't find teacher with id: ";
 
     private final JdbcTemplate jdbcTemplate;
+    private final TeacherMapper teacherMapper;
 
     @Autowired
-    private TeacherMapper teacherMapper;
-
-    @Autowired
-    public TeacherDao(JdbcTemplate jdbcTemplate) {
+    public TeacherDao(JdbcTemplate jdbcTemplate, TeacherMapper teacherMapper) {
         this.jdbcTemplate = jdbcTemplate;
+        this.teacherMapper = teacherMapper;
     }
 
     public void create(Teacher teacher) {

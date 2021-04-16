@@ -9,8 +9,12 @@ import java.sql.SQLException;
 
 @Component
 public class GroupMapper implements RowMapper<Group> {
+    private final Group group;
+
     @Autowired
-    private Group group;
+    public GroupMapper(Group group) {
+        this.group = group;
+    }
 
     @Override
     public Group mapRow(ResultSet resultSet, int i) throws SQLException {

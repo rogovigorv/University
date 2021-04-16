@@ -20,16 +20,13 @@ public class StudentDaoTest {
     private static final String INSERT_TEST_DATA = "insert_test_data.sql";
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
-
-    @Autowired
     private SqlRunner sqlRunner;
 
     @Autowired
     private StudentDao studentDao;
 
     @BeforeEach
-    public void setup() {
+    private void setup() {
         sqlRunner.runScript(CREATE_SCRIPT);
         sqlRunner.runScript(INSERT_TEST_DATA);
     }

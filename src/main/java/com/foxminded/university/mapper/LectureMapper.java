@@ -13,14 +13,16 @@ import java.sql.SQLException;
 
 @Component
 public class LectureMapper implements RowMapper<Lecture> {
-    @Autowired
-    private Lecture lecture;
+    private final Lecture lecture;
+    private final TeacherDao teacherDao;
+    private final GroupDao groupDao;
 
     @Autowired
-    private TeacherDao teacherDao;
-
-    @Autowired
-    private GroupDao groupDao;
+    public LectureMapper(Lecture lecture, TeacherDao teacherDao, GroupDao groupDao) {
+        this.lecture = lecture;
+        this.teacherDao = teacherDao;
+        this.groupDao = groupDao;
+    }
 
     @Override
     public Lecture mapRow(ResultSet resultSet, int i) throws SQLException {
