@@ -1,8 +1,12 @@
 package com.foxminded.university.mapper;
 
 import com.foxminded.university.config.SpringConfigTest;
+import com.foxminded.university.dao.GroupDao;
+import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.generate.SqlRunner;
+import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
+import com.foxminded.university.models.Teacher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,29 +24,29 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
 public class LectureMapperTest {
-    private static final String CREATE_SCRIPT = "create_university_tables.sql";
-    private static final String INSERT_TEST_DATA = "insert_test_data.sql";
-
-    @Autowired
-    private SqlRunner sqlRunner;
 
     @Autowired
     private LectureMapper lectureMapper;
 
     @Mock
-    ResultSet resultSet;
+    private ResultSet resultSet;
 
-    @BeforeEach
-    private void setup() {
-        sqlRunner.runScript(CREATE_SCRIPT);
-        sqlRunner.runScript(INSERT_TEST_DATA);
-    }
+    @Mock
+    private TeacherDao teacherDao;
+
+    @Mock
+    private GroupDao groupDao;
 
     @Test
     void mapLectureShouldReturnLectureWithId1AndLectureNameIsMath() throws SQLException {
+        Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
+        Group group = new Group(3, "Geeks");
+
         when(resultSet.getInt("teacher_id")).thenReturn(25);
+        when(teacherDao.getById(25)).thenReturn(teacher);
 
         when(resultSet.getInt("group_id")).thenReturn(3);
+        when(groupDao.getById(3)).thenReturn(group);
 
         when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("lectureName")).thenReturn("Math");
@@ -58,7 +62,6 @@ public class LectureMapperTest {
                 "Group: \n" +
                 "Group id: 3\n" +
                 "Group name: Geeks";
-
         Lecture lecture = lectureMapper.mapRow(resultSet, 1);
         String actual = null;
         if (lecture != null) {
