@@ -28,7 +28,7 @@ public class LectureMapper implements RowMapper<Lecture> {
     public Lecture mapRow(ResultSet resultSet, int i) throws SQLException {
 
         int teacherID = resultSet.getInt("teacher_id");
-        Teacher teacher = teacherDao.getById(resultSet.getInt("teacher_id"));
+        Teacher teacher = teacherDao.getById(teacherID);
 
         int groupID = resultSet.getInt("group_id");
         Group group = groupDao.getById(groupID);
