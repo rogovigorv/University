@@ -1,15 +1,12 @@
 package com.foxminded.university.mapper;
 
 import com.foxminded.university.config.SpringConfigTest;
-import com.foxminded.university.generate.SqlRunner;
 import com.foxminded.university.models.Group;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.sql.ResultSet;

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,9 +23,6 @@ public class StudentMapperTest {
 
     @Mock
     private GroupDao groupDao;
-
-    @Spy
-    private Student student;
 
     @InjectMocks
     private StudentMapper studentMapper;

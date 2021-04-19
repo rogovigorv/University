@@ -12,16 +12,16 @@ import java.sql.SQLException;
 @Component
 public class StudentMapper implements RowMapper<Student> {
     private final GroupDao groupDao;
-    private final Student student;
 
     @Autowired
-    public StudentMapper(GroupDao groupDao, Student student) {
+    public StudentMapper(GroupDao groupDao) {
         this.groupDao = groupDao;
-        this.student = student;
     }
 
     @Override
     public Student mapRow(ResultSet resultSet, int i) throws SQLException {
+        Student student = new Student();
+
         int groupID = resultSet.getInt("group_id");
         Group group = groupDao.getById(groupID);
 

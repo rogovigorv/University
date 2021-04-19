@@ -13,13 +13,11 @@ import java.sql.SQLException;
 
 @Component
 public class LectureMapper implements RowMapper<Lecture> {
-    private final Lecture lecture;
     private final TeacherDao teacherDao;
     private final GroupDao groupDao;
 
     @Autowired
-    public LectureMapper(Lecture lecture, TeacherDao teacherDao, GroupDao groupDao) {
-        this.lecture = lecture;
+    public LectureMapper(TeacherDao teacherDao, GroupDao groupDao) {
         this.teacherDao = teacherDao;
         this.groupDao = groupDao;
     }
@@ -33,6 +31,7 @@ public class LectureMapper implements RowMapper<Lecture> {
         int groupID = resultSet.getInt("group_id");
         Group group = groupDao.getById(groupID);
 
+        Lecture lecture = new Lecture();
         lecture.setId(resultSet.getInt("id"));
         lecture.setTeacher(teacher);
         lecture.setLectureName(resultSet.getString("lectureName"));

@@ -9,12 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 public class LectureMapperTest {
@@ -31,9 +31,6 @@ public class LectureMapperTest {
 
     @Mock
     private GroupDao groupDao;
-
-    @Spy
-    private Lecture lecture;
 
     @InjectMocks
     private LectureMapper lectureMapper;
