@@ -1,6 +1,6 @@
 package com.foxminded.university.dao;
 
-import com.foxminded.university.mapper.TeacherMapper;
+import com.foxminded.university.mapper.TeacherRowMapper;
 import com.foxminded.university.models.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,12 +15,12 @@ public class TeacherDao implements UniversityDao<Teacher> {
     private static final String EXCEPTION_MESSAGE = "Can't find teacher with id: ";
 
     private final JdbcTemplate jdbcTemplate;
-    private final TeacherMapper teacherMapper;
+    private final TeacherRowMapper teacherRowMapper;
 
     @Autowired
-    public TeacherDao(JdbcTemplate jdbcTemplate, TeacherMapper teacherMapper) {
+    public TeacherDao(JdbcTemplate jdbcTemplate, TeacherRowMapper teacherRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        this.teacherMapper = teacherMapper;
+        this.teacherRowMapper = teacherRowMapper;
     }
 
     public void create(Teacher teacher) {
@@ -29,10 +29,10 @@ public class TeacherDao implements UniversityDao<Teacher> {
 
     @Override
     public Teacher getById(int id) {
-        return jdbcTemplate.query(TEACHER_SELECT_BY_ID, teacherMapper, new Object[]{id})
+        return jdbcTemplate.query(TEACHER_SELECT_BY_ID, teacherRowMapper, new Object[]{id})
                 .stream()
                 .findAny()
-                .orElseThrow(() -> new ExceptionDao(EXCEPTION_MESSAGE + id));
+                .orElseThrow(() -> new DaoException(EXCEPTION_MESSAGE + id));
     }
 
     public void update(Teacher teacher, int id) {

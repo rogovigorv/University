@@ -1,6 +1,6 @@
 package com.foxminded.university.dao;
 
-import com.foxminded.university.mapper.GroupMapper;
+import com.foxminded.university.mapper.GroupRowMapper;
 import com.foxminded.university.models.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,12 +15,12 @@ public class GroupDao implements UniversityDao<Group> {
     private static final String EXCEPTION_MESSAGE = "Can't find group with id: ";
 
     private final JdbcTemplate jdbcTemplate;
-    private final GroupMapper groupMapper;
+    private final GroupRowMapper groupRowMapper;
 
     @Autowired
-    public GroupDao(JdbcTemplate jdbcTemplate, GroupMapper groupMapper) {
+    public GroupDao(JdbcTemplate jdbcTemplate, GroupRowMapper groupRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        this.groupMapper = groupMapper;
+        this.groupRowMapper = groupRowMapper;
     }
 
     public void create(Group group) {
@@ -29,10 +29,10 @@ public class GroupDao implements UniversityDao<Group> {
 
     @Override
     public Group getById(int id) {
-        return jdbcTemplate.query(GROUP_SELECT_BY_ID, groupMapper, new Object[]{id})
+        return jdbcTemplate.query(GROUP_SELECT_BY_ID, groupRowMapper, new Object[]{id})
                 .stream()
                 .findAny()
-                .orElseThrow(() -> new ExceptionDao(EXCEPTION_MESSAGE + id));
+                .orElseThrow(() -> new DaoException(EXCEPTION_MESSAGE + id));
     }
 
     public void update(Group group, int id) {

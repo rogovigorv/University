@@ -11,12 +11,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class StudentMapperTest {
-    private static final Group GROUP =
-            new Group(1, "Dream team");
+public class StudentRowMapperTest {
 
     @Mock
     private ResultSet resultSet;
@@ -25,30 +24,29 @@ public class StudentMapperTest {
     private GroupDao groupDao;
 
     @InjectMocks
-    private StudentMapper studentMapper;
+    private StudentRowMapper studentRowMapper;
 
     @Test
     void mapStudentShouldReturnStudentWithId1AndLectureNameIsOleg() throws SQLException {
+        Group group = new Group(1, "Dream team");
+
         when(resultSet.getInt("group_id")).thenReturn(1);
-        when(groupDao.getById(1)).thenReturn(GROUP);
+        when(groupDao.getById(1)).thenReturn(group);
 
         when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("firstName")).thenReturn("Oleg");
         when(resultSet.getString("lastName")).thenReturn("Silovich");
 
-        String expected = "Student id: 1\n" +
-                "First name: Oleg\n" +
-                "Last name: Silovich\n" +
-                "Group: \n" +
-                "Group id: 1\n" +
-                "Group name: Dream team";
+        Student expected = new Student(1, "Oleg", "Silovich", group);
 
-        Student actualStudent = studentMapper.mapRow(resultSet, 1);
-        String actual = null;
-        if (actualStudent != null) {
-            actual = actualStudent.toString();
-        }
+        Student actual = studentRowMapper.mapRow(resultSet, 1);
 
         assertEquals(expected, actual);
+
+        verify(resultSet).getInt("group_id");
+        verify(groupDao).getById(1);
+        verify(resultSet).getInt("id");
+        verify(resultSet).getString("firstName");
+        verify(resultSet).getString("lastName");
     }
 }

@@ -18,10 +18,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
-public class GroupMapperTest {
+public class GroupRowMapperTest {
 
     @Autowired
-    private GroupMapper groupMapper;
+    private GroupRowMapper groupRowMapper;
 
     @Mock
     private ResultSet resultSet;
@@ -31,14 +31,9 @@ public class GroupMapperTest {
         when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("groupName")).thenReturn("Dream team");
 
-        String expected = "Group id: 1" + "\n" +
-        "Group name: Dream team";
+        Group expected = new Group(1, "Dream team");
 
-        Group actualGroup = groupMapper.mapRow(resultSet, 1);
-        String actual = null;
-        if (actualGroup != null) {
-            actual = actualGroup.toString();
-        }
+        Group actual = groupRowMapper.mapRow(resultSet, 1);
 
         assertEquals(expected, actual);
 

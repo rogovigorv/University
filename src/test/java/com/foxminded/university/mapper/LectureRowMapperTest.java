@@ -13,15 +13,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
 @ExtendWith(MockitoExtension.class)
-public class LectureMapperTest {
-    private static final Teacher TEACHER =
-            new Teacher(25, "Bronislav", "Potemkin");
-    private static final Group GROUP =
-            new Group(3, "Geeks");
+public class LectureRowMapperTest {
 
     @Mock
     private ResultSet resultSet;
@@ -33,37 +29,35 @@ public class LectureMapperTest {
     private GroupDao groupDao;
 
     @InjectMocks
-    private LectureMapper lectureMapper;
+    private LectureRowMapper lectureRowMapper;
 
     @Test
     void mapLectureShouldReturnLectureWithId1AndLectureNameIsMath() throws SQLException {
+        Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
+        Group group = new Group(3, "Geeks");
+
         when(resultSet.getInt("teacher_id")).thenReturn(25);
-        when(teacherDao.getById(25)).thenReturn(TEACHER);
+        when(teacherDao.getById(25)).thenReturn(teacher);
 
         when(resultSet.getInt("group_id")).thenReturn(3);
-        when(groupDao.getById(3)).thenReturn(GROUP);
+        when(groupDao.getById(3)).thenReturn(group);
 
         when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("lectureName")).thenReturn("Math");
         when(resultSet.getString("description")).thenReturn("Simple math");
 
-        String expected = "Lecture id: 1\n" +
-                "Teacher: \n" +
-                "Teacher id: 25\n" +
-                "First name: Bronislav\n" +
-                "Last name: Potemkin\n" +
-                "Lecture name: Math\n" +
-                "Description: Simple math\n" +
-                "Group: \n" +
-                "Group id: 3\n" +
-                "Group name: Geeks";
+        Lecture expected = new Lecture(1, teacher, "Math", "Simple math", group);
 
-        Lecture actualLecture = lectureMapper.mapRow(resultSet, 1);
-        String actual = null;
-        if (actualLecture != null) {
-            actual = actualLecture.toString();
-        }
+        Lecture actual = lectureRowMapper.mapRow(resultSet, 1);
 
         assertEquals(expected, actual);
+
+        verify(resultSet).getInt("teacher_id");
+        verify(teacherDao).getById(25);
+        verify(resultSet).getInt("group_id");
+        verify(groupDao).getById(3);
+        verify(resultSet).getInt("id");
+        verify(resultSet).getString("lectureName");
+        verify(resultSet).getString("description");
     }
 }

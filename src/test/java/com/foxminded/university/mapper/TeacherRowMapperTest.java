@@ -18,10 +18,10 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
-public class TeacherMapperTest {
+public class TeacherRowMapperTest {
 
     @Autowired
-    private TeacherMapper teacherMapper;
+    private TeacherRowMapper teacherRowMapper;
 
     @Mock
     private ResultSet resultSet;
@@ -32,16 +32,9 @@ public class TeacherMapperTest {
         when(resultSet.getString("firstName")).thenReturn("Bronislav");
         when(resultSet.getString("lastName")).thenReturn("Potemkin");
 
-        String expected = "Teacher id: 25\n" +
-                "First name: Bronislav\n" +
-                "Last name: Potemkin";
+        Teacher expected = new Teacher(25, "Bronislav", "Potemkin");
 
-        Teacher actualTeacher = teacherMapper.mapRow(resultSet, 1);
-        String actual = null;
-        if (actualTeacher != null) {
-            actual = actualTeacher.toString();
-
-        }
+        Teacher actual = teacherRowMapper.mapRow(resultSet, 1);
 
         assertEquals(expected, actual);
 

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class TeacherMapper implements RowMapper<Teacher> {
+public class TeacherRowMapper implements RowMapper<Teacher> {
 
     @Override
     public Teacher mapRow(ResultSet resultSet, int i) throws SQLException {

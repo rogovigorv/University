@@ -2,9 +2,9 @@ package com.foxminded.university.dao;
 
 import java.util.function.Supplier;
 
-public class ExceptionDao extends RuntimeException implements Supplier<RuntimeException> {
+public class DaoException extends RuntimeException implements Supplier<RuntimeException> {
 
-    public ExceptionDao(String message) {
+    public DaoException(String message) {
         super(message);
     }
 

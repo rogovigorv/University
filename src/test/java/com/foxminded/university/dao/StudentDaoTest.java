@@ -8,16 +8,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
 public class StudentDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
-    private static final String INSERT_TEST_DATA = "insert_test_data.sql";
 
     @Autowired
     private SqlRunner sqlRunner;
@@ -25,53 +24,57 @@ public class StudentDaoTest {
     @Autowired
     private StudentDao studentDao;
 
+    @Autowired
+    private GroupDao groupDao;
+
     @BeforeEach
     private void setup() {
         sqlRunner.runScript(CREATE_SCRIPT);
-        sqlRunner.runScript(INSERT_TEST_DATA);
     }
 
     @Test
     void getStudentByIdShouldReturnActualStudentWithNameOleg() {
-        int studentId = 1;
+        Group group = new Group(1, "Dream team");
+        groupDao.create(group);
 
-        String expected = "Oleg";
+        Student expected = new Student(1, "Oleg", "Silovich", group);
+        studentDao.create(expected);
 
-        Student actualStudent = studentDao.getById(studentId);
-        String actual = actualStudent.getFirstName();
+        Student actual = studentDao.getById(expected.getId());
 
-        assertEquals(expected, actual);
+        assertThat(expected, samePropertyValuesAs(actual));
     }
 
     @Test
     void updateStudentByIdShouldReturnActualStudentWithNameKolyaByUsingMethodGetById() {
-        int studentId = 1;
         Group group = new Group(1, "Dream team");
+        groupDao.create(group);
 
-        String expected = "Kolya";
+        Student student = new Student(1, "Oleg", "Silovich", group);
+        studentDao.create(student);
 
-        Student studentWithDifferentName = new Student(studentId, "Kolya", "Balalaikin", group);
-        studentDao.update(studentWithDifferentName, studentId);
+        Student expected = new Student(1, "Kolya", "Balalaikin", group);
 
-        Student actualStudent = studentDao.getById(studentId);
-        String actual = actualStudent.getFirstName();
+        Student studentWithDifferentName = new Student(1, "Kolya", "Balalaikin", group);
+        studentDao.update(studentWithDifferentName, 1);
 
-        assertEquals(expected, actual);
+        Student actual = studentDao.getById(1);
+
+        assertThat(expected, samePropertyValuesAs(actual));
     }
 
     @Test
     void createStudentShouldReturnActualStudentWithNameBorisByUsingMethodGetById() {
-        int studentId = 4;
         Group group = new Group(1, "Dream team");
+        groupDao.create(group);
 
-        String expected = "Boris";
-
-        Student newStudent = new Student(studentId, "Boris", "The Blade", group);
+        Student newStudent = new Student(2, "Boris", "The Blade", group);
         studentDao.create(newStudent);
 
-        Student actualStudent = studentDao.getById(studentId);
-        String actual = actualStudent.getFirstName();
+        Student expected = new Student(2, "Boris", "The Blade", group);
 
-        assertEquals(expected, actual);
+        Student actual = studentDao.getById(2);
+
+        assertThat(expected, samePropertyValuesAs(actual));
     }
 }

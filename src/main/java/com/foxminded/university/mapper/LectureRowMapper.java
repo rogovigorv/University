@@ -12,12 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class LectureMapper implements RowMapper<Lecture> {
+public class LectureRowMapper implements RowMapper<Lecture> {
     private final TeacherDao teacherDao;
     private final GroupDao groupDao;
 
     @Autowired
-    public LectureMapper(TeacherDao teacherDao, GroupDao groupDao) {
+    public LectureRowMapper(TeacherDao teacherDao, GroupDao groupDao) {
         this.teacherDao = teacherDao;
         this.groupDao = groupDao;
     }

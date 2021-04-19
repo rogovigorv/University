@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = SpringConfigTest.class)
 public class TeacherDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
-    private static final String INSERT_TEST_DATA = "insert_test_data.sql";
 
     @Autowired
     private SqlRunner sqlRunner;
@@ -27,47 +25,38 @@ public class TeacherDaoTest {
     @BeforeEach
     private void setup() {
         sqlRunner.runScript(CREATE_SCRIPT);
-        sqlRunner.runScript(INSERT_TEST_DATA);
     }
 
     @Test
     void getTeacherByIdShouldReturnActualTeacherWithNameBronislav() {
-        int teacherId = 25;
+        Teacher expected = new Teacher(25, "Bronislav", "Potemkin");
+        teacherDao.create(expected);
 
-        String expected = "Bronislav";
-
-        Teacher actualTeacher = teacherDao.getById(teacherId);
-        String actual = actualTeacher.getFirstName();
+        Teacher actual = teacherDao.getById(25);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void updateTeacherByIdShouldReturnActualTeacherWithNameSergeyByUsingMethodGetById() {
-        int teacherId = 25;
+        Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
+        teacherDao.create(teacher);
 
-        String expected = "Sergey";
+        Teacher expected = new Teacher(25, "Sergey", "Nemchinskiy");
 
-        Teacher teacherWithDifferentName = new Teacher(teacherId, "Sergey", "Nemchinskiy");
-        teacherDao.update(teacherWithDifferentName, teacherId);
+        teacherDao.update(expected, 25);
 
-        Teacher actualTeacher = teacherDao.getById(teacherId);
-        String actual = actualTeacher.getFirstName();
+        Teacher actual = teacherDao.getById(25);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void createTeacherShouldReturnActualTeacherWithNameIvanByUsingMethodGetById() {
-        int teacherId = 20;
+        Teacher expected = new Teacher(20, "Ivan", "Ivanov");
+        teacherDao.create(expected);
 
-        String expected = "Ivan";
-
-        Teacher teacherWithDifferentName = new Teacher(teacherId, "Ivan", "Ivanov");
-        teacherDao.create(teacherWithDifferentName);
-
-        Teacher actualTeacher = teacherDao.getById(teacherId);
-        String actual = actualTeacher.getFirstName();
+        Teacher actual = teacherDao.getById(20);
 
         assertEquals(expected, actual);
     }

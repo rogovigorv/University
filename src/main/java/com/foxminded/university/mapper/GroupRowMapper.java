@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class GroupMapper implements RowMapper<Group> {
+public class GroupRowMapper implements RowMapper<Group> {
 
     @Override
     public Group mapRow(ResultSet resultSet, int i) throws SQLException {

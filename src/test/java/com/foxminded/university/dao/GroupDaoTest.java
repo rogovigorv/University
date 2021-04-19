@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = SpringConfigTest.class)
 public class GroupDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
-    private static final String INSERT_TEST_DATA = "insert_test_data.sql";
 
     @Autowired
     private SqlRunner sqlRunner;
@@ -27,47 +25,39 @@ public class GroupDaoTest {
     @BeforeEach
     private void setup() {
         sqlRunner.runScript(CREATE_SCRIPT);
-        sqlRunner.runScript(INSERT_TEST_DATA);
     }
 
     @Test
     void getGroupByIdShouldReturnActualGroupWithNameDreamTeam() {
-        int groupId = 1;
+        Group expected = new Group(1, "Dream team");
+        groupDao.create(expected);
 
-        String expected = "Dream team";
+        Group actual = groupDao.getById(expected.getId());
 
-        Group actualGroup = groupDao.getById(groupId);
-        String actual = actualGroup.getGroupName();
-
-        assertEquals(expected, actual);
+        assertEquals(expected,actual);
     }
 
     @Test
     void updateGroupByIdShouldReturnActualGroupWithNameLambOfGodByUsingMethodGetById() {
-        int groupId = 1;
+        Group group = new Group(1, "Dream team");
+        groupDao.create(group);
 
-        String expected = "Lamb Of God";
+        Group expected = new Group(1, "Lamb Of God");
+        groupDao.update(expected, 1);
 
-        Group groupWithDifferentName = new Group(groupId, "Lamb Of God");
-        groupDao.update(groupWithDifferentName, groupId);
-
-        Group actualGroup = groupDao.getById(groupId);
-        String actual = actualGroup.getGroupName();
+        Group actual = groupDao.getById(1);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void createGroupShouldReturnActualGroupWithNameFreakAngelByUsingMethodGetById() {
-        int groupId = 4;
+        Group expected = new Group(4, "Freak Angel");
 
-        String expected = "Freak Angel";
-
-        Group newGroup = new Group(groupId, "Freak Angel");
+        Group newGroup = new Group(4, "Freak Angel");
         groupDao.create(newGroup);
 
-        Group actualGroup = groupDao.getById(groupId);
-        String actual = actualGroup.getGroupName();
+        Group actual = groupDao.getById(4);
 
         assertEquals(expected, actual);
     }

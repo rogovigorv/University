@@ -10,11 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class StudentMapper implements RowMapper<Student> {
+public class StudentRowMapper implements RowMapper<Student> {
     private final GroupDao groupDao;
 
     @Autowired
-    public StudentMapper(GroupDao groupDao) {
+    public StudentRowMapper(GroupDao groupDao) {
         this.groupDao = groupDao;
     }
 
