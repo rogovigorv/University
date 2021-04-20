@@ -1,10 +1,16 @@
-package com.foxminded.university;
+package com.foxminded.university.models;
 
+import org.springframework.stereotype.Component;
 import java.util.Objects;
 
+@Component
 public class Group {
     private int id;
     private String groupName;
+
+    public Group() {
+
+    }
 
     public Group(int id, String groupName) {
         this.id = id;
@@ -15,8 +21,16 @@ public class Group {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getGroupName() {
         return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
     }
 
     @Override
@@ -37,8 +51,11 @@ public class Group {
         return Objects.hash(id, groupName);
     }
 
+
+
     @Override
     public String toString() {
-        return "Group id: " + id + " Group name: " + groupName;
+        return "Group id: " + id + "\n" +
+                "Group name: " + groupName;
     }
 }

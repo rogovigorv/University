@@ -1,41 +1,56 @@
-package com.foxminded.university;
+package com.foxminded.university.models;
 
-import java.util.List;
+import org.springframework.stereotype.Component;
 import java.util.Objects;
 
+@Component
 public class Student {
     private int id;
     private String firstName;
     private String lastName;
     private Group group;
-    private List<Lecture> timeTable;
 
-    public Student(int id, String firstName, String lastName, Group group, List<Lecture> timeTable) {
+    public Student() {
+
+    }
+
+    public Student(int id, String firstName, String lastName, Group group) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.group = group;
-        this.timeTable = timeTable;
     }
 
     public int getId() {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
         return lastName;
     }
 
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public Group getGroup() {
         return group;
     }
 
-    public List<Lecture> getTimeTable() {
-        return timeTable;
+    public void setGroup(Group group) {
+        this.group = group;
     }
 
     @Override
@@ -50,21 +65,20 @@ public class Student {
         return id == student.id &&
                 firstName.equals(student.firstName) &&
                 lastName.equals(student.lastName) &&
-                group == student.group &&
-                timeTable == student.timeTable;
+                group == student.group;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, group, timeTable);
+        return Objects.hash(id, firstName, lastName, group);
     }
 
     @Override
     public String toString() {
-        return "Student id: " + id +
-                " First name: " + firstName +
-                " Last name: " + lastName +
-                " Group: " + group.toString() +
-                " TimeTable: " + timeTable.toString();
+        return "Student id: " + id + "\n" +
+                "First name: " + firstName + "\n" +
+                "Last name: " + lastName + "\n" +
+                "Group: " + "\n" +
+                group.toString();
     }
 }

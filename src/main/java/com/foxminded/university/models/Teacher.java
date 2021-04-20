@@ -1,11 +1,17 @@
-package com.foxminded.university;
+package com.foxminded.university.models;
 
+import org.springframework.stereotype.Component;
 import java.util.Objects;
 
+@Component
 public class Teacher{
     private int id;
     private String firstName;
     private String lastName;
+
+    public Teacher() {
+
+    }
 
     public Teacher(int id, String firstName, String lastName) {
         this.id = id;
@@ -17,12 +23,24 @@ public class Teacher{
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getLastName() {
         return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     @Override
@@ -46,8 +64,8 @@ public class Teacher{
 
     @Override
     public String toString() {
-        return "Teacher id: " + id +
-                " First name: " + firstName +
-                " Last name: " + lastName;
+        return "Teacher id: " + id + "\n" +
+                "First name: " + firstName + "\n" +
+                "Last name: " + lastName;
     }
 }
