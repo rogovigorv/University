@@ -12,12 +12,15 @@ public class Queries {
     public static final String LECTURE_UPDATE_BY_ID =
             "UPDATE lecture SET lectureName=?, description=?, teacher_id=?, group_id=? WHERE id=?";
     public static final String LECTURE_DELETE_BY_ID = "DELETE FROM lecture WHERE id=?";
+    public static final String LECTURE_UPDATE_TEACHER = "UPDATE lecture SET teacher_id=? WHERE id=?";
 
     public static final String STUDENT_CREATE = "INSERT INTO student VALUES (?, ?, ?, ?)";
     public static final String STUDENT_SELECT_BY_ID = "SELECT * FROM student WHERE id=?";
     public static final String STUDENT_UPDATE_BY_ID =
             "UPDATE student SET firstName=?, lastName=?, group_id=? WHERE id=?";
     public static final String STUDENT_DELETE_BY_ID = "DELETE FROM student WHERE id=?";
+    public static final String STUDENT_UPDATE_GROUP = "UPDATE student SET group_id=? WHERE id=?";
+    public static final String STUDENT_UPDATE_FIRST_NAME = "UPDATE student SET firstname=? WHERE id=?";
 
     public static final String TEACHER_CREATE = "INSERT INTO teacher VALUES (?, ?, ?)";
     public static final String TEACHER_SELECT_BY_ID = "SELECT * FROM teacher WHERE id=?";
