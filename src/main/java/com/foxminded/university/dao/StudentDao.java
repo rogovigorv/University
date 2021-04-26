@@ -9,8 +9,6 @@ import static com.foxminded.university.dao.Queries.STUDENT_CREATE;
 import static com.foxminded.university.dao.Queries.STUDENT_DELETE_BY_ID;
 import static com.foxminded.university.dao.Queries.STUDENT_SELECT_BY_ID;
 import static com.foxminded.university.dao.Queries.STUDENT_UPDATE_BY_ID;
-import static com.foxminded.university.dao.Queries.STUDENT_UPDATE_FIRST_NAME;
-import static com.foxminded.university.dao.Queries.STUDENT_UPDATE_GROUP;
 
 @Repository
 public class StudentDao implements UniversityDao<Student>{
@@ -46,13 +44,5 @@ public class StudentDao implements UniversityDao<Student>{
     @Override
     public void delete(int id) {
         jdbcTemplate.update(STUDENT_DELETE_BY_ID, id);
-    }
-
-    public void updateGroup(int studentId, int groupId) {
-        jdbcTemplate.update(STUDENT_UPDATE_GROUP, groupId, studentId);
-    }
-
-    public void updateName(int id, String name) {
-        jdbcTemplate.update(STUDENT_UPDATE_FIRST_NAME, name, id);
     }
 }

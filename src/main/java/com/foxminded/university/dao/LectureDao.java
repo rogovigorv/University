@@ -10,7 +10,6 @@ import static com.foxminded.university.dao.Queries.LECTURE_SELECT_BY_GROUP_ID;
 import static com.foxminded.university.dao.Queries.LECTURE_SELECT_BY_ID;
 import static com.foxminded.university.dao.Queries.LECTURE_CREATE;
 import static com.foxminded.university.dao.Queries.LECTURE_UPDATE_BY_ID;
-import static com.foxminded.university.dao.Queries.LECTURE_UPDATE_TEACHER;
 
 @Repository
 public class LectureDao implements UniversityDao<Lecture> {
@@ -53,9 +52,5 @@ public class LectureDao implements UniversityDao<Lecture> {
     @Override
     public void delete(int id) {
         jdbcTemplate.update(LECTURE_DELETE_BY_ID, id);
-    }
-
-    public void updateTeacher(int teacherId, int lectureId) {
-        jdbcTemplate.update(LECTURE_UPDATE_TEACHER, teacherId, lectureId);
     }
 }
