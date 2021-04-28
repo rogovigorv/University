@@ -4,14 +4,15 @@ import com.foxminded.university.mapper.LectureRowMapper;
 import com.foxminded.university.models.Lecture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.LECTURE_DELETE_BY_ID;
+import static com.foxminded.university.dao.Queries.LECTURE_DELETE_BY_TEACHER_ID;
 import static com.foxminded.university.dao.Queries.LECTURE_SELECT_BY_GROUP_ID;
 import static com.foxminded.university.dao.Queries.LECTURE_SELECT_BY_ID;
 import static com.foxminded.university.dao.Queries.LECTURE_CREATE;
 import static com.foxminded.university.dao.Queries.LECTURE_UPDATE_BY_ID;
 
-@Component
+@Repository
 public class LectureDao implements UniversityDao<Lecture> {
     private static final String EXCEPTION_MESSAGE = "Can't find lecture with id: ";
 
@@ -52,5 +53,9 @@ public class LectureDao implements UniversityDao<Lecture> {
     @Override
     public void delete(int id) {
         jdbcTemplate.update(LECTURE_DELETE_BY_ID, id);
+    }
+
+    public void deleteByTeacherId(int id) {
+        jdbcTemplate.update(LECTURE_DELETE_BY_TEACHER_ID, id);
     }
 }
