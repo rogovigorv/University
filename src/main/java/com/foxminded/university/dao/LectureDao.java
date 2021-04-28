@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.LECTURE_DELETE_BY_ID;
+import static com.foxminded.university.dao.Queries.LECTURE_DELETE_BY_TEACHER_ID;
 import static com.foxminded.university.dao.Queries.LECTURE_SELECT_BY_GROUP_ID;
 import static com.foxminded.university.dao.Queries.LECTURE_SELECT_BY_ID;
 import static com.foxminded.university.dao.Queries.LECTURE_CREATE;
@@ -52,5 +53,9 @@ public class LectureDao implements UniversityDao<Lecture> {
     @Override
     public void delete(int id) {
         jdbcTemplate.update(LECTURE_DELETE_BY_ID, id);
+    }
+
+    public void deleteByTeacherId(int id) {
+        jdbcTemplate.update(LECTURE_DELETE_BY_TEACHER_ID, id);
     }
 }

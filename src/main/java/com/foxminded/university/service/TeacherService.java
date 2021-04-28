@@ -3,7 +3,9 @@ package com.foxminded.university.service;
 import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TeacherService {
     private final TeacherDao teacherDao;
 
