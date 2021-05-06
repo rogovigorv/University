@@ -31,23 +31,16 @@ public class TeacherDaoTest {
 
     @Test
     void getTeacherByIdShouldReturnActualTeacherWithNameBronislav() {
-        log.debug("TeacherDaoTest getTeacherByIdShouldReturnActualTeacherWithNameBronislav test started");
-
         Teacher expected = new Teacher(25, "Bronislav", "Potemkin");
         teacherDao.create(expected);
 
         Teacher actual = teacherDao.getById(25);
 
         assertEquals(expected, actual);
-
-        log.debug("TeacherDaoTest getTeacherByIdShouldReturnActualTeacherWithNameBronislav test completed");
     }
 
     @Test
     void updateTeacherByIdShouldReturnActualTeacherWithNameSergeyByUsingMethodGetById() {
-        log.debug("TeacherDaoTest updateTeacherByIdShouldReturnActualTeacherWithNameSergeyByUsingMethodGetById" +
-                "test started");
-
         Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
@@ -58,24 +51,15 @@ public class TeacherDaoTest {
         Teacher actual = teacherDao.getById(25);
 
         assertEquals(expected, actual);
-
-        log.debug("TeacherDaoTest updateTeacherByIdShouldReturnActualTeacherWithNameSergeyByUsingMethodGetById" +
-                "test completed");
     }
 
     @Test
     void createTeacherShouldReturnActualTeacherWithNameIvanByUsingMethodGetById() {
-        log.debug("TeacherDaoTest createTeacherShouldReturnActualTeacherWithNameIvanByUsingMethodGetById" +
-                "test started");
-
         Teacher expected = new Teacher(20, "Ivan", "Ivanov");
         teacherDao.create(expected);
 
         Teacher actual = teacherDao.getById(20);
 
         assertEquals(expected, actual);
-
-        log.debug("TeacherDaoTest createTeacherShouldReturnActualTeacherWithNameIvanByUsingMethodGetById" +
-                "test completed");
     }
 }

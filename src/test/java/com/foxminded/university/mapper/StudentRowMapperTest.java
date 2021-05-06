@@ -30,8 +30,6 @@ public class StudentRowMapperTest {
 
     @Test
     void mapStudentShouldReturnStudentWithId1AndLectureNameIsOleg() throws SQLException {
-        log.debug("StudentRowMapperTest mapStudentShouldReturnStudentWithId1AndLectureNameIsOleg started");
-
         Group group = new Group(1, "Dream team");
 
         when(resultSet.getInt("group_id")).thenReturn(1);
@@ -52,7 +50,5 @@ public class StudentRowMapperTest {
         verify(resultSet).getInt("id");
         verify(resultSet).getString("firstName");
         verify(resultSet).getString("lastName");
-
-        log.debug("StudentRowMapperTest mapStudentShouldReturnStudentWithId1AndLectureNameIsOleg completed");
     }
 }

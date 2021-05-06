@@ -36,8 +36,6 @@ public class StudentDaoTest {
 
     @Test
     void getStudentByIdShouldReturnActualStudentWithNameOleg() {
-        log.debug("StudentDaoTest getStudentByIdShouldReturnActualStudentWithNameOleg test started");
-
         Group group = new Group(1, "Dream team");
         groupDao.create(group);
 
@@ -47,15 +45,10 @@ public class StudentDaoTest {
         Student actual = studentDao.getById(expected.getId());
 
         assertThat(expected, samePropertyValuesAs(actual));
-
-        log.debug("StudentDaoTest getStudentByIdShouldReturnActualStudentWithNameOleg test completed");
     }
 
     @Test
     void updateStudentByIdShouldReturnActualStudentWithNameKolyaByUsingMethodGetById() {
-        log.debug("StudentDaoTest updateStudentByIdShouldReturnActualStudentWithNameKolyaByUsingMethodGetById" +
-                "test started");
-
         Group group = new Group(1, "Dream team");
         groupDao.create(group);
 
@@ -70,16 +63,10 @@ public class StudentDaoTest {
         Student actual = studentDao.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
-
-        log.debug("StudentDaoTest updateStudentByIdShouldReturnActualStudentWithNameKolyaByUsingMethodGetById" +
-                "test completed");
     }
 
     @Test
     void createStudentShouldReturnActualStudentWithNameBorisByUsingMethodGetById() {
-        log.debug("StudentDaoTest createStudentShouldReturnActualStudentWithNameBorisByUsingMethodGetById" +
-                "test started");
-
         Group group = new Group(1, "Dream team");
         groupDao.create(group);
 
@@ -91,8 +78,5 @@ public class StudentDaoTest {
         Student actual = studentDao.getById(2);
 
         assertThat(expected, samePropertyValuesAs(actual));
-
-        log.debug("StudentDaoTest createStudentShouldReturnActualStudentWithNameBorisByUsingMethodGetById" +
-                "test completed");
     }
 }

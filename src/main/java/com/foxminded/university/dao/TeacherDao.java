@@ -4,6 +4,7 @@ import com.foxminded.university.mapper.TeacherRowMapper;
 import com.foxminded.university.models.Teacher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.TEACHER_CREATE;
@@ -28,13 +29,19 @@ public class TeacherDao implements UniversityDao<Teacher> {
     }
 
     public void create(Teacher teacher) {
-        log.info("TeacherDao create method started");
-        jdbcTemplate.update(TEACHER_CREATE, teacher.getId(), teacher.getFirstName(), teacher.getLastName());
+        log.debug("TeacherDao create method started with teacher: {}", teacher);
+
+        try {
+            jdbcTemplate.update(TEACHER_CREATE, teacher.getId(), teacher.getFirstName(), teacher.getLastName());
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public Teacher getById(int id) {
-        log.info("TeacherDao getById method started");
+    public Teacher getById(int id) throws DaoException {
+        log.debug("TeacherDao getById method started with ID: {}", id);
+
         return jdbcTemplate.query(TEACHER_SELECT_BY_ID, teacherRowMapper, new Object[]{id})
                 .stream()
                 .findAny()
@@ -42,18 +49,29 @@ public class TeacherDao implements UniversityDao<Teacher> {
     }
 
     public void update(Teacher teacher, int id) {
-        log.info("TeacherDao update method started");
-        jdbcTemplate.update(TEACHER_UPDATE_BY_ID, teacher.getFirstName(), teacher.getLastName(), id);
+        log.debug("TeacherDao update method started with teacher: {}, and ID: {}", teacher, id);
+
+        try {
+            jdbcTemplate.update(TEACHER_UPDATE_BY_ID, teacher.getFirstName(), teacher.getLastName(), id);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void delete(int id) {
-        log.info("TeacherDao delete method started");
-        jdbcTemplate.update(TEACHER_DELETE_BY_ID, id);
+        log.debug("TeacherDao delete method started with ID: {}", id);
+
+        try {
+            jdbcTemplate.update(TEACHER_DELETE_BY_ID, id);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Teacher getByTeacherSurname(String surname) {
-        log.info("TeacherDao getByTeacherSurname method started");
+        log.debug("TeacherDao getByTeacherSurname method started with teacher surname: {}", surname);
+
         return jdbcTemplate.query(TEACHER_SELECT_BY_LAST_NAME, teacherRowMapper, new Object[]{surname})
                 .stream()
                 .findAny()

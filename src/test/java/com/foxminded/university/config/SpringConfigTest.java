@@ -35,8 +35,6 @@ public class SpringConfigTest {
         dataSource.setUsername(user);
         dataSource.setPassword(password);
 
-        log.debug("Test DataSource bean created");
-
         return dataSource;
     }
 
@@ -44,8 +42,6 @@ public class SpringConfigTest {
     public JdbcTemplate jdbcTemplate() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(dataSource());
-
-        log.debug("Test JdbcTemplate bean created");
 
         return jdbcTemplate;
     }

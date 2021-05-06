@@ -4,6 +4,8 @@ import com.foxminded.university.mapper.GroupRowMapper;
 import com.foxminded.university.models.Group;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.InvalidResultSetAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.GROUP_CREATE;
@@ -28,13 +30,19 @@ public class GroupDao implements UniversityDao<Group> {
     }
 
     public void create(Group group) {
-        log.info("GroupDao create method started");
+        log.debug("GroupDao create method started with group: {}", group);
+
+        try {
             jdbcTemplate.update(GROUP_CREATE, group.getId(), group.getGroupName());
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public Group getById(int id) {
-        log.info("GroupDao getById method started");
+        log.debug("GroupDao getById method started with ID: {}", id);
+
         return jdbcTemplate.query(GROUP_SELECT_BY_ID, groupRowMapper, new Object[]{id})
                 .stream()
                 .findAny()
@@ -42,18 +50,29 @@ public class GroupDao implements UniversityDao<Group> {
     }
 
     public void update(Group group, int id) {
-        log.info("GroupDao update method started");
-        jdbcTemplate.update(GROUP_UPDATE_BY_ID, group.getGroupName(), id);
+        log.debug("GroupDao update method started with group: {} and ID: {}", group, id);
+
+        try {
+            jdbcTemplate.update(GROUP_UPDATE_BY_ID, group.getGroupName(), id);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void delete(int id) {
-        log.info("GroupDao delete method started");
-        jdbcTemplate.update(GROUP_DELETE_BY_ID, id);
+        log.debug("GroupDao delete method started with ID: {}", id);
+
+        try {
+            jdbcTemplate.update(GROUP_DELETE_BY_ID, id);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Group getByGroupName(String groupName) {
-        log.info("GroupDao getByGroupName method started");
+        log.debug("GroupDao getByGroupName method started with group name: {}", groupName);
+
         return jdbcTemplate.query(GROUP_SELECT_BY_NAME, groupRowMapper, new Object[]{groupName})
                 .stream()
                 .findAny()

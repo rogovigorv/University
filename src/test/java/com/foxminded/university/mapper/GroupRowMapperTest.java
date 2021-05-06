@@ -30,8 +30,6 @@ public class GroupRowMapperTest {
 
     @Test
     void mapGroupShouldReturnGroupWithId1AndGroupNameIsDreamTeam() throws SQLException {
-        log.debug("GroupRowMapperTest mapGroupShouldReturnGroupWithId1AndGroupNameIsDreamTeam started");
-
         when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("groupName")).thenReturn("Dream team");
 
@@ -43,7 +41,5 @@ public class GroupRowMapperTest {
 
         verify(resultSet).getInt("id");
         verify(resultSet).getString("groupName");
-
-        log.debug("GroupRowMapperTest mapGroupShouldReturnGroupWithId1AndGroupNameIsDreamTeam completed");
     }
 }

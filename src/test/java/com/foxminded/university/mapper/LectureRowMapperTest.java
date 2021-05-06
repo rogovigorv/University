@@ -35,8 +35,6 @@ public class LectureRowMapperTest {
 
     @Test
     void mapLectureShouldReturnLectureWithId1AndLectureNameIsMath() throws SQLException {
-        log.debug("LectureRowMapperTest mapLectureShouldReturnLectureWithId1AndLectureNameIsMath test started");
-
         Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
         Group group = new Group(3, "Geeks");
 
@@ -63,7 +61,5 @@ public class LectureRowMapperTest {
         verify(resultSet).getInt("id");
         verify(resultSet).getString("lectureName");
         verify(resultSet).getString("description");
-
-        log.debug("LectureRowMapperTest mapLectureShouldReturnLectureWithId1AndLectureNameIsMath test completed");
     }
 }

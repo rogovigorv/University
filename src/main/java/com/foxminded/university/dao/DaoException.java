@@ -7,6 +7,5 @@ public class DaoException extends RuntimeException {
 
     public DaoException(String message) {
         super(message);
-        log.info("A DaoException exception occurred");
     }
 }

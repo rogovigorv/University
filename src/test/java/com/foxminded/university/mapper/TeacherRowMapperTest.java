@@ -30,9 +30,6 @@ public class TeacherRowMapperTest {
 
     @Test
     void mapTeacherShouldReturnTeacherWithId25FirstNameIsBronislavAndLastNameIsPotemkin() throws SQLException {
-        log.debug("TeacherRowMapperTest mapTeacherShouldReturnTeacherWithId25FirstNameIsBronislavAndLastNameIsPotemkin" +
-                "test started");
-
         when(resultSet.getInt("id")).thenReturn(25);
         when(resultSet.getString("firstName")).thenReturn("Bronislav");
         when(resultSet.getString("lastName")).thenReturn("Potemkin");
@@ -46,8 +43,5 @@ public class TeacherRowMapperTest {
         verify(resultSet).getInt("id");
         verify(resultSet).getString("firstName");
         verify(resultSet).getString("lastName");
-
-        log.debug("TeacherRowMapperTest mapTeacherShouldReturnTeacherWithId25FirstNameIsBronislavAndLastNameIsPotemkin" +
-                "test completed");
     }
 }

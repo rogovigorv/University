@@ -4,6 +4,7 @@ import com.foxminded.university.mapper.StudentRowMapper;
 import com.foxminded.university.models.Student;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.STUDENT_CREATE;
@@ -27,14 +28,15 @@ public class StudentDao implements UniversityDao<Student>{
     }
 
     public void create(Student student) {
-        log.info("StudentDao create method started");
+        log.debug("StudentDao create method started with student: {}", student);
         jdbcTemplate.update(STUDENT_CREATE, student.getId(), student.getFirstName(),
                 student.getLastName(), student.getGroup().getId());
     }
 
     @Override
-    public Student getById(int id) {
-        log.info("StudentDao getById method started");
+    public Student getById(int id) throws DaoException {
+        log.debug("StudentDao getById method started with ID: {}", id);
+
         return jdbcTemplate.query(STUDENT_SELECT_BY_ID, studentRowMapper, new Object[]{id})
                 .stream()
                 .findAny()
@@ -42,19 +44,34 @@ public class StudentDao implements UniversityDao<Student>{
     }
 
     public void update(Student student, int id) {
-        log.info("StudentDao update method started");
-        jdbcTemplate.update(STUDENT_UPDATE_BY_ID, student.getFirstName(), student.getLastName(),
-                student.getGroup().getId(), id);
+        log.debug("StudentDao update method started with student: {}, and ID: {}", student, id);
+
+        try {
+            jdbcTemplate.update(STUDENT_UPDATE_BY_ID, student.getFirstName(), student.getLastName(),
+                    student.getGroup().getId(), id);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void delete(int id) {
-        log.info("StudentDao delete method started");
-        jdbcTemplate.update(STUDENT_DELETE_BY_ID, id);
+        log.debug("StudentDao delete method started with ID: {}", id);
+
+        try {
+            jdbcTemplate.update(STUDENT_DELETE_BY_ID, id);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void updateGroup(int studentId, int groupId) {
-        log.info("StudentDao updateGroup method started");
-        jdbcTemplate.update(STUDENT_UPDATE_GROUP_BY_ID, groupId, studentId);
+        log.debug("StudentDao updateGroup method started with student ID: {}, and group ID: {}", studentId, groupId);
+
+        try {
+            jdbcTemplate.update(STUDENT_UPDATE_GROUP_BY_ID, groupId, studentId);
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
