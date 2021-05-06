@@ -1,5 +1,6 @@
 package com.foxminded.university.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -12,6 +13,7 @@ import javax.sql.DataSource;
 @Configuration
 @ComponentScan("com.foxminded.university")
 @PropertySource("classpath:h2.properties")
+@Slf4j
 public class SpringConfigTest {
     @Value("${h2.driver}")
     String driver;
@@ -33,6 +35,8 @@ public class SpringConfigTest {
         dataSource.setUsername(user);
         dataSource.setPassword(password);
 
+        log.debug("Test DataSource bean created");
+
         return dataSource;
     }
 
@@ -40,6 +44,8 @@ public class SpringConfigTest {
     public JdbcTemplate jdbcTemplate() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(dataSource());
+
+        log.debug("Test JdbcTemplate bean created");
 
         return jdbcTemplate;
     }

@@ -2,6 +2,7 @@ package com.foxminded.university.mapper;
 
 import com.foxminded.university.config.SpringConfigTest;
 import com.foxminded.university.models.Teacher;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
+@Slf4j
 public class TeacherRowMapperTest {
 
     @Autowired
@@ -28,6 +30,9 @@ public class TeacherRowMapperTest {
 
     @Test
     void mapTeacherShouldReturnTeacherWithId25FirstNameIsBronislavAndLastNameIsPotemkin() throws SQLException {
+        log.debug("TeacherRowMapperTest mapTeacherShouldReturnTeacherWithId25FirstNameIsBronislavAndLastNameIsPotemkin" +
+                "test started");
+
         when(resultSet.getInt("id")).thenReturn(25);
         when(resultSet.getString("firstName")).thenReturn("Bronislav");
         when(resultSet.getString("lastName")).thenReturn("Potemkin");
@@ -41,5 +46,8 @@ public class TeacherRowMapperTest {
         verify(resultSet).getInt("id");
         verify(resultSet).getString("firstName");
         verify(resultSet).getString("lastName");
+
+        log.debug("TeacherRowMapperTest mapTeacherShouldReturnTeacherWithId25FirstNameIsBronislavAndLastNameIsPotemkin" +
+                "test completed");
     }
 }

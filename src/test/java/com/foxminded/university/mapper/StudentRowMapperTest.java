@@ -3,6 +3,7 @@ package com.foxminded.university.mapper;
 import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Student;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@Slf4j
 public class StudentRowMapperTest {
 
     @Mock
@@ -28,6 +30,8 @@ public class StudentRowMapperTest {
 
     @Test
     void mapStudentShouldReturnStudentWithId1AndLectureNameIsOleg() throws SQLException {
+        log.debug("StudentRowMapperTest mapStudentShouldReturnStudentWithId1AndLectureNameIsOleg started");
+
         Group group = new Group(1, "Dream team");
 
         when(resultSet.getInt("group_id")).thenReturn(1);
@@ -48,5 +52,7 @@ public class StudentRowMapperTest {
         verify(resultSet).getInt("id");
         verify(resultSet).getString("firstName");
         verify(resultSet).getString("lastName");
+
+        log.debug("StudentRowMapperTest mapStudentShouldReturnStudentWithId1AndLectureNameIsOleg completed");
     }
 }

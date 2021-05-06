@@ -1,15 +1,12 @@
 package com.foxminded.university.dao;
 
-import java.util.function.Supplier;
+import lombok.extern.slf4j.Slf4j;
 
-public class DaoException extends RuntimeException implements Supplier<RuntimeException> {
+@Slf4j
+public class DaoException extends RuntimeException {
 
     public DaoException(String message) {
         super(message);
-    }
-
-    @Override
-    public RuntimeException get() {
-        return null;
+        log.info("A DaoException exception occurred");
     }
 }

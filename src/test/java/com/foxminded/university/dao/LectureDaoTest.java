@@ -5,6 +5,7 @@ import com.foxminded.university.generate.SqlRunner;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Teacher;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
+@Slf4j
 public class LectureDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
@@ -38,6 +40,8 @@ public class LectureDaoTest {
 
     @Test
     void getLectureByIdShouldReturnActualLectureWithNameMath() {
+        log.debug("LectureDaoTest getLectureByIdShouldReturnActualLectureWithNameMath test started");
+
         Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
@@ -50,10 +54,15 @@ public class LectureDaoTest {
         Lecture actual = lectureDao.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
+
+        log.debug("LectureDaoTest getLectureByIdShouldReturnActualLectureWithNameMath test completed");
     }
 
     @Test
     void updateLectureByIdShouldReturnActualLectureWithNameSleddingByUsingMethodGetById() {
+        log.debug("LectureDaoTest" +
+                "updateLectureByIdShouldReturnActualLectureWithNameSleddingByUsingMethodGetById test started");
+
         Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
@@ -72,10 +81,17 @@ public class LectureDaoTest {
         Lecture actual = lectureDao.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
+
+        log.debug("LectureDaoTest" +
+                "updateLectureByIdShouldReturnActualLectureWithNameSleddingByUsingMethodGetById test completed");
     }
 
     @Test
     void createGroupShouldReturnActualLectureWithNameHowToTossPancakesCorrectlyByUsingMethodGetById() {
+        log.debug("LectureDaoTest" +
+                "createGroupShouldReturnActualLectureWithNameHowToTossPancakesCorrectlyByUsingMethodGetById" +
+                "test started");
+
         Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
@@ -95,10 +111,17 @@ public class LectureDaoTest {
         Lecture actual = lectureDao.getById(4);
 
         assertThat(expected, samePropertyValuesAs(actual));
+
+        log.debug("LectureDaoTest" +
+                "createGroupShouldReturnActualLectureWithNameHowToTossPancakesCorrectlyByUsingMethodGetById" +
+                "test completed");
     }
 
     @Test
     void getLectureByIdGroupIdShouldReturnActualLectureWithNameEng() {
+        log.debug("LectureDaoTest" +
+                "getLectureByIdGroupIdShouldReturnActualLectureWithNameEng test started");
+
         Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
@@ -111,5 +134,8 @@ public class LectureDaoTest {
         Lecture actual = lectureDao.getByGroupId(3);
 
         assertThat(expected, samePropertyValuesAs(actual));
+
+        log.debug("LectureDaoTest" +
+                "getLectureByIdGroupIdShouldReturnActualLectureWithNameEng test completed");
     }
 }

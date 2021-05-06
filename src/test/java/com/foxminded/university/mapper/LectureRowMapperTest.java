@@ -5,6 +5,7 @@ import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Teacher;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@Slf4j
 public class LectureRowMapperTest {
 
     @Mock
@@ -33,6 +35,8 @@ public class LectureRowMapperTest {
 
     @Test
     void mapLectureShouldReturnLectureWithId1AndLectureNameIsMath() throws SQLException {
+        log.debug("LectureRowMapperTest mapLectureShouldReturnLectureWithId1AndLectureNameIsMath test started");
+
         Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
         Group group = new Group(3, "Geeks");
 
@@ -59,5 +63,7 @@ public class LectureRowMapperTest {
         verify(resultSet).getInt("id");
         verify(resultSet).getString("lectureName");
         verify(resultSet).getString("description");
+
+        log.debug("LectureRowMapperTest mapLectureShouldReturnLectureWithId1AndLectureNameIsMath test completed");
     }
 }

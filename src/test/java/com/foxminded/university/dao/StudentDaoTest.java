@@ -4,6 +4,7 @@ import com.foxminded.university.config.SpringConfigTest;
 import com.foxminded.university.generate.SqlRunner;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Student;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +16,7 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
+@Slf4j
 public class StudentDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
@@ -34,6 +36,8 @@ public class StudentDaoTest {
 
     @Test
     void getStudentByIdShouldReturnActualStudentWithNameOleg() {
+        log.debug("StudentDaoTest getStudentByIdShouldReturnActualStudentWithNameOleg test started");
+
         Group group = new Group(1, "Dream team");
         groupDao.create(group);
 
@@ -43,10 +47,15 @@ public class StudentDaoTest {
         Student actual = studentDao.getById(expected.getId());
 
         assertThat(expected, samePropertyValuesAs(actual));
+
+        log.debug("StudentDaoTest getStudentByIdShouldReturnActualStudentWithNameOleg test completed");
     }
 
     @Test
     void updateStudentByIdShouldReturnActualStudentWithNameKolyaByUsingMethodGetById() {
+        log.debug("StudentDaoTest updateStudentByIdShouldReturnActualStudentWithNameKolyaByUsingMethodGetById" +
+                "test started");
+
         Group group = new Group(1, "Dream team");
         groupDao.create(group);
 
@@ -61,10 +70,16 @@ public class StudentDaoTest {
         Student actual = studentDao.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
+
+        log.debug("StudentDaoTest updateStudentByIdShouldReturnActualStudentWithNameKolyaByUsingMethodGetById" +
+                "test completed");
     }
 
     @Test
     void createStudentShouldReturnActualStudentWithNameBorisByUsingMethodGetById() {
+        log.debug("StudentDaoTest createStudentShouldReturnActualStudentWithNameBorisByUsingMethodGetById" +
+                "test started");
+
         Group group = new Group(1, "Dream team");
         groupDao.create(group);
 
@@ -76,5 +91,8 @@ public class StudentDaoTest {
         Student actual = studentDao.getById(2);
 
         assertThat(expected, samePropertyValuesAs(actual));
+
+        log.debug("StudentDaoTest createStudentShouldReturnActualStudentWithNameBorisByUsingMethodGetById" +
+                "test completed");
     }
 }
