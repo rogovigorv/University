@@ -16,8 +16,6 @@ import static com.foxminded.university.dao.Queries.STUDENT_UPDATE_GROUP_BY_ID;
 @Repository
 @Slf4j
 public class StudentDao implements UniversityDao<Student>{
-    private static final String EXCEPTION_MESSAGE = "Can't find student with id: ";
-
     private final JdbcTemplate jdbcTemplate;
     private final StudentRowMapper studentRowMapper;
 
@@ -27,51 +25,60 @@ public class StudentDao implements UniversityDao<Student>{
         this.studentRowMapper = studentRowMapper;
     }
 
-    public void create(Student student) {
+    public void create(Student student) throws DaoException {
         log.debug("StudentDao create method started with student: {}", student);
-        jdbcTemplate.update(STUDENT_CREATE, student.getId(), student.getFirstName(),
-                student.getLastName(), student.getGroup().getId());
+
+        try {
+            jdbcTemplate.update(STUDENT_CREATE, student.getId(), student.getFirstName(),
+                    student.getLastName(), student.getGroup().getId());
+        } catch (Throwable e) {
+            throw new DaoException(e);
+        }
     }
 
     @Override
     public Student getById(int id) throws DaoException {
         log.debug("StudentDao getById method started with ID: {}", id);
 
-        return jdbcTemplate.query(STUDENT_SELECT_BY_ID, studentRowMapper, new Object[]{id})
-                .stream()
-                .findAny()
-                .orElseThrow(() -> new DaoException(EXCEPTION_MESSAGE + id));
+        Student student;
+        try {
+            student = jdbcTemplate.queryForObject(STUDENT_SELECT_BY_ID, studentRowMapper, id);
+        } catch (Throwable e) {
+            throw new DaoException(e);
+        }
+
+        return student;
     }
 
-    public void update(Student student, int id) {
+    public void update(Student student, int id) throws DaoException {
         log.debug("StudentDao update method started with student: {}, and ID: {}", student, id);
 
         try {
             jdbcTemplate.update(STUDENT_UPDATE_BY_ID, student.getFirstName(), student.getLastName(),
                     student.getGroup().getId(), id);
-        } catch (DataAccessException e) {
-            throw new RuntimeException(e);
+        } catch (Throwable e) {
+            throw new DaoException(e);
         }
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws DaoException {
         log.debug("StudentDao delete method started with ID: {}", id);
 
         try {
             jdbcTemplate.update(STUDENT_DELETE_BY_ID, id);
-        } catch (DataAccessException e) {
-            throw new RuntimeException(e);
+        } catch (Throwable e) {
+            throw new DaoException(e);
         }
     }
 
-    public void updateGroup(int studentId, int groupId) {
+    public void updateGroup(int studentId, int groupId) throws DaoException {
         log.debug("StudentDao updateGroup method started with student ID: {}, and group ID: {}", studentId, groupId);
 
         try {
             jdbcTemplate.update(STUDENT_UPDATE_GROUP_BY_ID, groupId, studentId);
-        } catch (DataAccessException e) {
-            throw new RuntimeException(e);
+        } catch (Throwable e) {
+            throw new DaoException(e);
         }
     }
 }

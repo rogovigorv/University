@@ -1,5 +1,6 @@
 package com.foxminded.university.service;
 
+import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.LectureDao;
 import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Lecture;
@@ -22,33 +23,74 @@ public class LectureService {
 
     public void create(Lecture lecture, int groupID) {
         log.info("LectureService create method started");
-        lectureDao.create(lecture, groupID);
+
+        try {
+            lectureDao.create(lecture, groupID);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public Lecture getById(int id) {
         log.info("LectureService getById method started");
-        return lectureDao.getById(id);
+
+        Lecture lecture;
+        try {
+            lecture = lectureDao.getById(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+
+        return lecture;
     }
 
     public Lecture getByGroupId(int id) {
         log.info("LectureService getByGroupId method started");
-        return lectureDao.getByGroupId(id);
+
+        Lecture lecture;
+        try {
+            lecture = lectureDao.getByGroupId(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+
+        return lecture;
     }
 
     public void update(Lecture lecture, int groupID, int id) {
         log.info("LectureService update method started");
-        lectureDao.update(lecture, groupID, id);
+
+        try {
+            lectureDao.update(lecture, groupID, id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public void delete(int id) {
         log.info("LectureService delete method started");
-        lectureDao.delete(id);
+
+        try {
+            lectureDao.delete(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public void deleteByTeacherSurname(String surname) {
         log.info("LectureService deleteByTeacherSurname method started");
 
-        Teacher teacher = teacherDao.getByTeacherSurname(surname);
-        lectureDao.deleteByTeacherId(teacher.getId());
+        Teacher teacher;
+        try {
+            teacher = teacherDao.getByTeacherSurname(surname);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+
+        try {
+            lectureDao.deleteByTeacherId(teacher.getId());
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 }

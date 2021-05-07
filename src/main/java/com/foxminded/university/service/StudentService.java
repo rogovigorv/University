@@ -1,5 +1,6 @@
 package com.foxminded.university.service;
 
+import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.dao.StudentDao;
 import com.foxminded.university.models.Group;
@@ -22,35 +23,78 @@ public class StudentService {
 
     public void create(Student student) {
         log.info("StudentService create method started");
-        studentDao.create(student);
+
+        try {
+            studentDao.create(student);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public Student getById(int id) {
         log.info("StudentService getById method started");
-        return studentDao.getById(id);
+
+        Student student;
+        try {
+            student = studentDao.getById(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+
+        return student;
     }
 
     public void update(Student student, int id) {
         log.info("StudentService update method started");
-        studentDao.update(student, id);
+
+        try {
+            studentDao.update(student, id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public void delete(int id) {
         log.info("StudentService delete method started");
-        studentDao.delete(id);
+
+        try {
+            studentDao.delete(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public void deleteByGroupName(String groupName) {
         log.info("StudentService deleteByGroupName method started");
 
-        Group group = groupDao.getByGroupName(groupName);
-        studentDao.delete(group.getId());
+        Group group;
+        try {
+            group = groupDao.getByGroupName(groupName);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+
+        try {
+            studentDao.delete(group.getId());
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public void changeGroup(int studentId, String groupName) {
         log.info("StudentService changeGroup method started");
 
-        Group group = groupDao.getByGroupName(groupName);
-        studentDao.updateGroup(studentId, group.getId());
+        Group group;
+        try {
+            group = groupDao.getByGroupName(groupName);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+
+        try {
+            studentDao.updateGroup(studentId, group.getId());
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 }

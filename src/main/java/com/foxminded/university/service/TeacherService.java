@@ -1,5 +1,6 @@
 package com.foxminded.university.service;
 
+import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Teacher;
 import lombok.extern.slf4j.Slf4j;
@@ -18,21 +19,44 @@ public class TeacherService {
 
     public void create(Teacher teacher) {
         log.info("TeacherService create method started");
-        teacherDao.create(teacher);
+
+        try {
+            teacherDao.create(teacher);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public Teacher getById(int id) {
         log.info("TeacherService getById method started");
-        return teacherDao.getById(id);
+
+        Teacher teacher;
+        try {
+            teacher = teacherDao.getById(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+
+        return teacher;
     }
 
     public void update(Teacher teacher, int id) {
         log.info("TeacherService update method started");
-        teacherDao.update(teacher, id);
+
+        try {
+            teacherDao.update(teacher, id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 
     public void delete(int id) {
         log.info("TeacherService delete method started");
-        teacherDao.delete(id);
+
+        try {
+            teacherDao.delete(id);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
     }
 }
