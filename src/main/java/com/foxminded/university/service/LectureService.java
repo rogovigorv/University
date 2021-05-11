@@ -27,7 +27,7 @@ public class LectureService {
         try {
             lectureDao.create(lecture, groupID);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to create this lecture.", e);
         }
     }
 
@@ -38,7 +38,7 @@ public class LectureService {
         try {
             lecture = lectureDao.getById(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Can't get lecture with ID " + id + ".", e);
         }
 
         return lecture;
@@ -51,7 +51,7 @@ public class LectureService {
         try {
             lecture = lectureDao.getByGroupId(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Can't get lecture with group ID " + id + ".", e);
         }
 
         return lecture;
@@ -63,7 +63,7 @@ public class LectureService {
         try {
             lectureDao.update(lecture, groupID, id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to update lecture with ID " + id + ".", e);
         }
     }
 
@@ -73,7 +73,7 @@ public class LectureService {
         try {
             lectureDao.delete(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to delete lecture with ID " + id + ".", e);
         }
     }
 
@@ -84,13 +84,13 @@ public class LectureService {
         try {
             teacher = teacherDao.getByTeacherSurname(surname);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to get teacher to this lecture.", e);
         }
 
         try {
             lectureDao.deleteByTeacherId(teacher.getId());
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to delete lecture with teacher ID " + teacher.getId() + ".", e);
         }
     }
 }

@@ -31,7 +31,7 @@ public class StudentDao implements UniversityDao<Student>{
         try {
             jdbcTemplate.update(STUDENT_CREATE, student.getId(), student.getFirstName(),
                     student.getLastName(), student.getGroup().getId());
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -43,7 +43,7 @@ public class StudentDao implements UniversityDao<Student>{
         Student student;
         try {
             student = jdbcTemplate.queryForObject(STUDENT_SELECT_BY_ID, studentRowMapper, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
 
@@ -56,7 +56,7 @@ public class StudentDao implements UniversityDao<Student>{
         try {
             jdbcTemplate.update(STUDENT_UPDATE_BY_ID, student.getFirstName(), student.getLastName(),
                     student.getGroup().getId(), id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -67,7 +67,7 @@ public class StudentDao implements UniversityDao<Student>{
 
         try {
             jdbcTemplate.update(STUDENT_DELETE_BY_ID, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -77,7 +77,7 @@ public class StudentDao implements UniversityDao<Student>{
 
         try {
             jdbcTemplate.update(STUDENT_UPDATE_GROUP_BY_ID, groupId, studentId);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }

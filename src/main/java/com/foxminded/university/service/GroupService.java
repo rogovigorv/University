@@ -23,7 +23,7 @@ public class GroupService {
         try {
             groupDao.create(group);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to create this group.", e);
         }
     }
 
@@ -34,7 +34,7 @@ public class GroupService {
         try {
             group = groupDao.getById(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Can't get group with ID " + id + ".", e);
         }
 
         return group;
@@ -46,7 +46,7 @@ public class GroupService {
         try {
             groupDao.update(group, id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to update group with ID " + id + ".", e);
         }
     }
 
@@ -56,7 +56,7 @@ public class GroupService {
         try {
             groupDao.delete(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to delete group with ID " + id + ".", e);
         }
     }
 }

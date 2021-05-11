@@ -4,6 +4,7 @@ import com.foxminded.university.mapper.LectureRowMapper;
 import com.foxminded.university.models.Lecture;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.LECTURE_DELETE_BY_ID;
@@ -31,7 +32,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         try {
             jdbcTemplate.update(LECTURE_CREATE, lecture.getId(), lecture.getLectureName(),
                     lecture.getDescription(), lecture.getTeacher().getId(), groupID);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -43,7 +44,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         Lecture lecture;
         try {
             lecture = jdbcTemplate.queryForObject(LECTURE_SELECT_BY_ID, lectureRowMapper, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
 
@@ -56,7 +57,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         Lecture lecture;
         try {
             lecture = jdbcTemplate.queryForObject(LECTURE_SELECT_BY_GROUP_ID, lectureRowMapper, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
 
@@ -69,7 +70,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         try {
             jdbcTemplate.update(LECTURE_UPDATE_BY_ID, lecture.getLectureName(), lecture.getDescription(),
                     lecture.getTeacher().getId(), groupID, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -80,7 +81,7 @@ public class LectureDao implements UniversityDao<Lecture> {
 
         try {
             jdbcTemplate.update(LECTURE_DELETE_BY_ID, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -90,7 +91,7 @@ public class LectureDao implements UniversityDao<Lecture> {
 
         try {
             jdbcTemplate.update(LECTURE_DELETE_BY_TEACHER_ID, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }

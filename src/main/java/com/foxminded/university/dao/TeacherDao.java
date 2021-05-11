@@ -4,6 +4,7 @@ import com.foxminded.university.mapper.TeacherRowMapper;
 import com.foxminded.university.models.Teacher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.TEACHER_CREATE;
@@ -29,7 +30,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
 
         try {
             jdbcTemplate.update(TEACHER_CREATE, teacher.getId(), teacher.getFirstName(), teacher.getLastName());
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -41,7 +42,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         Teacher teacher;
         try {
             teacher = jdbcTemplate.queryForObject(TEACHER_SELECT_BY_ID, teacherRowMapper, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
 
@@ -53,7 +54,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
 
         try {
             jdbcTemplate.update(TEACHER_UPDATE_BY_ID, teacher.getFirstName(), teacher.getLastName(), id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -64,7 +65,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
 
         try {
             jdbcTemplate.update(TEACHER_DELETE_BY_ID, id);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
     }
@@ -75,7 +76,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         Teacher teacher;
         try {
             teacher = jdbcTemplate.queryForObject(TEACHER_SELECT_BY_LAST_NAME, teacherRowMapper, surname);
-        } catch (Throwable e) {
+        } catch (DataAccessException e) {
             throw new DaoException(e);
         }
 

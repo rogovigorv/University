@@ -27,7 +27,7 @@ public class StudentService {
         try {
             studentDao.create(student);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to create this student.", e);
         }
     }
 
@@ -38,7 +38,7 @@ public class StudentService {
         try {
             student = studentDao.getById(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Can't get student with ID " + id + ".", e);
         }
 
         return student;
@@ -50,7 +50,7 @@ public class StudentService {
         try {
             studentDao.update(student, id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to update student with ID " + id + ".", e);
         }
     }
 
@@ -60,7 +60,7 @@ public class StudentService {
         try {
             studentDao.delete(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to delete student with ID " + id + ".", e);
         }
     }
 
@@ -71,13 +71,13 @@ public class StudentService {
         try {
             group = groupDao.getByGroupName(groupName);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to get group to this student.", e);
         }
 
         try {
             studentDao.delete(group.getId());
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to delete student with group ID " + group.getId() + ".", e);
         }
     }
 
@@ -88,13 +88,13 @@ public class StudentService {
         try {
             group = groupDao.getByGroupName(groupName);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to get group to this student.", e);
         }
 
         try {
             studentDao.updateGroup(studentId, group.getId());
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to change the group for student with ID " + studentId + ".", e);
         }
     }
 }

@@ -23,7 +23,7 @@ public class TeacherService {
         try {
             teacherDao.create(teacher);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to create this teacher.", e);
         }
     }
 
@@ -34,7 +34,7 @@ public class TeacherService {
         try {
             teacher = teacherDao.getById(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Can't get teacher with ID " + id + ".", e);
         }
 
         return teacher;
@@ -46,7 +46,7 @@ public class TeacherService {
         try {
             teacherDao.update(teacher, id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to update teacher with ID " + id + ".", e);
         }
     }
 
@@ -56,7 +56,7 @@ public class TeacherService {
         try {
             teacherDao.delete(id);
         } catch (DaoException e) {
-            throw new ServiceException(e);
+            throw new ServiceException("Unable to delete teacher with ID " + id + ".", e);
         }
     }
 }
