@@ -3,6 +3,7 @@ package com.foxminded.university.dao;
 import com.foxminded.university.config.SpringConfigTest;
 import com.foxminded.university.generate.SqlRunner;
 import com.foxminded.university.models.Group;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
+@Slf4j
 public class GroupDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 

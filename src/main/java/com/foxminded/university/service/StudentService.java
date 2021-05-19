@@ -1,13 +1,16 @@
 package com.foxminded.university.service;
 
+import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.dao.StudentDao;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Student;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class StudentService {
     private final StudentDao studentDao;
     private final GroupDao groupDao;
@@ -19,28 +22,87 @@ public class StudentService {
     }
 
     public void create(Student student) {
-        studentDao.create(student);
+        log.info("Create student: {}", student);
+
+        try {
+            studentDao.create(student);
+        } catch (DaoException e) {
+            log.warn("Unable to create this student {}", student);
+            throw new ServiceException("Unable to create this student.", e);
+        }
     }
 
     public Student getById(int id) {
-        return studentDao.getById(id);
+        log.info("Get student with ID: {}", id);
+
+        Student student;
+        try {
+            student = studentDao.getById(id);
+        } catch (DaoException e) {
+            log.warn("Can't get student with ID: {}", id);
+            throw new ServiceException("Can't get student with ID " + id + ".", e);
+        }
+
+        return student;
     }
 
     public void update(Student student, int id) {
-        studentDao.update(student, id);
+        log.info("Update student: {}, and ID: {}", student, id);
+
+        try {
+            studentDao.update(student, id);
+        } catch (DaoException e) {
+            log.warn("Unable to update student with ID: {}", id);
+            throw new ServiceException("Unable to update student with ID " + id + ".", e);
+        }
     }
 
     public void delete(int id) {
-        studentDao.delete(id);
+        log.info("Delete student with ID: {}", id);
+
+        try {
+            studentDao.delete(id);
+        } catch (DaoException e) {
+            log.warn("Unable to delete student with ID: {}", id);
+            throw new ServiceException("Unable to delete student with ID " + id + ".", e);
+        }
     }
 
     public void deleteByGroupName(String groupName) {
-        Group group = groupDao.getByGroupName(groupName);
-        studentDao.delete(group.getId());
+        log.info("Delete student by group name: {}", groupName);
+
+        Group group;
+        try {
+            group = groupDao.getByGroupName(groupName);
+        } catch (DaoException e) {
+            log.warn("Unable to get group with name {} to this student", groupName);
+            throw new ServiceException("Unable to get group to this student.", e);
+        }
+
+        try {
+            studentDao.delete(group.getId());
+        } catch (DaoException e) {
+            log.warn("Unable to delete student with group ID: {}", group.getId());
+            throw new ServiceException("Unable to delete student with group ID " + group.getId() + ".", e);
+        }
     }
 
     public void changeGroup(int studentId, String groupName) {
-        Group group = groupDao.getByGroupName(groupName);
-        studentDao.updateGroup(studentId, group.getId());
+        log.info("Change student group: student ID - " + studentId + ", new group - " + groupName);
+
+        Group group;
+        try {
+            group = groupDao.getByGroupName(groupName);
+        } catch (DaoException e) {
+            log.warn("Unable to get group with name {} to this student", groupName);
+            throw new ServiceException("Unable to get group to this student.", e);
+        }
+
+        try {
+            studentDao.updateGroup(studentId, group.getId());
+        } catch (DaoException e) {
+            log.warn("Unable to change the group for student with ID: {}", studentId);
+            throw new ServiceException("Unable to change the group for student with ID " + studentId + ".", e);
+        }
     }
 }

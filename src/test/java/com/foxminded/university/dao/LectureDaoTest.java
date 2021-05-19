@@ -5,6 +5,7 @@ import com.foxminded.university.generate.SqlRunner;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Teacher;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
+@Slf4j
 public class LectureDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 

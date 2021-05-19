@@ -2,6 +2,7 @@ package com.foxminded.university.mapper;
 
 import com.foxminded.university.config.SpringConfigTest;
 import com.foxminded.university.models.Group;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,6 +19,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
+@Slf4j
 public class GroupRowMapperTest {
 
     @Autowired

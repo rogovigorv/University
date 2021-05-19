@@ -5,6 +5,7 @@ import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Teacher;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
+@Slf4j
 public class LectureRowMapper implements RowMapper<Lecture> {
     private final TeacherDao teacherDao;
     private final GroupDao groupDao;
@@ -24,6 +26,7 @@ public class LectureRowMapper implements RowMapper<Lecture> {
 
     @Override
     public Lecture mapRow(ResultSet resultSet, int i) throws SQLException {
+        log.info("Start lecture mapper");
 
         int teacherID = resultSet.getInt("teacher_id");
         Teacher teacher = teacherDao.getById(teacherID);
