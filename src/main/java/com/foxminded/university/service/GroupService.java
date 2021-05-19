@@ -18,7 +18,7 @@ public class GroupService {
     }
 
     public void create(Group group) {
-        log.info("GroupService create method started");
+        log.info("Create group {}", group);
 
         try {
             groupDao.create(group);
@@ -28,7 +28,7 @@ public class GroupService {
     }
 
     public Group getById(int id) {
-        log.info("GroupService getById method started");
+        log.info("Get group with ID: {}", id);
 
         Group group;
         try {
@@ -41,7 +41,7 @@ public class GroupService {
     }
 
     public void update(Group group, int id) {
-        log.info("GroupService update method started");
+        log.info("Update group: {} and ID: {}", group, id);
 
         try {
             groupDao.update(group, id);
@@ -51,7 +51,7 @@ public class GroupService {
     }
 
     public void delete(int id) {
-        log.info("GroupService delete method started");
+        log.info("Delete group with ID: {}", id);
 
         try {
             groupDao.delete(id);

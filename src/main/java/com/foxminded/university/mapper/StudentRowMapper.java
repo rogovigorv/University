@@ -22,7 +22,7 @@ public class StudentRowMapper implements RowMapper<Student> {
 
     @Override
     public Student mapRow(ResultSet resultSet, int i) throws SQLException {
-        log.info("StudentRowMapper mapRow method started");
+        log.info("Start student mapper");
 
         Student student = new Student();
 

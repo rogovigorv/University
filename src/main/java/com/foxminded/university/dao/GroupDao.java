@@ -26,7 +26,7 @@ public class GroupDao implements UniversityDao<Group> {
     }
 
     public void create(Group group) throws DaoException {
-        log.debug("GroupDao create method started with group: {}", group);
+        log.debug("Create group: {}", group);
 
         try {
             jdbcTemplate.update(GROUP_CREATE, group.getId(), group.getGroupName());
@@ -37,7 +37,7 @@ public class GroupDao implements UniversityDao<Group> {
 
     @Override
     public Group getById(int id) throws DaoException {
-        log.debug("GroupDao getById method started with ID: {}", id);
+        log.debug("Get group with ID: {}", id);
 
         Group group;
         try {
@@ -50,7 +50,7 @@ public class GroupDao implements UniversityDao<Group> {
     }
 
     public void update(Group group, int id) throws DaoException {
-        log.debug("GroupDao update method started with group: {} and ID: {}", group, id);
+        log.debug("Update group: {} and ID: {}", group, id);
 
         try {
             jdbcTemplate.update(GROUP_UPDATE_BY_ID, group.getGroupName(), id);
@@ -61,7 +61,7 @@ public class GroupDao implements UniversityDao<Group> {
 
     @Override
     public void delete(int id) throws DaoException {
-        log.debug("GroupDao delete method started with ID: {}", id);
+        log.debug("Delete group with ID: {}", id);
 
         try {
             jdbcTemplate.update(GROUP_DELETE_BY_ID, id);
@@ -71,7 +71,7 @@ public class GroupDao implements UniversityDao<Group> {
     }
 
     public Group getByGroupName(String groupName) throws DaoException {
-        log.debug("GroupDao getByGroupName method started with group name: {}", groupName);
+        log.debug("Get group with name: {}", groupName);
 
         Group group;
         try {

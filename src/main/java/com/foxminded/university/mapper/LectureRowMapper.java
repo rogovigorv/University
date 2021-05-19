@@ -26,7 +26,7 @@ public class LectureRowMapper implements RowMapper<Lecture> {
 
     @Override
     public Lecture mapRow(ResultSet resultSet, int i) throws SQLException {
-        log.info("LectureRowMapper mapRow method started");
+        log.info("Start lecture mapper");
 
         int teacherID = resultSet.getInt("teacher_id");
         Teacher teacher = teacherDao.getById(teacherID);

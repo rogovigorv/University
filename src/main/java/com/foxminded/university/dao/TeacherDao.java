@@ -26,7 +26,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
     }
 
     public void create(Teacher teacher) throws DaoException {
-        log.debug("TeacherDao create method started with teacher: {}", teacher);
+        log.debug("Create teacher: {}", teacher);
 
         try {
             jdbcTemplate.update(TEACHER_CREATE, teacher.getId(), teacher.getFirstName(), teacher.getLastName());
@@ -37,7 +37,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
 
     @Override
     public Teacher getById(int id) throws DaoException {
-        log.debug("TeacherDao getById method started with ID: {}", id);
+        log.debug("Get teacher with ID: {}", id);
 
         Teacher teacher;
         try {
@@ -50,7 +50,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
     }
 
     public void update(Teacher teacher, int id) throws DaoException {
-        log.debug("TeacherDao update method started with teacher: {}, and ID: {}", teacher, id);
+        log.debug("Update teacher: {}, and ID: {}", teacher, id);
 
         try {
             jdbcTemplate.update(TEACHER_UPDATE_BY_ID, teacher.getFirstName(), teacher.getLastName(), id);
@@ -61,7 +61,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
 
     @Override
     public void delete(int id) throws DaoException {
-        log.debug("TeacherDao delete method started with ID: {}", id);
+        log.debug("Delete teacher with ID: {}", id);
 
         try {
             jdbcTemplate.update(TEACHER_DELETE_BY_ID, id);
@@ -71,7 +71,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
     }
 
     public Teacher getByTeacherSurname(String surname) throws DaoException {
-        log.debug("TeacherDao getByTeacherSurname method started with teacher surname: {}", surname);
+        log.debug("Get teacher by surname: {}", surname);
 
         Teacher teacher;
         try {

@@ -27,7 +27,7 @@ public class LectureDao implements UniversityDao<Lecture> {
     }
 
     public void create(Lecture lecture, int groupID) throws DaoException {
-        log.debug("LectureDao create method started with lecture: {} and group ID: {}", lecture, groupID);
+        log.debug("Create lecture: {} and group ID: {}", lecture, groupID);
 
         try {
             jdbcTemplate.update(LECTURE_CREATE, lecture.getId(), lecture.getLectureName(),
@@ -39,7 +39,7 @@ public class LectureDao implements UniversityDao<Lecture> {
 
     @Override
     public Lecture getById(int id) throws DaoException {
-        log.debug("LectureDao getById method started with ID: {}", id);
+        log.debug("Get lecture with ID: {}", id);
 
         Lecture lecture;
         try {
@@ -52,7 +52,7 @@ public class LectureDao implements UniversityDao<Lecture> {
     }
 
     public Lecture getByGroupId(int id) throws DaoException {
-        log.debug("LectureDao getByGroupId method started with ID: {}", id);
+        log.debug("Get lecture with group ID: {}", id);
 
         Lecture lecture;
         try {
@@ -65,7 +65,7 @@ public class LectureDao implements UniversityDao<Lecture> {
     }
 
     public void update(Lecture lecture, int groupID, int id) throws DaoException {
-        log.debug("LectureDao update method started with lecture: {}, group ID: {} and ID: {}", lecture, groupID, id);
+        log.debug("Update lecture: {}, group ID: {} and ID: {}", lecture, groupID, id);
 
         try {
             jdbcTemplate.update(LECTURE_UPDATE_BY_ID, lecture.getLectureName(), lecture.getDescription(),
@@ -77,7 +77,7 @@ public class LectureDao implements UniversityDao<Lecture> {
 
     @Override
     public void delete(int id) throws DaoException {
-        log.debug("LectureDao delete method started with ID: {}", id);
+        log.debug("Delete lecture with ID: {}", id);
 
         try {
             jdbcTemplate.update(LECTURE_DELETE_BY_ID, id);
@@ -87,7 +87,7 @@ public class LectureDao implements UniversityDao<Lecture> {
     }
 
     public void deleteByTeacherId(int id) throws DaoException {
-        log.info("LectureDao deleteByTeacherId method started with ID: {}", id);
+        log.info("Delete lecture with teacher ID: {}", id);
 
         try {
             jdbcTemplate.update(LECTURE_DELETE_BY_TEACHER_ID, id);

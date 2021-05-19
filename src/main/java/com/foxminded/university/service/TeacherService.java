@@ -18,7 +18,7 @@ public class TeacherService {
     }
 
     public void create(Teacher teacher) {
-        log.info("TeacherService create method started");
+        log.info("Create teacher: {}", teacher);
 
         try {
             teacherDao.create(teacher);
@@ -28,7 +28,7 @@ public class TeacherService {
     }
 
     public Teacher getById(int id) {
-        log.info("TeacherService getById method started");
+        log.info("Get teacher with ID: {}", id);
 
         Teacher teacher;
         try {
@@ -41,7 +41,7 @@ public class TeacherService {
     }
 
     public void update(Teacher teacher, int id) {
-        log.info("TeacherService update method started");
+        log.info("Update teacher: {}, and ID: {}", teacher, id);
 
         try {
             teacherDao.update(teacher, id);
@@ -51,7 +51,7 @@ public class TeacherService {
     }
 
     public void delete(int id) {
-        log.info("TeacherService delete method started");
+        log.info("Delete teacher with ID: {}", id);
 
         try {
             teacherDao.delete(id);

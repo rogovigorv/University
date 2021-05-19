@@ -22,7 +22,7 @@ public class StudentService {
     }
 
     public void create(Student student) {
-        log.info("StudentService create method started");
+        log.info("Create student: {}", student);
 
         try {
             studentDao.create(student);
@@ -32,7 +32,7 @@ public class StudentService {
     }
 
     public Student getById(int id) {
-        log.info("StudentService getById method started");
+        log.info("Get student with ID: {}", id);
 
         Student student;
         try {
@@ -45,7 +45,7 @@ public class StudentService {
     }
 
     public void update(Student student, int id) {
-        log.info("StudentService update method started");
+        log.info("Update student: {}, and ID: {}", student, id);
 
         try {
             studentDao.update(student, id);
@@ -55,7 +55,7 @@ public class StudentService {
     }
 
     public void delete(int id) {
-        log.info("StudentService delete method started");
+        log.info("Delete student with ID: {}", id);
 
         try {
             studentDao.delete(id);
@@ -65,7 +65,7 @@ public class StudentService {
     }
 
     public void deleteByGroupName(String groupName) {
-        log.info("StudentService deleteByGroupName method started");
+        log.info("Delete student by group name: {}", groupName);
 
         Group group;
         try {
@@ -82,7 +82,7 @@ public class StudentService {
     }
 
     public void changeGroup(int studentId, String groupName) {
-        log.info("StudentService changeGroup method started");
+        log.info("Change student group: student ID - " + studentId + ", new group - " + groupName);
 
         Group group;
         try {

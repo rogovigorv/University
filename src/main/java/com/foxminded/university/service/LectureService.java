@@ -22,7 +22,7 @@ public class LectureService {
     }
 
     public void create(Lecture lecture, int groupID) {
-        log.info("LectureService create method started");
+        log.info("Create lecture: {} and group ID: {}", lecture, groupID);
 
         try {
             lectureDao.create(lecture, groupID);
@@ -32,7 +32,7 @@ public class LectureService {
     }
 
     public Lecture getById(int id) {
-        log.info("LectureService getById method started");
+        log.info("Get lecture with ID: {}", id);
 
         Lecture lecture;
         try {
@@ -45,7 +45,7 @@ public class LectureService {
     }
 
     public Lecture getByGroupId(int id) {
-        log.info("LectureService getByGroupId method started");
+        log.info("Get lecture with group ID: {}", id);
 
         Lecture lecture;
         try {
@@ -58,7 +58,7 @@ public class LectureService {
     }
 
     public void update(Lecture lecture, int groupID, int id) {
-        log.info("LectureService update method started");
+        log.info("Update lecture: {}, group ID: {} and ID: {}", lecture, groupID, id);
 
         try {
             lectureDao.update(lecture, groupID, id);
@@ -68,7 +68,7 @@ public class LectureService {
     }
 
     public void delete(int id) {
-        log.info("LectureService delete method started");
+        log.info("Delete lecture with ID: {}", id);
 
         try {
             lectureDao.delete(id);
@@ -78,7 +78,7 @@ public class LectureService {
     }
 
     public void deleteByTeacherSurname(String surname) {
-        log.info("LectureService deleteByTeacherSurname method started");
+        log.info("Delete lecture with teacher surname: {}", surname);
 
         Teacher teacher;
         try {

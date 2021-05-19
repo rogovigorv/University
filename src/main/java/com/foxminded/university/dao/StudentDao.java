@@ -26,7 +26,7 @@ public class StudentDao implements UniversityDao<Student>{
     }
 
     public void create(Student student) throws DaoException {
-        log.debug("StudentDao create method started with student: {}", student);
+        log.debug("Create student: {}", student);
 
         try {
             jdbcTemplate.update(STUDENT_CREATE, student.getId(), student.getFirstName(),
@@ -38,7 +38,7 @@ public class StudentDao implements UniversityDao<Student>{
 
     @Override
     public Student getById(int id) throws DaoException {
-        log.debug("StudentDao getById method started with ID: {}", id);
+        log.debug("Get student with ID: {}", id);
 
         Student student;
         try {
@@ -51,7 +51,7 @@ public class StudentDao implements UniversityDao<Student>{
     }
 
     public void update(Student student, int id) throws DaoException {
-        log.debug("StudentDao update method started with student: {}, and ID: {}", student, id);
+        log.debug("Update student: {}, and ID: {}", student, id);
 
         try {
             jdbcTemplate.update(STUDENT_UPDATE_BY_ID, student.getFirstName(), student.getLastName(),
@@ -63,7 +63,7 @@ public class StudentDao implements UniversityDao<Student>{
 
     @Override
     public void delete(int id) throws DaoException {
-        log.debug("StudentDao delete method started with ID: {}", id);
+        log.debug("Delete student with ID: {}", id);
 
         try {
             jdbcTemplate.update(STUDENT_DELETE_BY_ID, id);
@@ -73,7 +73,7 @@ public class StudentDao implements UniversityDao<Student>{
     }
 
     public void updateGroup(int studentId, int groupId) throws DaoException {
-        log.debug("StudentDao updateGroup method started with student ID: {}, and group ID: {}", studentId, groupId);
+        log.debug("Update student with ID: {}, and group ID: {}", studentId, groupId);
 
         try {
             jdbcTemplate.update(STUDENT_UPDATE_GROUP_BY_ID, groupId, studentId);

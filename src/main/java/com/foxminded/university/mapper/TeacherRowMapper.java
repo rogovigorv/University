@@ -13,7 +13,7 @@ public class TeacherRowMapper implements RowMapper<Teacher> {
 
     @Override
     public Teacher mapRow(ResultSet resultSet, int i) throws SQLException {
-        log.info("TeacherRowMapper mapRow method started");
+        log.info("Start teacher mapper");
 
         Teacher teacher = new Teacher();
 
