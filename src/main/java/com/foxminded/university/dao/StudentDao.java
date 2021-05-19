@@ -32,6 +32,7 @@ public class StudentDao implements UniversityDao<Student>{
             jdbcTemplate.update(STUDENT_CREATE, student.getId(), student.getFirstName(),
                     student.getLastName(), student.getGroup().getId());
         } catch (DataAccessException e) {
+            log.warn("Unable to create this student {}", student);
             throw new DaoException(e);
         }
     }
@@ -44,6 +45,7 @@ public class StudentDao implements UniversityDao<Student>{
         try {
             student = jdbcTemplate.queryForObject(STUDENT_SELECT_BY_ID, studentRowMapper, id);
         } catch (DataAccessException e) {
+            log.warn("Can't get student with ID: {}", id);
             throw new DaoException(e);
         }
 
@@ -57,6 +59,7 @@ public class StudentDao implements UniversityDao<Student>{
             jdbcTemplate.update(STUDENT_UPDATE_BY_ID, student.getFirstName(), student.getLastName(),
                     student.getGroup().getId(), id);
         } catch (DataAccessException e) {
+            log.warn("Unable to update student with ID: {}", id);
             throw new DaoException(e);
         }
     }
@@ -68,6 +71,7 @@ public class StudentDao implements UniversityDao<Student>{
         try {
             jdbcTemplate.update(STUDENT_DELETE_BY_ID, id);
         } catch (DataAccessException e) {
+            log.warn("Unable to delete student with ID: {}", id);
             throw new DaoException(e);
         }
     }
@@ -78,6 +82,7 @@ public class StudentDao implements UniversityDao<Student>{
         try {
             jdbcTemplate.update(STUDENT_UPDATE_GROUP_BY_ID, groupId, studentId);
         } catch (DataAccessException e) {
+            log.warn("Unable to change the group for student with ID: {}", studentId);
             throw new DaoException(e);
         }
     }

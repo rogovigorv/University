@@ -31,6 +31,7 @@ public class GroupDao implements UniversityDao<Group> {
         try {
             jdbcTemplate.update(GROUP_CREATE, group.getId(), group.getGroupName());
         } catch (DataAccessException e) {
+            log.warn("Unable to create this group {}", group);
             throw new DaoException(e);
         }
     }
@@ -43,6 +44,7 @@ public class GroupDao implements UniversityDao<Group> {
         try {
             group = jdbcTemplate.queryForObject(GROUP_SELECT_BY_ID, groupRowMapper, id);
         } catch (DataAccessException e) {
+            log.warn("Can't get group with ID: {}", id);
             throw new DaoException(e);
         }
 
@@ -55,6 +57,7 @@ public class GroupDao implements UniversityDao<Group> {
         try {
             jdbcTemplate.update(GROUP_UPDATE_BY_ID, group.getGroupName(), id);
         } catch (DataAccessException e) {
+            log.warn("Unable to update group with ID: {}", id);
             throw new DaoException(e);
         }
     }
@@ -66,6 +69,7 @@ public class GroupDao implements UniversityDao<Group> {
         try {
             jdbcTemplate.update(GROUP_DELETE_BY_ID, id);
         } catch (DataAccessException e) {
+            log.warn("Unable to delete group with ID: {}", id);
             throw new DaoException(e);
         }
     }

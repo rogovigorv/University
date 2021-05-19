@@ -31,6 +31,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         try {
             jdbcTemplate.update(TEACHER_CREATE, teacher.getId(), teacher.getFirstName(), teacher.getLastName());
         } catch (DataAccessException e) {
+            log.warn("Unable to create this teacher {}", teacher);
             throw new DaoException(e);
         }
     }
@@ -43,6 +44,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         try {
             teacher = jdbcTemplate.queryForObject(TEACHER_SELECT_BY_ID, teacherRowMapper, id);
         } catch (DataAccessException e) {
+            log.warn("Can't get teacher with ID: {}", id);
             throw new DaoException(e);
         }
 
@@ -55,6 +57,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         try {
             jdbcTemplate.update(TEACHER_UPDATE_BY_ID, teacher.getFirstName(), teacher.getLastName(), id);
         } catch (DataAccessException e) {
+            log.warn("Unable to update teacher with ID: {}", id);
             throw new DaoException(e);
         }
     }
@@ -66,6 +69,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         try {
             jdbcTemplate.update(TEACHER_DELETE_BY_ID, id);
         } catch (DataAccessException e) {
+            log.warn("Unable to delete teacher with ID: {}", id);
             throw new DaoException(e);
         }
     }
@@ -77,6 +81,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         try {
             teacher = jdbcTemplate.queryForObject(TEACHER_SELECT_BY_LAST_NAME, teacherRowMapper, surname);
         } catch (DataAccessException e) {
+            log.warn("Unable to get teacher with surname {}", surname);
             throw new DaoException(e);
         }
 

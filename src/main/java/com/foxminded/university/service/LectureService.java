@@ -27,6 +27,7 @@ public class LectureService {
         try {
             lectureDao.create(lecture, groupID);
         } catch (DaoException e) {
+            log.warn("Unable to create this lecture: {}", lecture);
             throw new ServiceException("Unable to create this lecture.", e);
         }
     }
@@ -38,6 +39,7 @@ public class LectureService {
         try {
             lecture = lectureDao.getById(id);
         } catch (DaoException e) {
+            log.warn("Can't get lecture with ID: {}", id);
             throw new ServiceException("Can't get lecture with ID " + id + ".", e);
         }
 
@@ -51,6 +53,7 @@ public class LectureService {
         try {
             lecture = lectureDao.getByGroupId(id);
         } catch (DaoException e) {
+            log.warn("Can't get lecture with group ID: {}", id);
             throw new ServiceException("Can't get lecture with group ID " + id + ".", e);
         }
 
@@ -63,6 +66,7 @@ public class LectureService {
         try {
             lectureDao.update(lecture, groupID, id);
         } catch (DaoException e) {
+            log.warn("Unable to update lecture with ID: {}", id);
             throw new ServiceException("Unable to update lecture with ID " + id + ".", e);
         }
     }
@@ -73,6 +77,7 @@ public class LectureService {
         try {
             lectureDao.delete(id);
         } catch (DaoException e) {
+            log.warn("Unable to delete lecture with ID: {}", id);
             throw new ServiceException("Unable to delete lecture with ID " + id + ".", e);
         }
     }
@@ -84,12 +89,14 @@ public class LectureService {
         try {
             teacher = teacherDao.getByTeacherSurname(surname);
         } catch (DaoException e) {
+            log.warn("Unable to get teacher with surname {} to this lecture", surname);
             throw new ServiceException("Unable to get teacher to this lecture.", e);
         }
 
         try {
             lectureDao.deleteByTeacherId(teacher.getId());
         } catch (DaoException e) {
+            log.warn("Unable to delete lecture with teacher ID: {}", teacher.getId());
             throw new ServiceException("Unable to delete lecture with teacher ID " + teacher.getId() + ".", e);
         }
     }

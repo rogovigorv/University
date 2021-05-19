@@ -33,6 +33,7 @@ public class LectureDao implements UniversityDao<Lecture> {
             jdbcTemplate.update(LECTURE_CREATE, lecture.getId(), lecture.getLectureName(),
                     lecture.getDescription(), lecture.getTeacher().getId(), groupID);
         } catch (DataAccessException e) {
+            log.warn("Unable to create this lecture {}", lecture);
             throw new DaoException(e);
         }
     }
@@ -45,6 +46,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         try {
             lecture = jdbcTemplate.queryForObject(LECTURE_SELECT_BY_ID, lectureRowMapper, id);
         } catch (DataAccessException e) {
+            log.warn("Can't get lecture with ID: {}", id);
             throw new DaoException(e);
         }
 
@@ -58,6 +60,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         try {
             lecture = jdbcTemplate.queryForObject(LECTURE_SELECT_BY_GROUP_ID, lectureRowMapper, id);
         } catch (DataAccessException e) {
+            log.warn("Can't get lecture with group ID: {}", id);
             throw new DaoException(e);
         }
 
@@ -71,6 +74,7 @@ public class LectureDao implements UniversityDao<Lecture> {
             jdbcTemplate.update(LECTURE_UPDATE_BY_ID, lecture.getLectureName(), lecture.getDescription(),
                     lecture.getTeacher().getId(), groupID, id);
         } catch (DataAccessException e) {
+            log.warn("Unable to update lecture with ID: {}", id);
             throw new DaoException(e);
         }
     }
@@ -82,6 +86,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         try {
             jdbcTemplate.update(LECTURE_DELETE_BY_ID, id);
         } catch (DataAccessException e) {
+            log.warn("Unable to delete lecture with ID: {}", id);
             throw new DaoException(e);
         }
     }
@@ -92,6 +97,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         try {
             jdbcTemplate.update(LECTURE_DELETE_BY_TEACHER_ID, id);
         } catch (DataAccessException e) {
+            log.warn("Unable to delete lecture with teacher ID: {}", id);
             throw new DaoException(e);
         }
     }
