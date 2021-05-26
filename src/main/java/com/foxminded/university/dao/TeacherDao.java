@@ -2,6 +2,7 @@ package com.foxminded.university.dao;
 
 import com.foxminded.university.mapper.TeacherRowMapper;
 import com.foxminded.university.models.Teacher;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.TEACHER_CREATE;
 import static com.foxminded.university.dao.Queries.TEACHER_DELETE_BY_ID;
+import static com.foxminded.university.dao.Queries.TEACHER_SELECT_ALL;
 import static com.foxminded.university.dao.Queries.TEACHER_SELECT_BY_ID;
 import static com.foxminded.university.dao.Queries.TEACHER_SELECT_BY_LAST_NAME;
 import static com.foxminded.university.dao.Queries.TEACHER_UPDATE_BY_ID;
@@ -86,5 +88,19 @@ public class TeacherDao implements UniversityDao<Teacher> {
         }
 
         return teacher;
+    }
+
+    public List<Teacher> showAll() {
+        log.debug("Get all teachers");
+
+        List<Teacher> teachers;
+        try {
+            teachers = jdbcTemplate.query(TEACHER_SELECT_ALL, teacherRowMapper);
+        } catch (DataAccessException e) {
+            log.warn("Unable to get all teachers");
+            throw new DaoException(e);
+        }
+
+        return teachers;
     }
 }

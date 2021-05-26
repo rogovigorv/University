@@ -2,6 +2,7 @@ package com.foxminded.university.dao;
 
 import com.foxminded.university.mapper.StudentRowMapper;
 import com.foxminded.university.models.Student;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -9,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import static com.foxminded.university.dao.Queries.STUDENT_CREATE;
 import static com.foxminded.university.dao.Queries.STUDENT_DELETE_BY_ID;
+import static com.foxminded.university.dao.Queries.STUDENT_SELECT_ALL;
 import static com.foxminded.university.dao.Queries.STUDENT_SELECT_BY_ID;
 import static com.foxminded.university.dao.Queries.STUDENT_UPDATE_BY_ID;
 import static com.foxminded.university.dao.Queries.STUDENT_UPDATE_GROUP_BY_ID;
@@ -85,5 +87,19 @@ public class StudentDao implements UniversityDao<Student>{
             log.warn("Unable to change the group for student with ID: {}", studentId);
             throw new DaoException(e);
         }
+    }
+
+    public List<Student> showAll() throws DaoException {
+        log.debug("Get all students");
+
+        List<Student> students;
+        try {
+            students = jdbcTemplate.query(STUDENT_SELECT_ALL, studentRowMapper);
+        } catch (DataAccessException e) {
+            log.warn("Unable to get all students");
+            throw new DaoException(e);
+        }
+
+        return students;
     }
 }

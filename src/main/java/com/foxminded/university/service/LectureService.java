@@ -5,6 +5,7 @@ import com.foxminded.university.dao.LectureDao;
 import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Teacher;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -99,5 +100,19 @@ public class LectureService {
             log.warn("Unable to delete lecture with teacher ID: {}", teacher.getId());
             throw new ServiceException("Unable to delete lecture with teacher ID " + teacher.getId() + ".", e);
         }
+    }
+
+    public List<Lecture> showAll() {
+        log.debug("Get all lectures");
+
+        List<Lecture> lectures;
+        try {
+            lectures = lectureDao.showAll();
+        } catch (DaoException e) {
+            log.warn("Unable get all lectures");
+            throw new ServiceException("Unable get all lectures.", e);
+        }
+
+        return lectures;
     }
 }

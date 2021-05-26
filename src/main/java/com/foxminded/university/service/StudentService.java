@@ -5,6 +5,7 @@ import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.dao.StudentDao;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Student;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -104,5 +105,19 @@ public class StudentService {
             log.warn("Unable to change the group for student with ID: {}", studentId);
             throw new ServiceException("Unable to change the group for student with ID " + studentId + ".", e);
         }
+    }
+
+    public List<Student> showAll() {
+        log.debug("Get all students");
+
+        List<Student> students;
+        try {
+            students = studentDao.showAll();
+        } catch (DaoException e) {
+            log.warn("Unable get all students");
+            throw new ServiceException("Unable get all students.", e);
+        }
+
+        return students;
     }
 }

@@ -1,9 +1,7 @@
 package com.foxminded.university.models;
 
-import org.springframework.stereotype.Component;
 import java.util.Objects;
 
-@Component
 public class Student {
     private int id;
     private String firstName;

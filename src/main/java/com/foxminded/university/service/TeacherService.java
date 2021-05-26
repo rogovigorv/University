@@ -3,6 +3,7 @@ package com.foxminded.university.service;
 import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Teacher;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,5 +63,19 @@ public class TeacherService {
             log.warn("Unable to delete teacher with ID: {}", id);
             throw new ServiceException("Unable to delete teacher with ID " + id + ".", e);
         }
+    }
+
+    public List<Teacher> showAll() {
+        log.debug("Get all teachers");
+
+        List<Teacher> teachers;
+        try {
+            teachers = teacherDao.showAll();
+        } catch (DaoException e) {
+            log.warn("Unable get all teachers");
+            throw new ServiceException("Unable get all teachers.", e);
+        }
+
+        return teachers;
     }
 }

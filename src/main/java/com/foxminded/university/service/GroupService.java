@@ -3,6 +3,7 @@ package com.foxminded.university.service;
 import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.models.Group;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,5 +63,19 @@ public class GroupService {
             log.warn("Unable to delete group with ID: {}", id);
             throw new ServiceException("Unable to delete group with ID " + id + ".", e);
         }
+    }
+
+    public List<Group> showAll() {
+        log.debug("Get all groups");
+
+        List<Group> groups;
+        try {
+            groups = groupDao.showAll();
+        } catch (DaoException e) {
+            log.warn("Unable get all groups");
+            throw new ServiceException("Unable get all groups.", e);
+        }
+
+        return groups;
     }
 }
