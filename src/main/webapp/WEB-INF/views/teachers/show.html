@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All teachers</title>
+</head>
+
+<body>
+    <table border="1" width="25%" cellpadding="5" >
+        <tr>
+            <td>Id</td>
+            <td>Name</td>
+            <td>Surname</td>
+        </tr>
+            <tr th:each="teacher : ${teachers}">
+                <td th:text="${teacher.getId()}">
+                <td th:text="${teacher.getFirstName()}">
+                <td th:text="${teacher.getLastName()}">
+            </tr>
+    </table>
+</body>
+</html>

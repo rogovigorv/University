@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All lectures</title>
+</head>
+
+<body>
+    <table border="1" width="25%" cellpadding="5">
+        <tr>
+            <td>Id</td>
+            <td>Teacher surname</td>
+            <td>Lecture name</td>
+            <td>Description</td>
+            <td>Group name</td>
+        </tr>
+            <tr th:each="lecture : ${lectures}">
+                <td th:text="${lecture.getId()}">
+                <td th:text="${lecture.getTeacher().getLastName()}">
+                <td th:text="${lecture.getLectureName()}">
+                <td th:text="${lecture.getDescription()}">
+                <td th:text="${lecture.getGroup().getGroupName()}">
+            </tr>
+    </table>
+</body>
+</html>
