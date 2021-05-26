@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan("com.foxminded.university")
+@ComponentScan(basePackages = "com.foxminded.university",
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SpringConfig.class))
 @PropertySource("classpath:h2.properties")
 @Slf4j
 public class SpringConfigTest {
@@ -46,4 +48,3 @@ public class SpringConfigTest {
         return jdbcTemplate;
     }
 }
-
