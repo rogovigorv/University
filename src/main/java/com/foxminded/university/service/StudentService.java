@@ -4,10 +4,16 @@ import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.dao.StudentDao;
 import com.foxminded.university.models.Group;
+import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Student;
+import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -107,17 +113,27 @@ public class StudentService {
         }
     }
 
-    public List<Student> showAll() {
-        log.debug("Get all students");
+    public Page<Student> findPaginated(Pageable pageable) {
+        log.debug("Get students pages");
 
-        List<Student> students;
-        try {
-            students = studentDao.showAll();
-        } catch (DaoException e) {
-            log.warn("Unable get all students");
-            throw new ServiceException("Unable get all students.", e);
+        List<Student> students = studentDao.showAll();
+
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+
+        List<Student> currentPageList;
+
+        if (students.size() < startItem) {
+            currentPageList = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, students.size());
+            currentPageList = students.subList(startItem, toIndex);
         }
 
-        return students;
+        Page<Student> studentPage =
+                new PageImpl<>(currentPageList, PageRequest.of(currentPage, pageSize), students.size());
+
+        return studentPage;
     }
 }

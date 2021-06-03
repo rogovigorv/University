@@ -14,6 +14,7 @@
         <H2.JDBC.Driver.version>1.4.200</H2.JDBC.Driver.version>
         <hsqldb.version>2.4.1</hsqldb.version>
         <spring.version>5.3.5</spring.version>
+        <spring.data.commons.version>2.5.1</spring.data.commons.version>
         <spring-test.version>5.2.13.RELEASE</spring-test.version>
         <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <hamcrest.version>1.3</hamcrest.version>
@@ -60,6 +61,11 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>${spring.data.commons.version}</version>
         </dependency>
         <dependency>
             <groupId>org.thymeleaf</groupId>
