@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
-@Slf4j
 public class GroupDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
