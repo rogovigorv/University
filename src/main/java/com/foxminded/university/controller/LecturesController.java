@@ -1,5 +1,6 @@
 package com.foxminded.university.controller;
 
+import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.service.LectureService;
 import java.util.List;
@@ -11,7 +12,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -43,5 +49,35 @@ public class LecturesController {
         }
 
         return "lectures/lectures";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String showEachLecture(@PathVariable("id") int id, Model model) {
+        model.addAttribute("lectureId", lectureService.getById(id));
+        return "lectures/edit";
+    }
+
+    @PatchMapping("/{id}/edit")
+    public String update(@ModelAttribute("lecture") Lecture lecture, int groupId) {
+        lectureService.update(lecture, groupId);
+        return "redirect:/lectures";
+    }
+
+    @GetMapping("/new")
+    public String addNewLecture(Model model) {
+        model.addAttribute("newLecture", new Lecture());
+        return "lectures/new";
+    }
+
+    @PostMapping("/new")
+    public String createNewLecture(@ModelAttribute("lecture") Lecture lecture) {
+        lectureService.create(lecture, lecture.getTeacher().getId(), lecture.getGroup().getId());
+        return "redirect:/lectures";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteGroup(@PathVariable("id") int id) {
+        lectureService.delete(id);
+        return "redirect:/lectures";
     }
 }

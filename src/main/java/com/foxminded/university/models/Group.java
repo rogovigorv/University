@@ -1,5 +1,7 @@
 package com.foxminded.university.models;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Group {
@@ -48,8 +50,6 @@ public class Group {
     public int hashCode() {
         return Objects.hash(id, groupName);
     }
-
-
 
     @Override
     public String toString() {

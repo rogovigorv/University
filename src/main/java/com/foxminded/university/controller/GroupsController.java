@@ -11,7 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,7 +34,7 @@ public class GroupsController {
     public String showAllGroups(Model model, @RequestParam("page") Optional<Integer> page,
                                 @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(17);
+        int pageSize = size.orElse(12);
 
         Page<Group> groupPage = groupService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("groupPage", groupPage);
@@ -43,5 +48,35 @@ public class GroupsController {
         }
 
         return "groups/groups";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String showEachGroup(@PathVariable("id") int id, Model model) {
+        model.addAttribute("groupId", groupService.getById(id));
+        return "groups/edit";
+    }
+
+    @PatchMapping("/{id}/edit")
+    public String update(@ModelAttribute("group") Group group, @PathVariable("id") int id) {
+        groupService.update(group, id);
+        return "redirect:/groups";
+    }
+
+    @GetMapping("/new")
+    public String addNewGroup(Model model) {
+        model.addAttribute("newGroup", new Group());
+        return "groups/new";
+    }
+
+    @PostMapping("/new")
+    public String createNewGroup(@ModelAttribute("group") Group group) {
+        groupService.create(group);
+        return "redirect:/groups";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteGroup(@PathVariable("id") int id) {
+        groupService.delete(id);
+        return "redirect:/groups";
     }
 }

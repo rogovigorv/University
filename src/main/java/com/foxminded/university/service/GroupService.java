@@ -4,6 +4,7 @@ import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.models.Group;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,8 @@ public class GroupService {
         log.debug("Get groups pages");
 
         List<Group> groups = groupDao.showAll();
+
+        groups.sort(Comparator.comparing(Group::getId));
 
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();

@@ -28,11 +28,11 @@ public class LectureService {
         this.teacherDao = teacherDao;
     }
 
-    public void create(Lecture lecture, int groupID) {
+    public void create(Lecture lecture, int teacherID, int groupID) {
         log.info("Create lecture: {} and group ID: {}", lecture, groupID);
 
         try {
-            lectureDao.create(lecture, groupID);
+            lectureDao.create(lecture, teacherID, groupID);
         } catch (DaoException e) {
             log.warn("Unable to create this lecture: {}", lecture);
             throw new ServiceException("Unable to create this lecture.", e);
@@ -67,14 +67,14 @@ public class LectureService {
         return lecture;
     }
 
-    public void update(Lecture lecture, int groupID, int id) {
-        log.info("Update lecture: {}, group ID: {} and ID: {}", lecture, groupID, id);
+    public void update(Lecture lecture, int groupID) {
+        log.info("Update lecture: {}, group ID: {}", lecture, groupID);
 
         try {
-            lectureDao.update(lecture, groupID, id);
+            lectureDao.update(lecture, groupID);
         } catch (DaoException e) {
-            log.warn("Unable to update lecture with ID: {}", id);
-            throw new ServiceException("Unable to update lecture with ID " + id + ".", e);
+            log.warn("Unable to update lecture with name: {}", lecture.getLectureName());
+            throw new ServiceException("Unable to update lecture with name " + lecture.getLectureName() + ".", e);
         }
     }
 

@@ -40,14 +40,14 @@ public class LectureDaoTest {
 
     @Test
     void getLectureByIdShouldReturnActualLectureWithNameMath() {
-        Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
+        Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
-        Group group = new Group(3, "Geeks");
+        Group group = new Group(1, "Geeks");
         groupDao.create(group);
 
         Lecture expected = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureDao.create(expected, 3);
+        lectureDao.create(expected, 1,1);
 
         Lecture actual = lectureDao.getById(1);
 
@@ -56,20 +56,20 @@ public class LectureDaoTest {
 
     @Test
     void updateLectureByIdShouldReturnActualLectureWithNameSleddingByUsingMethodGetById() {
-        Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
+        Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
-        Group group = new Group(3, "Geeks");
+        Group group = new Group(1, "Geeks");
         groupDao.create(group);
 
         Lecture lecture = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureDao.create(lecture, 3);
+        lectureDao.create(lecture, 1,1);
 
         Lecture expected = new Lecture(1, teacher, "Sledding", "Sledding drift", group);
 
         Lecture lectureWithDifferentName =
                 new Lecture(1, teacher, "Sledding", "Sledding drift", group);
-        lectureDao.update(lectureWithDifferentName, group.getId(), 1);
+        lectureDao.update(lectureWithDifferentName, group.getId());
 
         Lecture actual = lectureDao.getById(1);
 
@@ -78,39 +78,36 @@ public class LectureDaoTest {
 
     @Test
     void createGroupShouldReturnActualLectureWithNameHowToTossPancakesCorrectlyByUsingMethodGetById() {
-        Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
+        Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
-        Group group = new Group(3, "Geeks");
+        Group group = new Group(1, "Geeks");
         groupDao.create(group);
 
-        Lecture lecture = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureDao.create(lecture, 3);
-
-        Lecture expected = new Lecture(4, teacher,
+        Lecture expected = new Lecture(1, teacher,
                 "How to toss pancakes correctly", "Simple Tossing pancakes", group);
 
-        Lecture newLecture = new Lecture(4, teacher,
+        Lecture newLecture = new Lecture(1, teacher,
                 "How to toss pancakes correctly", "Simple Tossing pancakes", group);
-        lectureDao.create(newLecture, 3);
+        lectureDao.create(newLecture, 1,1);
 
-        Lecture actual = lectureDao.getById(4);
+        Lecture actual = lectureDao.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
     }
 
     @Test
     void getLectureByIdGroupIdShouldReturnActualLectureWithNameEng() {
-        Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
+        Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
-        Group group = new Group(3, "Geeks");
+        Group group = new Group(1, "Geeks");
         groupDao.create(group);
 
         Lecture expected = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureDao.create(expected, 3);
+        lectureDao.create(expected, 1,1);
 
-        Lecture actual = lectureDao.getByGroupId(3);
+        Lecture actual = lectureDao.getByGroupId(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
     }

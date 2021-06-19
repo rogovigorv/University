@@ -31,7 +31,7 @@ public class GroupDao implements UniversityDao<Group> {
         log.debug("Create group: {}", group);
 
         try {
-            jdbcTemplate.update(GROUP_CREATE, group.getId(), group.getGroupName());
+            jdbcTemplate.update(GROUP_CREATE, group.getGroupName());
         } catch (DataAccessException e) {
             log.warn("Unable to create this group {}", group);
             throw new DaoException(e);

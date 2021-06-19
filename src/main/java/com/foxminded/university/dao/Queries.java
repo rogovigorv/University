@@ -1,14 +1,15 @@
 package com.foxminded.university.dao;
 
 public class Queries {
-    public static final String GROUP_CREATE = "INSERT INTO groups VALUES (?, ?)";
+    public static final String GROUP_CREATE = "INSERT INTO groups (groupname) VALUES (?)";
     public static final String GROUP_SELECT_BY_ID = "SELECT * FROM groups WHERE id=?";
     public static final String GROUP_UPDATE_BY_ID = "UPDATE groups SET groupName=? WHERE id=?";
     public static final String GROUP_DELETE_BY_ID = "DELETE FROM groups WHERE id=?";
     public static final String GROUP_SELECT_BY_NAME = "SELECT * FROM groups WHERE groupname=?";
     public static final String GROUP_SELECT_ALL = "SELECT * FROM groups";
 
-    public static final String LECTURE_CREATE = "INSERT INTO lecture VALUES (?, ?, ?, ?, ?)";
+    public static final String LECTURE_CREATE =
+            "INSERT INTO lecture (lecturename, description, teacher_id, group_id) VALUES (?, ?, ?, ?)";
     public static final String LECTURE_SELECT_BY_ID = "SELECT * FROM lecture WHERE id=?";
     public static final String LECTURE_SELECT_BY_GROUP_ID = "SELECT * FROM lecture WHERE group_id=?";
     public static final String LECTURE_UPDATE_BY_ID =
