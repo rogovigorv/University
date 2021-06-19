@@ -53,12 +53,12 @@ public class GroupDaoTest {
 
     @Test
     void createGroupShouldReturnActualGroupWithNameFreakAngelByUsingMethodGetById() {
-        Group expected = new Group(4, "Freak Angel");
+        Group expected = new Group(1, "Freak Angel");
 
-        Group newGroup = new Group(4, "Freak Angel");
+        Group newGroup = new Group(1, "Freak Angel");
         groupDao.create(newGroup);
 
-        Group actual = groupDao.getById(4);
+        Group actual = groupDao.getById(1);
 
         assertEquals(expected, actual);
     }
