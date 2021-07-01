@@ -31,7 +31,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         log.debug("Create teacher: {}", teacher);
 
         try {
-            jdbcTemplate.update(TEACHER_CREATE, teacher.getId(), teacher.getFirstName(), teacher.getLastName());
+            jdbcTemplate.update(TEACHER_CREATE, teacher.getFirstName(), teacher.getLastName());
         } catch (DataAccessException e) {
             log.warn("Unable to create this teacher {}", teacher);
             throw new DaoException(e);
@@ -53,13 +53,13 @@ public class TeacherDao implements UniversityDao<Teacher> {
         return teacher;
     }
 
-    public void update(Teacher teacher, int id) throws DaoException {
-        log.debug("Update teacher: {}, and ID: {}", teacher, id);
+    public void update(Teacher teacher) throws DaoException {
+        log.debug("Update teacher: {}", teacher);
 
         try {
-            jdbcTemplate.update(TEACHER_UPDATE_BY_ID, teacher.getFirstName(), teacher.getLastName(), id);
+            jdbcTemplate.update(TEACHER_UPDATE_BY_ID, teacher.getFirstName(), teacher.getLastName(), teacher.getId());
         } catch (DataAccessException e) {
-            log.warn("Unable to update teacher with ID: {}", id);
+            log.warn("Unable to update teacher with ID: {}", teacher.getId());
             throw new DaoException(e);
         }
     }

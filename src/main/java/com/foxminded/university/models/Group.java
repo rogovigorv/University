@@ -1,7 +1,5 @@
 package com.foxminded.university.models;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Objects;
 
 public class Group {

@@ -31,7 +31,7 @@ public class GroupsController {
     }
 
     @GetMapping()
-    public String showAllGroups(Model model, @RequestParam("page") Optional<Integer> page,
+    public String showAll(Model model, @RequestParam("page") Optional<Integer> page,
                                 @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(12);
@@ -51,7 +51,7 @@ public class GroupsController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEachGroup(@PathVariable("id") int id, Model model) {
+    public String showEach(@PathVariable("id") int id, Model model) {
         model.addAttribute("groupId", groupService.getById(id));
         return "groups/edit";
     }
@@ -63,19 +63,19 @@ public class GroupsController {
     }
 
     @GetMapping("/new")
-    public String addNewGroup(Model model) {
+    public String addNew(Model model) {
         model.addAttribute("newGroup", new Group());
         return "groups/new";
     }
 
     @PostMapping("/new")
-    public String createNewGroup(@ModelAttribute("group") Group group) {
+    public String create(@ModelAttribute("group") Group group) {
         groupService.create(group);
         return "redirect:/groups";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteGroup(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") int id) {
         groupService.delete(id);
         return "redirect:/groups";
     }

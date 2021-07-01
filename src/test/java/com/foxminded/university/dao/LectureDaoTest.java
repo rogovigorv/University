@@ -18,7 +18,7 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
 @Slf4j
-public class LectureDaoTest {
+class LectureDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
     @Autowired
@@ -47,7 +47,7 @@ public class LectureDaoTest {
         groupDao.create(group);
 
         Lecture expected = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureDao.create(expected, 1,1);
+        lectureDao.create(expected);
 
         Lecture actual = lectureDao.getById(1);
 
@@ -63,13 +63,13 @@ public class LectureDaoTest {
         groupDao.create(group);
 
         Lecture lecture = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureDao.create(lecture, 1,1);
+        lectureDao.create(lecture);
 
         Lecture expected = new Lecture(1, teacher, "Sledding", "Sledding drift", group);
 
         Lecture lectureWithDifferentName =
                 new Lecture(1, teacher, "Sledding", "Sledding drift", group);
-        lectureDao.update(lectureWithDifferentName, group.getId());
+        lectureDao.update(lectureWithDifferentName);
 
         Lecture actual = lectureDao.getById(1);
 
@@ -89,7 +89,7 @@ public class LectureDaoTest {
 
         Lecture newLecture = new Lecture(1, teacher,
                 "How to toss pancakes correctly", "Simple Tossing pancakes", group);
-        lectureDao.create(newLecture, 1,1);
+        lectureDao.create(newLecture);
 
         Lecture actual = lectureDao.getById(1);
 
@@ -105,7 +105,7 @@ public class LectureDaoTest {
         groupDao.create(group);
 
         Lecture expected = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureDao.create(expected, 1,1);
+        lectureDao.create(expected);
 
         Lecture actual = lectureDao.getByGroupId(1);
 

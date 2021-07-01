@@ -36,8 +36,12 @@
 
 <div class="container row justify-content-start col-4">
     <form th:method="PATCH" th:action="@{/groups/{id}/edit (id=${groupId.getId()})}" th:object="${groupId}">
-        <input type="text" th:field="*{groupName}"/>
-        <input type="submit" value="Update"/>
+        <div class="form-group">
+            <label>Please edit a group name:</label>
+            <input type="text" class="form-control" aria-describedby="button-addon2" th:field="*{groupName}"/>
+        </div>
+
+        <button class="btn btn-success" type="submit" id="button-addon2">Update</button>
     </form>
 </div>
 

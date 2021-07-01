@@ -1,6 +1,5 @@
 package com.foxminded.university.controller;
 
-import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.service.LectureService;
 import java.util.List;
@@ -32,10 +31,10 @@ public class LecturesController {
     }
 
     @GetMapping()
-    public String showAllLectures(Model model, @RequestParam("page") Optional<Integer> page,
+    public String showAll(Model model, @RequestParam("page") Optional<Integer> page,
                                 @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(17);
+        int pageSize = size.orElse(12);
 
         Page<Lecture> lecturePage = lectureService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("lecturePage", lecturePage);
@@ -52,31 +51,31 @@ public class LecturesController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEachLecture(@PathVariable("id") int id, Model model) {
+    public String showEach(@PathVariable("id") int id, Model model) {
         model.addAttribute("lectureId", lectureService.getById(id));
         return "lectures/edit";
     }
 
     @PatchMapping("/{id}/edit")
-    public String update(@ModelAttribute("lecture") Lecture lecture, int groupId) {
-        lectureService.update(lecture, groupId);
+    public String update(@ModelAttribute("lecture") Lecture lecture) {
+        lectureService.update(lecture);
         return "redirect:/lectures";
     }
 
     @GetMapping("/new")
-    public String addNewLecture(Model model) {
+    public String addNew(Model model) {
         model.addAttribute("newLecture", new Lecture());
         return "lectures/new";
     }
 
     @PostMapping("/new")
-    public String createNewLecture(@ModelAttribute("lecture") Lecture lecture) {
-        lectureService.create(lecture, lecture.getTeacher().getId(), lecture.getGroup().getId());
+    public String create(@ModelAttribute("lecture") Lecture lecture) {
+        lectureService.create(lecture);
         return "redirect:/lectures";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteGroup(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") int id) {
         lectureService.delete(id);
         return "redirect:/lectures";
     }

@@ -35,10 +35,13 @@
 <br/>
 
 <div class="container row justify-content-start col-4">
-    <form class="input-group mb-3" th:method="POST" th:action="@{/groups/new}" th:object="${newGroup}">
-        <input type="text" class="form-control" placeholder="Please enter a group name"
-               aria-describedby="button-addon2" th:field="*{groupName}"/>
-        <button class="btn btn-outline-success" type="submit" id="button-addon2">Add</button>
+    <form th:method="POST" th:action="@{/groups/new}" th:object="${newGroup}">
+        <div class="form-group">
+            <label>Please enter a group name:</label>
+            <input type="text" class="form-control" aria-describedby="button-addon2" th:field="*{groupName}"/>
+        </div>
+
+        <button class="btn btn-success" type="submit" id="button-addon2">Add</button>
     </form>
 </div>
 

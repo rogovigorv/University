@@ -28,12 +28,12 @@ public class LectureDao implements UniversityDao<Lecture> {
         this.lectureRowMapper = lectureRowMapper;
     }
 
-    public void create(Lecture lecture, int teacherID, int groupID) throws DaoException {
-        log.debug("Create lecture: {} and group ID: {}", lecture, groupID);
+    public void create(Lecture lecture) throws DaoException {
+        log.debug("Create lecture: {}", lecture);
 
         try {
             jdbcTemplate.update(LECTURE_CREATE, lecture.getLectureName(),
-                    lecture.getDescription(), teacherID, groupID);
+                    lecture.getDescription(), lecture.getTeacher().getId(), lecture.getGroup().getId());
         } catch (DataAccessException e) {
             log.warn("Unable to create this lecture {}", lecture);
             throw new DaoException(e);
@@ -69,12 +69,12 @@ public class LectureDao implements UniversityDao<Lecture> {
         return lecture;
     }
 
-    public void update(Lecture lecture, int groupID) throws DaoException {
-        log.debug("Update lecture: {}, group ID: {}", lecture, groupID);
+    public void update(Lecture lecture) throws DaoException {
+        log.debug("Update lecture: {}", lecture);
 
         try {
             jdbcTemplate.update(LECTURE_UPDATE_BY_ID, lecture.getLectureName(), lecture.getDescription(),
-                    lecture.getTeacher().getId(), groupID, lecture.getId());
+                    lecture.getTeacher().getId(), lecture.getGroup().getId(), lecture.getId());
         } catch (DataAccessException e) {
             log.warn("Unable to update lecture with ID: {}", lecture.getId());
             throw new DaoException(e);

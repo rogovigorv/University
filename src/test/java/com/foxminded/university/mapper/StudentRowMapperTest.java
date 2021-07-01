@@ -17,7 +17,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Slf4j
-public class StudentRowMapperTest {
+class StudentRowMapperTest {
 
     @Mock
     private ResultSet resultSet;

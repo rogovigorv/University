@@ -7,6 +7,7 @@ import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Teacher;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,11 @@ public class LectureService {
         this.teacherDao = teacherDao;
     }
 
-    public void create(Lecture lecture, int teacherID, int groupID) {
-        log.info("Create lecture: {} and group ID: {}", lecture, groupID);
+    public void create(Lecture lecture) {
+        log.info("Create lecture: {}", lecture);
 
         try {
-            lectureDao.create(lecture, teacherID, groupID);
+            lectureDao.create(lecture);
         } catch (DaoException e) {
             log.warn("Unable to create this lecture: {}", lecture);
             throw new ServiceException("Unable to create this lecture.", e);
@@ -67,11 +68,11 @@ public class LectureService {
         return lecture;
     }
 
-    public void update(Lecture lecture, int groupID) {
-        log.info("Update lecture: {}, group ID: {}", lecture, groupID);
+    public void update(Lecture lecture) {
+        log.info("Update lecture: {}", lecture);
 
         try {
-            lectureDao.update(lecture, groupID);
+            lectureDao.update(lecture);
         } catch (DaoException e) {
             log.warn("Unable to update lecture with name: {}", lecture.getLectureName());
             throw new ServiceException("Unable to update lecture with name " + lecture.getLectureName() + ".", e);
@@ -112,6 +113,8 @@ public class LectureService {
         log.debug("Get lectures pages");
 
         List<Lecture> lectures = lectureDao.showAll();
+
+        lectures.sort(Comparator.comparing(Lecture::getId));
 
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();

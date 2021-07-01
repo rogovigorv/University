@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
 @Slf4j
-public class GroupRowMapperTest {
+class GroupRowMapperTest {
 
     @Autowired
     private GroupRowMapper groupRowMapper;

@@ -30,6 +30,7 @@
         </div>
     </div>
 </nav>
+
 <h2>
     <span class="badge bg-light text-dark">LECTURE LIST</span>
 </h2>
@@ -44,9 +45,9 @@
         <thead>
         <tr>
             <th>ID</th>
-            <th>TEACHER SURNAME</th>
             <th>LECTURE NAME</th>
             <th>DESCRIPTION</th>
+            <th>TEACHER SURNAME</th>
             <th>GROUP NAME</th>
             <th>EDIT</th>
             <th>DELETE</th>
@@ -55,9 +56,9 @@
         <tbody>
         <tr th:each="lecture : ${lecturePage.content}">
             <td th:text="${lecture.getId()}">
-            <td th:text="${lecture.getTeacher().getLastName()}">
             <td th:text="${lecture.getLectureName()}">
             <td th:text="${lecture.getDescription()}">
+            <td th:text="${lecture.getTeacher().getLastName()}">
             <td th:text="${lecture.getGroup().getGroupName()}">
             <td>
                 <a class="btn btn-success" th:href="@{/lectures/{id}/edit (id=${lecture.getId()})}">Edit</a>
