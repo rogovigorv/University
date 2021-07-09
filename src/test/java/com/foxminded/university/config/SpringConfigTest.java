@@ -1,6 +1,13 @@
 package com.foxminded.university.config;
 
+import com.foxminded.university.dao.GroupDao;
+import com.foxminded.university.dao.LectureDao;
+import com.foxminded.university.dao.StudentDao;
+import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.service.GroupService;
+import com.foxminded.university.service.LectureService;
+import com.foxminded.university.service.StudentService;
+import com.foxminded.university.service.TeacherService;
 import lombok.extern.slf4j.Slf4j;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Value;
@@ -51,7 +58,42 @@ public class SpringConfigTest {
     }
 
     @Bean
+    public GroupDao groupDaoMock() {
+        return Mockito.mock(GroupDao.class);
+    }
+
+    @Bean
     public GroupService groupService() {
-        return Mockito.mock(GroupService.class);
+        return new GroupService(groupDaoMock());
+    }
+
+    @Bean
+    public TeacherDao teacherDaoMock() {
+        return Mockito.mock(TeacherDao.class);
+    }
+
+    @Bean
+    public TeacherService teacherService() {
+        return new TeacherService(teacherDaoMock());
+    }
+
+    @Bean
+    public LectureDao lectureDaoMock() {
+        return Mockito.mock(LectureDao.class);
+    }
+
+    @Bean
+    public LectureService lectureService() {
+        return new LectureService(lectureDaoMock(), teacherDaoMock());
+    }
+
+    @Bean
+    public StudentDao studentDaoMock() {
+        return Mockito.mock(StudentDao.class);
+    }
+
+    @Bean
+    public StudentService studentService() {
+        return new StudentService(studentDaoMock(), groupDaoMock());
     }
 }

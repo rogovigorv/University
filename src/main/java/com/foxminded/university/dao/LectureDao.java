@@ -3,6 +3,9 @@ package com.foxminded.university.dao;
 import com.foxminded.university.mapper.LectureRowMapper;
 import com.foxminded.university.models.Lecture;
 import java.util.List;
+import java.util.Objects;
+
+import com.foxminded.university.service.LectureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;

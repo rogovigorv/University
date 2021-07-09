@@ -9,6 +9,8 @@ import com.foxminded.university.models.Teacher;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -69,7 +71,7 @@ public class LectureService {
     }
 
     public void update(Lecture lecture) {
-        log.info("Update lecture: {}", lecture);
+        log.info("Update lecture: {}", lecture.getLectureName());
 
         try {
             lectureDao.update(lecture);

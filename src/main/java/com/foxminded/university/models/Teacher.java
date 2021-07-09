@@ -49,10 +49,10 @@ public class Teacher{
         if (otherTeacher == null || getClass() != otherTeacher.getClass()) {
             return false;
         }
+
         Teacher teacher = (Teacher) otherTeacher;
-        return id == teacher.id &&
-                firstName.equals(teacher.firstName) &&
-                lastName.equals(teacher.lastName);
+
+        return id == teacher.id;
     }
 
     @Override

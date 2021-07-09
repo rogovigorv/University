@@ -1,6 +1,5 @@
 package com.foxminded.university.controller;
 
-import com.foxminded.university.models.Student;
 import com.foxminded.university.models.Teacher;
 import com.foxminded.university.service.TeacherService;
 import java.util.List;
