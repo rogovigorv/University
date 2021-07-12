@@ -39,17 +39,16 @@ public class Group {
         if (otherGroup == null || getClass() != otherGroup.getClass()) {
             return false;
         }
+
         Group group = (Group) otherGroup;
-        return id == group.id &&
-                groupName.equals(group.groupName);
+
+        return id == group.id;
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, groupName);
     }
-
-
 
     @Override
     public String toString() {

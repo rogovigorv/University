@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns: lang="">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+    <title>Edit group</title>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/groups">Groups</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/lectures">Lectures</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/students">Students</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/teachers">Teachers</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<br/>
+
+<div class="container row justify-content-start col-4">
+    <form th:method="PATCH" th:action="@{/groups/{id}/edit (id=${groupId.getId()})}" th:object="${groupId}">
+        <div class="form-group">
+            <label>Please edit a group name:</label>
+            <input type="text" class="form-control" aria-describedby="button-addon2" th:field="*{groupName}"/>
+        </div>
+
+        <button class="btn btn-success" type="submit" id="button-addon2">Update</button>
+    </form>
+</div>
+
+</body>
+</html>

@@ -59,11 +59,12 @@ public class Student {
         if (otherStudent == null || getClass() != otherStudent.getClass()) {
             return false;
         }
+
         Student student = (Student) otherStudent;
+
         return id == student.id &&
                 firstName.equals(student.firstName) &&
-                lastName.equals(student.lastName) &&
-                group == student.group;
+                lastName.equals(student.lastName);
     }
 
     @Override

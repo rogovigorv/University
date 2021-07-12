@@ -11,7 +11,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -26,10 +31,10 @@ public class LecturesController {
     }
 
     @GetMapping()
-    public String showAllLectures(Model model, @RequestParam("page") Optional<Integer> page,
+    public String showAll(Model model, @RequestParam("page") Optional<Integer> page,
                                 @RequestParam("size") Optional<Integer> size) {
         int currentPage = page.orElse(1);
-        int pageSize = size.orElse(17);
+        int pageSize = size.orElse(12);
 
         Page<Lecture> lecturePage = lectureService.findPaginated(PageRequest.of(currentPage - 1, pageSize));
         model.addAttribute("lecturePage", lecturePage);
@@ -43,5 +48,35 @@ public class LecturesController {
         }
 
         return "lectures/lectures";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String showEach(@PathVariable("id") int id, Model model) {
+        model.addAttribute("lectureId", lectureService.getById(id));
+        return "lectures/edit";
+    }
+
+    @PatchMapping("/{id}/edit")
+    public String update(@ModelAttribute("lecture") Lecture lecture) {
+        lectureService.update(lecture);
+        return "redirect:/lectures";
+    }
+
+    @GetMapping("/new")
+    public String addNew(Model model) {
+        model.addAttribute("newLecture", new Lecture());
+        return "lectures/new";
+    }
+
+    @PostMapping("/new")
+    public String create(@ModelAttribute("lecture") Lecture lecture) {
+        lectureService.create(lecture);
+        return "redirect:/lectures";
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable("id") int id) {
+        lectureService.delete(id);
+        return "redirect:/lectures";
     }
 }

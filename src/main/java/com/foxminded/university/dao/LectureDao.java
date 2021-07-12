@@ -3,6 +3,9 @@ package com.foxminded.university.dao;
 import com.foxminded.university.mapper.LectureRowMapper;
 import com.foxminded.university.models.Lecture;
 import java.util.List;
+import java.util.Objects;
+
+import com.foxminded.university.service.LectureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -28,12 +31,12 @@ public class LectureDao implements UniversityDao<Lecture> {
         this.lectureRowMapper = lectureRowMapper;
     }
 
-    public void create(Lecture lecture, int groupID) throws DaoException {
-        log.debug("Create lecture: {} and group ID: {}", lecture, groupID);
+    public void create(Lecture lecture) throws DaoException {
+        log.debug("Create lecture: {}", lecture);
 
         try {
-            jdbcTemplate.update(LECTURE_CREATE, lecture.getId(), lecture.getLectureName(),
-                    lecture.getDescription(), lecture.getTeacher().getId(), groupID);
+            jdbcTemplate.update(LECTURE_CREATE, lecture.getLectureName(),
+                    lecture.getDescription(), lecture.getTeacher().getId(), lecture.getGroup().getId());
         } catch (DataAccessException e) {
             log.warn("Unable to create this lecture {}", lecture);
             throw new DaoException(e);
@@ -69,14 +72,14 @@ public class LectureDao implements UniversityDao<Lecture> {
         return lecture;
     }
 
-    public void update(Lecture lecture, int groupID, int id) throws DaoException {
-        log.debug("Update lecture: {}, group ID: {} and ID: {}", lecture, groupID, id);
+    public void update(Lecture lecture) throws DaoException {
+        log.debug("Update lecture: {}", lecture);
 
         try {
             jdbcTemplate.update(LECTURE_UPDATE_BY_ID, lecture.getLectureName(), lecture.getDescription(),
-                    lecture.getTeacher().getId(), groupID, id);
+                    lecture.getTeacher().getId(), lecture.getGroup().getId(), lecture.getId());
         } catch (DataAccessException e) {
-            log.warn("Unable to update lecture with ID: {}", id);
+            log.warn("Unable to update lecture with ID: {}", lecture.getId());
             throw new DaoException(e);
         }
     }

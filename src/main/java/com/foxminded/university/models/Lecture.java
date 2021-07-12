@@ -70,12 +70,14 @@ public class Lecture {
         if (otherLecture == null || getClass() != otherLecture.getClass()) {
             return false;
         }
+
         Lecture lecture = (Lecture) otherLecture;
-        return id == lecture.id &&
-                teacher == lecture.teacher &&
+
+       return id == lecture.id &&
+                teacher.equals(lecture.getTeacher()) &&
                 lectureName.equals(lecture.lectureName) &&
                 description.equals(lecture.description) &&
-                group == lecture.group;
+                group.equals(lecture.getGroup());
     }
 
     @Override

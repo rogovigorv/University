@@ -3,7 +3,6 @@ package com.foxminded.university.dao;
 import com.foxminded.university.config.SpringConfigTest;
 import com.foxminded.university.generate.SqlRunner;
 import com.foxminded.university.models.Group;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
-public class GroupDaoTest {
+class GroupDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
     @Autowired
@@ -53,12 +52,12 @@ public class GroupDaoTest {
 
     @Test
     void createGroupShouldReturnActualGroupWithNameFreakAngelByUsingMethodGetById() {
-        Group expected = new Group(4, "Freak Angel");
+        Group expected = new Group(1, "Freak Angel");
 
-        Group newGroup = new Group(4, "Freak Angel");
+        Group newGroup = new Group(1, "Freak Angel");
         groupDao.create(newGroup);
 
-        Group actual = groupDao.getById(4);
+        Group actual = groupDao.getById(1);
 
         assertEquals(expected, actual);
     }

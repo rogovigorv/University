@@ -5,6 +5,7 @@ import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Student;
 import com.foxminded.university.models.Teacher;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,14 +50,14 @@ public class TeacherService {
         return teacher;
     }
 
-    public void update(Teacher teacher, int id) {
-        log.info("Update teacher: {}, and ID: {}", teacher, id);
+    public void update(Teacher teacher) {
+        log.info("Update teacher: {}", teacher);
 
         try {
-            teacherDao.update(teacher, id);
+            teacherDao.update(teacher);
         } catch (DaoException e) {
-            log.warn("Unable to update teacher with ID: {}", id);
-            throw new ServiceException("Unable to update teacher with ID " + id + ".", e);
+            log.warn("Unable to update teacher with ID: {}", teacher.getId());
+            throw new ServiceException("Unable to update teacher with ID " + teacher.getId() + ".", e);
         }
     }
 
@@ -75,6 +76,8 @@ public class TeacherService {
         log.debug("Get teachers pages");
 
         List<Teacher> teachers = teacherDao.showAll();
+
+        teachers.sort(Comparator.comparing(Teacher::getId));
 
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();

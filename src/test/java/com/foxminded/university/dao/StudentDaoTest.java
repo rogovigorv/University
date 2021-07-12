@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.samePropertyValuesAs;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
 @Slf4j
-public class StudentDaoTest {
+class StudentDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
     @Autowired
@@ -58,7 +58,7 @@ public class StudentDaoTest {
         Student expected = new Student(1, "Kolya", "Balalaikin", group);
 
         Student studentWithDifferentName = new Student(1, "Kolya", "Balalaikin", group);
-        studentDao.update(studentWithDifferentName, 1);
+        studentDao.update(studentWithDifferentName);
 
         Student actual = studentDao.getById(1);
 
@@ -70,12 +70,12 @@ public class StudentDaoTest {
         Group group = new Group(1, "Dream team");
         groupDao.create(group);
 
-        Student newStudent = new Student(2, "Boris", "The Blade", group);
+        Student newStudent = new Student(1, "Boris", "The Blade", group);
         studentDao.create(newStudent);
 
-        Student expected = new Student(2, "Boris", "The Blade", group);
+        Student expected = new Student(1, "Boris", "The Blade", group);
 
-        Student actual = studentDao.getById(2);
+        Student actual = studentDao.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
     }

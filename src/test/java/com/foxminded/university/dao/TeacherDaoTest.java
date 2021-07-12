@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = SpringConfigTest.class)
 @Slf4j
-public class TeacherDaoTest {
+class TeacherDaoTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
     @Autowired
@@ -31,34 +31,34 @@ public class TeacherDaoTest {
 
     @Test
     void getTeacherByIdShouldReturnActualTeacherWithNameBronislav() {
-        Teacher expected = new Teacher(25, "Bronislav", "Potemkin");
+        Teacher expected = new Teacher(1, "Bronislav", "Potemkin");
         teacherDao.create(expected);
 
-        Teacher actual = teacherDao.getById(25);
+        Teacher actual = teacherDao.getById(1);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void updateTeacherByIdShouldReturnActualTeacherWithNameSergeyByUsingMethodGetById() {
-        Teacher teacher = new Teacher(25, "Bronislav", "Potemkin");
+        Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
         teacherDao.create(teacher);
 
-        Teacher expected = new Teacher(25, "Sergey", "Nemchinskiy");
+        Teacher expected = new Teacher(1, "Sergey", "Nemchinskiy");
 
-        teacherDao.update(expected, 25);
+        teacherDao.update(expected);
 
-        Teacher actual = teacherDao.getById(25);
+        Teacher actual = teacherDao.getById(1);
 
         assertEquals(expected, actual);
     }
 
     @Test
     void createTeacherShouldReturnActualTeacherWithNameIvanByUsingMethodGetById() {
-        Teacher expected = new Teacher(20, "Ivan", "Ivanov");
+        Teacher expected = new Teacher(1, "Ivan", "Ivanov");
         teacherDao.create(expected);
 
-        Teacher actual = teacherDao.getById(20);
+        Teacher actual = teacherDao.getById(1);
 
         assertEquals(expected, actual);
     }
