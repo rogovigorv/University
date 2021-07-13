@@ -19,7 +19,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import java.util.Objects;
 
 @Configuration
 @ComponentScan("com.foxminded.university")
@@ -42,7 +41,7 @@ public class SpringConfig implements WebMvcConfigurer {
     @Bean
     public DataSource dataSource() throws NamingException {
         log.info("DataSource bean created");
-        return (DataSource) new JndiTemplate().lookup(Objects.requireNonNull(environment.getProperty("jdbc.url")));
+        return (DataSource) new JndiTemplate().lookup(environment.getProperty("jdbc.url"));
     }
 
     @Bean
