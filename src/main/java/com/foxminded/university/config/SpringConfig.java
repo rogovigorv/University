@@ -3,15 +3,16 @@ package com.foxminded.university.config;
 import com.foxminded.university.generate.SqlRunner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
+import org.springframework.jndi.JndiTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -21,7 +22,7 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 @Configuration
 @ComponentScan("com.foxminded.university")
-@PropertySource("classpath:postgres.properties")
+@PropertySource("classpath:persistence-jndi.properties")
 @EnableWebMvc
 @Slf4j
 public class SpringConfig implements WebMvcConfigurer {
@@ -29,39 +30,22 @@ public class SpringConfig implements WebMvcConfigurer {
     private static final String DATA_SCRIPT = "insert_test_data.sql";
 
     private final ApplicationContext applicationContext;
+    private final Environment environment;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext) {
+    public SpringConfig(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
+        this.environment = environment;
     }
 
-    @Value("${postgres.driver}")
-    String driver;
-
-    @Value("${postgres.url}")
-    String url;
-
-    @Value("${postgres.user}")
-    String user;
-
-    @Value("${postgres.password}")
-    String password;
-
     @Bean
-    public DataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(driver);
-        dataSource.setUrl(url);
-        dataSource.setUsername(user);
-        dataSource.setPassword(password);
-
+    public DataSource dataSource() throws NamingException {
         log.info("DataSource bean created");
-
-        return dataSource;
+        return (DataSource) new JndiTemplate().lookup(environment.getProperty("jdbc.url"));
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate() {
+    public JdbcTemplate jdbcTemplate() throws NamingException {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(dataSource());
 
@@ -71,7 +55,7 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public void mainSqlRunner() {
+    public void mainSqlRunner() throws NamingException {
         SqlRunner sqlRunner = new SqlRunner(jdbcTemplate());
         sqlRunner.runScript(CREATE_SCRIPT);
         sqlRunner.runScript(DATA_SCRIPT);
