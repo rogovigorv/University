@@ -1,7 +1,6 @@
 package com.foxminded.university.controller;
 
 import com.foxminded.university.config.SpringConfigTest;
-import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Teacher;
 import org.junit.jupiter.api.BeforeEach;

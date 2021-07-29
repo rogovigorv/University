@@ -2,7 +2,6 @@ package com.foxminded.university.service;
 
 import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.TeacherDao;
-import com.foxminded.university.models.Student;
 import com.foxminded.university.models.Teacher;
 import java.util.Collections;
 import java.util.Comparator;
@@ -14,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -25,6 +25,7 @@ public class TeacherService {
         this.teacherDao = teacherDao;
     }
 
+    @Transactional
     public void create(Teacher teacher) {
         log.info("Create teacher: {}", teacher);
 
@@ -36,6 +37,7 @@ public class TeacherService {
         }
     }
 
+    @Transactional
     public Teacher getById(int id) {
         log.info("Get teacher with ID: {}", id);
 
@@ -50,6 +52,7 @@ public class TeacherService {
         return teacher;
     }
 
+    @Transactional
     public void update(Teacher teacher) {
         log.info("Update teacher: {}", teacher);
 
@@ -61,6 +64,7 @@ public class TeacherService {
         }
     }
 
+    @Transactional
     public void delete(int id) {
         log.info("Delete teacher with ID: {}", id);
 
@@ -72,6 +76,7 @@ public class TeacherService {
         }
     }
 
+    @Transactional
     public Page<Teacher> findPaginated(Pageable pageable) {
         log.debug("Get teachers pages");
 

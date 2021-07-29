@@ -2,15 +2,10 @@ package com.foxminded.university.service;
 
 import com.foxminded.university.dao.DaoException;
 import com.foxminded.university.dao.LectureDao;
-import com.foxminded.university.dao.TeacherDao;
-import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
-import com.foxminded.university.models.Teacher;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,19 +13,19 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 public class LectureService {
     private final LectureDao lectureDao;
-    private final TeacherDao teacherDao;
 
     @Autowired
-    public LectureService(LectureDao lectureDao, TeacherDao teacherDao) {
+    public LectureService(LectureDao lectureDao) {
         this.lectureDao = lectureDao;
-        this.teacherDao = teacherDao;
     }
 
+    @Transactional
     public void create(Lecture lecture) {
         log.info("Create lecture: {}", lecture);
 
@@ -42,6 +37,7 @@ public class LectureService {
         }
     }
 
+    @Transactional
     public Lecture getById(int id) {
         log.info("Get lecture with ID: {}", id);
 
@@ -56,20 +52,7 @@ public class LectureService {
         return lecture;
     }
 
-    public Lecture getByGroupId(int id) {
-        log.info("Get lecture with group ID: {}", id);
-
-        Lecture lecture;
-        try {
-            lecture = lectureDao.getByGroupId(id);
-        } catch (DaoException e) {
-            log.warn("Can't get lecture with group ID: {}", id);
-            throw new ServiceException("Can't get lecture with group ID " + id + ".", e);
-        }
-
-        return lecture;
-    }
-
+    @Transactional
     public void update(Lecture lecture) {
         log.info("Update lecture: {}", lecture.getLectureName());
 
@@ -81,6 +64,7 @@ public class LectureService {
         }
     }
 
+    @Transactional
     public void delete(int id) {
         log.info("Delete lecture with ID: {}", id);
 
@@ -92,25 +76,7 @@ public class LectureService {
         }
     }
 
-    public void deleteByTeacherSurname(String surname) {
-        log.info("Delete lecture with teacher surname: {}", surname);
-
-        Teacher teacher;
-        try {
-            teacher = teacherDao.getByTeacherSurname(surname);
-        } catch (DaoException e) {
-            log.warn("Unable to get teacher with surname {} to this lecture", surname);
-            throw new ServiceException("Unable to get teacher to this lecture.", e);
-        }
-
-        try {
-            lectureDao.deleteByTeacherId(teacher.getId());
-        } catch (DaoException e) {
-            log.warn("Unable to delete lecture with teacher ID: {}", teacher.getId());
-            throw new ServiceException("Unable to delete lecture with teacher ID " + teacher.getId() + ".", e);
-        }
-    }
-
+    @Transactional
     public Page<Lecture> findPaginated(Pageable pageable) {
         log.debug("Get lectures pages");
 

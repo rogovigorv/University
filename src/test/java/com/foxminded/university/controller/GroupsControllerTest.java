@@ -96,7 +96,7 @@ class GroupsControllerTest {
     void update_ShouldAddGroupToModelAndRedirectToGroupsListViewAndCallTheUpdateDaoMethodOnce() throws Exception {
         Group group = new Group(1, "Spice Girls");
 
-        doNothing().when(groupDaoMock).update(group,1);
+        doNothing().when(groupDaoMock).update(group);
 
         mockMvc.perform(patch("/groups/{id}/edit", 1L)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -107,7 +107,7 @@ class GroupsControllerTest {
                 .andExpect(view().name("redirect:/groups"))
                 .andExpect(model().attribute("group", hasProperty("groupName", is("Spice Girls"))));
 
-        verify(groupDaoMock, times(1)).update(group, 1);
+        verify(groupDaoMock, times(1)).update(group);
         verifyNoMoreInteractions(groupDaoMock);
     }
 

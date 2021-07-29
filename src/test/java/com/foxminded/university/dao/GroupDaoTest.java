@@ -43,7 +43,7 @@ class GroupDaoTest {
         groupDao.create(group);
 
         Group expected = new Group(1, "Lamb Of God");
-        groupDao.update(expected, 1);
+        groupDao.update(expected);
 
         Group actual = groupDao.getById(1);
 

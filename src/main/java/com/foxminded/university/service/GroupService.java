@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -24,6 +25,7 @@ public class GroupService {
         this.groupDao = groupDao;
     }
 
+    @Transactional
     public void create(Group group) {
         log.info("Create group {}", group);
 
@@ -35,6 +37,7 @@ public class GroupService {
         }
     }
 
+    @Transactional
     public Group getById(int id) {
         log.info("Get group with ID: {}", id);
 
@@ -49,17 +52,19 @@ public class GroupService {
         return group;
     }
 
-    public void update(Group group, int id) {
-        log.info("Update group: {} and ID: {}", group, id);
+    @Transactional
+    public void update(Group group) {
+        log.info("Update group: {} and ID: {}", group, group.getId());
 
         try {
-            groupDao.update(group, id);
+            groupDao.update(group);
         } catch (DaoException e) {
-            log.warn("Unable to update group with ID: {}", id);
-            throw new ServiceException("Unable to update group with ID " + id + ".", e);
+            log.warn("Unable to update group with ID: {}", group.getId());
+            throw new ServiceException("Unable to update group with ID " + group.getId() + ".", e);
         }
     }
 
+    @Transactional
     public void delete(int id) {
         log.info("Delete group with ID: {}", id);
 
@@ -71,6 +76,7 @@ public class GroupService {
         }
     }
 
+    @Transactional
     public Page<Group> findPaginated(Pageable pageable) {
         log.debug("Get groups pages");
 

@@ -1,8 +1,16 @@
 package com.foxminded.university.dao;
 
+import java.util.List;
+
 public interface UniversityDao<T> {
 
-    public T getById(int id);
+    void create(T t);
 
-    public void delete(int id);
+    T getById(int id);
+
+    void delete(int id);
+
+    List<T> showAll();
+
+    void update(T T);
 }

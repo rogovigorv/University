@@ -95,20 +95,4 @@ class LectureDaoTest {
 
         assertThat(expected, samePropertyValuesAs(actual));
     }
-
-    @Test
-    void getLectureByIdGroupIdShouldReturnActualLectureWithNameEng() {
-        Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
-        teacherDao.create(teacher);
-
-        Group group = new Group(1, "Geeks");
-        groupDao.create(group);
-
-        Lecture expected = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureDao.create(expected);
-
-        Lecture actual = lectureDao.getByGroupId(1);
-
-        assertThat(expected, samePropertyValuesAs(actual));
-    }
 }

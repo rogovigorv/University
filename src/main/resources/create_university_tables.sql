@@ -16,9 +16,9 @@ CREATE TABLE student (
 id SERIAL PRIMARY KEY,
 firstName VARCHAR NOT NULL,
 lastName VARCHAR NOT NULL,
-group_id INT,
+student_group_id INT,
 
-FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (student_group_id) REFERENCES groups(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 DROP TABLE IF EXISTS lecture CASCADE;
@@ -26,9 +26,9 @@ CREATE TABLE lecture (
 id SERIAL PRIMARY KEY,
 lectureName VARCHAR NOT NULL,
 description VARCHAR NOT NULL,
-teacher_id INT,
-group_id INT,
+lecture_teacher_id INT,
+lecture_group_id INT,
 
-FOREIGN KEY (teacher_id) REFERENCES teacher(id) ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (group_id) REFERENCES groups(id) ON DELETE CASCADE ON UPDATE CASCADE
+FOREIGN KEY (lecture_teacher_id) REFERENCES teacher(id) ON DELETE CASCADE ON UPDATE CASCADE,
+FOREIGN KEY (lecture_group_id) REFERENCES groups(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

@@ -55,7 +55,7 @@
         </thead>
         <tbody>
         <tr th:each="lecture : ${lecturePage.content}">
-            <td th:text="${lecture.getId()}">
+            <td class="h6" th:text="${lecture.getId()}">
             <td th:text="${lecture.getLectureName()}">
             <td th:text="${lecture.getDescription()}">
             <td th:text="${lecture.getTeacher().getLastName()}">

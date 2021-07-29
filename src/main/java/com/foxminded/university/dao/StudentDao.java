@@ -1,38 +1,37 @@
 package com.foxminded.university.dao;
 
-import com.foxminded.university.mapper.StudentRowMapper;
 import com.foxminded.university.models.Student;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import static com.foxminded.university.dao.Queries.STUDENT_CREATE;
-import static com.foxminded.university.dao.Queries.STUDENT_DELETE_BY_ID;
-import static com.foxminded.university.dao.Queries.STUDENT_SELECT_ALL;
-import static com.foxminded.university.dao.Queries.STUDENT_SELECT_BY_ID;
-import static com.foxminded.university.dao.Queries.STUDENT_UPDATE_BY_ID;
-import static com.foxminded.university.dao.Queries.STUDENT_UPDATE_GROUP_BY_ID;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 @Repository
 @Slf4j
 public class StudentDao implements UniversityDao<Student>{
-    private final JdbcTemplate jdbcTemplate;
-    private final StudentRowMapper studentRowMapper;
+    private final SessionFactory sessionFactory;
 
     @Autowired
-    public StudentDao(JdbcTemplate jdbcTemplate, StudentRowMapper studentRowMapper) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.studentRowMapper = studentRowMapper;
+    public StudentDao(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    @Override
     public void create(Student student) throws DaoException {
         log.debug("Create student: {}", student);
 
+        Session currentSession = sessionFactory.getCurrentSession();
+
         try {
-            jdbcTemplate.update(STUDENT_CREATE, student.getFirstName(),
-                    student.getLastName(), student.getGroup().getId());
+            currentSession.save(student);
         } catch (DataAccessException e) {
             log.warn("Unable to create this student {}", student);
             throw new DaoException(e);
@@ -44,8 +43,10 @@ public class StudentDao implements UniversityDao<Student>{
         log.debug("Get student with ID: {}", id);
 
         Student student;
+        Session currentSession = sessionFactory.getCurrentSession();
+
         try {
-            student = jdbcTemplate.queryForObject(STUDENT_SELECT_BY_ID, studentRowMapper, id);
+            student = currentSession.get(Student.class, id);
         } catch (DataAccessException e) {
             log.warn("Can't get student with ID: {}", id);
             throw new DaoException(e);
@@ -54,12 +55,14 @@ public class StudentDao implements UniversityDao<Student>{
         return student;
     }
 
+    @Override
     public void update(Student student) throws DaoException {
         log.debug("Update student: {}", student);
 
+        Session currentSession = sessionFactory.getCurrentSession();
+
         try {
-            jdbcTemplate.update(STUDENT_UPDATE_BY_ID, student.getFirstName(), student.getLastName(),
-                    student.getGroup().getId(), student.getId());
+            currentSession.saveOrUpdate(student);
         } catch (DataAccessException e) {
             log.warn("Unable to update student with ID: {}", student.getId());
             throw new DaoException(e);
@@ -70,31 +73,36 @@ public class StudentDao implements UniversityDao<Student>{
     public void delete(int id) throws DaoException {
         log.debug("Delete student with ID: {}", id);
 
+        Session session = sessionFactory.getCurrentSession();
+
         try {
-            jdbcTemplate.update(STUDENT_DELETE_BY_ID, id);
+            session.delete(session.byId(Student.class).load(id));
         } catch (DataAccessException e) {
             log.warn("Unable to delete student with ID: {}", id);
             throw new DaoException(e);
         }
     }
 
-    public void updateGroup(int studentId, int groupId) throws DaoException {
-        log.debug("Update student with ID: {}, and group ID: {}", studentId, groupId);
-
-        try {
-            jdbcTemplate.update(STUDENT_UPDATE_GROUP_BY_ID, groupId, studentId);
-        } catch (DataAccessException e) {
-            log.warn("Unable to change the group for student with ID: {}", studentId);
-            throw new DaoException(e);
-        }
-    }
-
+    @Override
     public List<Student> showAll() throws DaoException {
         log.debug("Get all students");
 
-        List<Student> students;
+        Session session = sessionFactory.getCurrentSession();
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+
+        List<Student> students = new ArrayList<>();
+
         try {
-            students = jdbcTemplate.query(STUDENT_SELECT_ALL, studentRowMapper);
+            CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);
+            Root<Student> root = criteriaQuery.from(Student.class);
+            criteriaQuery.select(root);
+            Query query = session.createQuery(criteriaQuery);
+            List<?> results = query.getResultList();
+            results.forEach(r -> {
+                if(r != null) {
+                    students.add((Student) r);
+                }
+            });
         } catch (DataAccessException e) {
             log.warn("Unable to get all students");
             throw new DaoException(e);

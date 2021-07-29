@@ -84,7 +84,7 @@ public class SpringConfigTest {
 
     @Bean
     public LectureService lectureService() {
-        return new LectureService(lectureDaoMock(), teacherDaoMock());
+        return new LectureService(lectureDaoMock());
     }
 
     @Bean
@@ -94,6 +94,6 @@ public class SpringConfigTest {
 
     @Bean
     public StudentService studentService() {
-        return new StudentService(studentDaoMock(), groupDaoMock());
+        return new StudentService(studentDaoMock());
     }
 }
