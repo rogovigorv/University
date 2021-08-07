@@ -25,7 +25,6 @@ public class TeacherService {
         this.teacherDao = teacherDao;
     }
 
-    @Transactional
     public void create(Teacher teacher) {
         log.info("Create teacher: {}", teacher);
 
@@ -37,7 +36,6 @@ public class TeacherService {
         }
     }
 
-    @Transactional
     public Teacher getById(int id) {
         log.info("Get teacher with ID: {}", id);
 
@@ -76,7 +74,6 @@ public class TeacherService {
         }
     }
 
-    @Transactional
     public Page<Teacher> findPaginated(Pageable pageable) {
         log.debug("Get teachers pages");
 

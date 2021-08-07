@@ -6,9 +6,13 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -28,7 +32,7 @@ public class GroupDao implements UniversityDao<Group> {
     public void create(Group group) {
         log.debug("Create group: {}", group);
 
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
 
         try {
             currentSession.save(group);
@@ -43,7 +47,7 @@ public class GroupDao implements UniversityDao<Group> {
         log.debug("Get group with ID: {}", id);
 
         Group group;
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
 
         try {
             group = currentSession.get(Group.class, id);
@@ -62,7 +66,7 @@ public class GroupDao implements UniversityDao<Group> {
         Session currentSession = sessionFactory.getCurrentSession();
 
         try {
-            currentSession.saveOrUpdate(group);
+            currentSession.update(group);
         } catch (DataAccessException e) {
             log.warn("Unable to update group with ID: {}", group.getId());
             throw new DaoException(e);
@@ -85,12 +89,12 @@ public class GroupDao implements UniversityDao<Group> {
 
     @Override
     public List<Group> showAll() throws DaoException {
-        log.debug("Get all groups");
+        log.info("Get all groups");
 
-        Session session = sessionFactory.getCurrentSession();
+        List<Group> groups;
+        Session session = sessionFactory.openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
-        List<Group> groups = new ArrayList<>();
+        groups = new ArrayList<>();
 
         try {
             CriteriaQuery<Group> criteriaQuery = criteriaBuilder.createQuery(Group.class);
@@ -99,7 +103,7 @@ public class GroupDao implements UniversityDao<Group> {
             Query query = session.createQuery(criteriaQuery);
             List<?> results = query.getResultList();
             results.forEach(r -> {
-                if(r != null) {
+                if (r != null) {
                     groups.add((Group) r);
                 }
             });
@@ -109,5 +113,6 @@ public class GroupDao implements UniversityDao<Group> {
         }
 
         return groups;
+
     }
 }

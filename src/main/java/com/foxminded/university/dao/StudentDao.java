@@ -28,7 +28,7 @@ public class StudentDao implements UniversityDao<Student>{
     public void create(Student student) throws DaoException {
         log.debug("Create student: {}", student);
 
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
 
         try {
             currentSession.save(student);
@@ -43,7 +43,7 @@ public class StudentDao implements UniversityDao<Student>{
         log.debug("Get student with ID: {}", id);
 
         Student student;
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
 
         try {
             student = currentSession.get(Student.class, id);
@@ -87,7 +87,7 @@ public class StudentDao implements UniversityDao<Student>{
     public List<Student> showAll() throws DaoException {
         log.debug("Get all students");
 
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
         List<Student> students = new ArrayList<>();

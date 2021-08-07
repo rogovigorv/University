@@ -34,7 +34,7 @@ class GroupDaoTest {
 
         Group actual = groupDao.getById(expected.getId());
 
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
     }
 
     @Test

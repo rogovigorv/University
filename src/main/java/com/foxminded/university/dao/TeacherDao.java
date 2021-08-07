@@ -28,7 +28,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
     public void create(Teacher teacher) throws DaoException {
         log.debug("Create teacher: {}", teacher);
 
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
 
         try {
             currentSession.save(teacher);
@@ -43,7 +43,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
         log.debug("Get teacher with ID: {}", id);
 
         Teacher teacher;
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
 
         try {
             teacher = currentSession.get(Teacher.class, id);
@@ -87,7 +87,7 @@ public class TeacherDao implements UniversityDao<Teacher> {
     public List<Teacher> showAll() {
         log.debug("Get all teachers");
 
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
         List<Teacher> teachers = new ArrayList<>();

@@ -16,16 +16,27 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.transaction.TransactionManager;
+
+import javax.naming.NamingException;
 import javax.sql.DataSource;
+import java.util.Properties;
 
 @Configuration
 @ComponentScan(basePackages = "com.foxminded.university",
-        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = SpringConfig.class))
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {SpringConfig.class,
+                HibernateConfig.class, SpringMvcDispatcherServletInitializer.class}))
 @PropertySource("classpath:h2.properties")
+@PropertySource("classpath:database.properties")
 @Slf4j
 public class SpringConfigTest {
+    private final Environment environment;
+
     @Value("${h2.driver}")
     String driver;
 
@@ -37,6 +48,10 @@ public class SpringConfigTest {
 
     @Value("${h2.password}")
     String password;
+
+    public SpringConfigTest(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public DataSource dataSource() {
@@ -58,12 +73,37 @@ public class SpringConfigTest {
     }
 
     @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan("com.foxminded.university.models");
+        sessionFactory.setHibernateProperties(hibernateProperties());
+        return sessionFactory;
+    }
+
+    private Properties hibernateProperties() {
+        Properties properties = new Properties();
+        properties.put("hibernate.dialect", environment.getRequiredProperty("hibernate.dialect"));
+        properties.put("hibernate.show_sql", environment.getRequiredProperty("hibernate.show_sql"));
+        properties.put("hibernate.format_sql", environment.getRequiredProperty("hibernate.format_sql"));
+        properties.put("hibernate.hbm2ddl.auto", environment.getRequiredProperty("hibernate.hbm2ddl.auto"));
+        return properties;
+    }
+
+    @Bean
+    public TransactionManager transactionManager() throws NamingException {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+        transactionManager.setSessionFactory(sessionFactory().getObject());
+        return transactionManager;
+    }
+
+    @Bean
     public GroupDao groupDaoMock() {
         return Mockito.mock(GroupDao.class);
     }
 
     @Bean
-    public GroupService groupService() {
+    public GroupService groupServiceMock() {
         return new GroupService(groupDaoMock());
     }
 
@@ -73,7 +113,7 @@ public class SpringConfigTest {
     }
 
     @Bean
-    public TeacherService teacherService() {
+    public TeacherService teacherServiceMock() {
         return new TeacherService(teacherDaoMock());
     }
 
@@ -83,7 +123,7 @@ public class SpringConfigTest {
     }
 
     @Bean
-    public LectureService lectureService() {
+    public LectureService lectureServiceMock() {
         return new LectureService(lectureDaoMock());
     }
 
@@ -93,7 +133,7 @@ public class SpringConfigTest {
     }
 
     @Bean
-    public StudentService studentService() {
+    public StudentService studentServiceMock() {
         return new StudentService(studentDaoMock());
     }
 }

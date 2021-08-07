@@ -25,7 +25,6 @@ public class LectureService {
         this.lectureDao = lectureDao;
     }
 
-    @Transactional
     public void create(Lecture lecture) {
         log.info("Create lecture: {}", lecture);
 
@@ -37,7 +36,6 @@ public class LectureService {
         }
     }
 
-    @Transactional
     public Lecture getById(int id) {
         log.info("Get lecture with ID: {}", id);
 
@@ -76,7 +74,6 @@ public class LectureService {
         }
     }
 
-    @Transactional
     public Page<Lecture> findPaginated(Pageable pageable) {
         log.debug("Get lectures pages");
 

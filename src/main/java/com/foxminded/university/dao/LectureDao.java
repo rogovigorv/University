@@ -28,7 +28,7 @@ public class LectureDao implements UniversityDao<Lecture> {
     public void create(Lecture lecture) throws DaoException {
         log.debug("Create lecture: {}", lecture);
 
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
 
         try {
             currentSession.save(lecture);
@@ -43,7 +43,7 @@ public class LectureDao implements UniversityDao<Lecture> {
         log.debug("Get lecture with ID: {}", id);
 
         Lecture lecture;
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
 
         try {
             lecture = currentSession.get(Lecture.class, id);
@@ -87,7 +87,7 @@ public class LectureDao implements UniversityDao<Lecture> {
     public List<Lecture> showAll() throws DaoException {
         log.debug("Get all lectures");
 
-        Session session = sessionFactory.getCurrentSession();
+        Session session = sessionFactory.openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
         List<Lecture> lectures = new ArrayList<>();
