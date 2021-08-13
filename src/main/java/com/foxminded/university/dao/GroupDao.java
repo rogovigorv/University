@@ -10,9 +10,6 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -63,10 +60,13 @@ public class GroupDao implements UniversityDao<Group> {
     public void update(Group group) throws DaoException {
         log.debug("Update group: {} and ID: {}", group, group.getId());
 
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
+        Transaction transaction = currentSession.beginTransaction();
 
         try {
             currentSession.update(group);
+            transaction.commit();
+            currentSession.close();
         } catch (DataAccessException e) {
             log.warn("Unable to update group with ID: {}", group.getId());
             throw new DaoException(e);
@@ -77,10 +77,13 @@ public class GroupDao implements UniversityDao<Group> {
     public void delete(int id) throws DaoException {
         log.debug("Delete group with ID: {}", id);
 
-        Session session = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
+        Transaction transaction = currentSession.beginTransaction();
 
         try {
-            session.delete(session.byId(Group.class).load(id));
+            currentSession.delete(currentSession.byId(Group.class).load(id));
+            transaction.commit();
+            currentSession.close();
         } catch (DataAccessException e) {
             log.warn("Unable to delete group with ID: {}", id);
             throw new DaoException(e);

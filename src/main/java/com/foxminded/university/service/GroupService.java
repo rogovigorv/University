@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -50,7 +49,6 @@ public class GroupService {
         return group;
     }
 
-    @Transactional
     public void update(Group group) {
         log.info("Update group: {} and ID: {}", group, group.getId());
 
@@ -62,7 +60,6 @@ public class GroupService {
         }
     }
 
-    @Transactional
     public void delete(int id) {
         log.info("Delete group with ID: {}", id);
 
@@ -93,6 +90,9 @@ public class GroupService {
             int toIndex = Math.min(startItem + pageSize, groups.size());
             currentPageList = groups.subList(startItem, toIndex);
         }
+
+        System.out.println("currentPage " + currentPage);
+        System.out.println("pageSize " + pageSize);
 
         Page<Group> groupPage =
                 new PageImpl<>(currentPageList, PageRequest.of(currentPage, pageSize), groups.size());

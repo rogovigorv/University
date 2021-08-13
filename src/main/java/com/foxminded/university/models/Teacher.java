@@ -27,7 +27,7 @@ public class Teacher{
     @Column(name = "lastname")
     private String lastName;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "teacher")
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY, mappedBy = "teacher")
     private List<Lecture> lectures;
 
     public Teacher() {

@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -50,7 +49,6 @@ public class TeacherService {
         return teacher;
     }
 
-    @Transactional
     public void update(Teacher teacher) {
         log.info("Update teacher: {}", teacher);
 
@@ -62,7 +60,6 @@ public class TeacherService {
         }
     }
 
-    @Transactional
     public void delete(int id) {
         log.info("Delete teacher with ID: {}", id);
 

@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
@@ -59,10 +60,13 @@ public class TeacherDao implements UniversityDao<Teacher> {
     public void update(Teacher teacher) throws DaoException {
         log.debug("Update teacher: {}", teacher);
 
-        Session currentSession = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
+        Transaction transaction = currentSession.beginTransaction();
 
         try {
             currentSession.saveOrUpdate(teacher);
+            transaction.commit();
+            currentSession.close();
         } catch (DataAccessException e) {
             log.warn("Unable to update teacher with ID: {}", teacher.getId());
             throw new DaoException(e);
@@ -73,10 +77,13 @@ public class TeacherDao implements UniversityDao<Teacher> {
     public void delete(int id) throws DaoException {
         log.debug("Delete teacher with ID: {}", id);
 
-        Session session = sessionFactory.getCurrentSession();
+        Session currentSession = sessionFactory.openSession();
+        Transaction transaction = currentSession.beginTransaction();
 
         try {
-            session.delete(session.byId(Teacher.class).load(id));
+            currentSession.delete(currentSession.byId(Teacher.class).load(id));
+            transaction.commit();
+            currentSession.close();
         } catch (DataAccessException e) {
             log.warn("Unable to delete teacher with ID: {}", id);
             throw new DaoException(e);
