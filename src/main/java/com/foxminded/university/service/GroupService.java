@@ -1,11 +1,8 @@
 package com.foxminded.university.service;
 
-import com.foxminded.university.dao.DaoException;
-import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.models.Group;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import com.foxminded.university.repository.GroupRepository;
+import com.foxminded.university.repository.RepositoryException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,22 +11,26 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 @Slf4j
 public class GroupService {
-    private final GroupDao groupDao;
+    private final GroupRepository groupRepository;
 
     @Autowired
-    public GroupService(GroupDao groupDao) {
-        this.groupDao = groupDao;
+    public GroupService(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
     }
 
     public void create(Group group) {
         log.info("Create group {}", group);
 
         try {
-            groupDao.create(group);
-        } catch (DaoException e) {
+            groupRepository.create(group);
+        } catch (RepositoryException e) {
             log.warn("Unable to create this group {}", group);
             throw new ServiceException("Unable to create this group.", e);
         }
@@ -40,8 +41,8 @@ public class GroupService {
 
         Group group;
         try {
-            group = groupDao.getById(id);
-        } catch (DaoException e) {
+            group = groupRepository.getById(id);
+        } catch (RepositoryException e) {
             log.warn("Can't get group with ID: {}", id);
             throw new ServiceException("Can't get group with ID " + id + ".", e);
         }
@@ -49,14 +50,14 @@ public class GroupService {
         return group;
     }
 
-    public void update(Group group, int id) {
-        log.info("Update group: {} and ID: {}", group, id);
+    public void update(Group group) {
+        log.info("Update group: {} and ID: {}", group, group.getId());
 
         try {
-            groupDao.update(group, id);
-        } catch (DaoException e) {
-            log.warn("Unable to update group with ID: {}", id);
-            throw new ServiceException("Unable to update group with ID " + id + ".", e);
+            groupRepository.update(group);
+        } catch (RepositoryException e) {
+            log.warn("Unable to update group with ID: {}", group.getId());
+            throw new ServiceException("Unable to update group with ID " + group.getId() + ".", e);
         }
     }
 
@@ -64,17 +65,17 @@ public class GroupService {
         log.info("Delete group with ID: {}", id);
 
         try {
-            groupDao.delete(id);
-        } catch (DaoException e) {
+            groupRepository.delete(id);
+        } catch (RepositoryException e) {
             log.warn("Unable to delete group with ID: {}", id);
             throw new ServiceException("Unable to delete group with ID " + id + ".", e);
         }
     }
 
     public Page<Group> findPaginated(Pageable pageable) {
-        log.debug("Get groups pages");
+        log.info("Get groups pages");
 
-        List<Group> groups = groupDao.showAll();
+        List<Group> groups = groupRepository.showAll();
 
         groups.sort(Comparator.comparing(Group::getId));
 

@@ -19,10 +19,10 @@ INSERT INTO groups (groupname) VALUES ('Java guys');
 INSERT INTO groups (groupname) VALUES ('Testers');
 INSERT INTO groups (groupname) VALUES ('Truants');
 
-INSERT INTO student (firstname, lastname, group_id) VALUES ('Oleg', 'Silovich', 1);
+INSERT INTO student (firstname, lastname, student_group_id) VALUES ('Oleg', 'Silovich', 1);
 
 INSERT INTO teacher (firstname, lastname) VALUES ('Bronislav', 'Potemkin');
 
-INSERT INTO lecture (lecturename, description, teacher_id, group_id) VALUES ('Math', 'Simple math', 1, 3);
-INSERT INTO lecture (lecturename, description, teacher_id, group_id) VALUES ('Eng', 'Simple eng', 1, 2);
-INSERT INTO lecture (lecturename, description, teacher_id, group_id) VALUES ('Art', 'Simple art', 1, 1);
+INSERT INTO lecture (lecturename, description, lecture_teacher_id, lecture_group_id) VALUES ('Math', 'Simple math', 1, 3);
+INSERT INTO lecture (lecturename, description, lecture_teacher_id, lecture_group_id) VALUES ('Eng', 'Simple eng', 1, 2);
+INSERT INTO lecture (lecturename, description, lecture_teacher_id, lecture_group_id) VALUES ('Art', 'Simple art', 1, 1);

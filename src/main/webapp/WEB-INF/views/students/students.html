@@ -54,7 +54,7 @@
         </thead>
         <tbody>
         <tr th:each="student : ${studentPage.content}">
-            <td th:text="${student.getId()}">
+            <td class="h6" th:text="${student.getId()}">
             <td th:text="${student.getFirstName()}">
             <td th:text="${student.getLastName()}">
             <td th:text="${student.getGroup().getGroupName()}">

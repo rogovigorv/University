@@ -2,10 +2,6 @@ package com.foxminded.university.controller;
 
 import com.foxminded.university.models.Group;
 import com.foxminded.university.service.GroupService;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/groups")
@@ -57,8 +58,8 @@ public class GroupsController {
     }
 
     @PatchMapping("/{id}/edit")
-    public String update(@ModelAttribute("group") Group group, @PathVariable("id") int id) {
-        groupService.update(group, id);
+    public String update(@ModelAttribute("group") Group group) {
+        groupService.update(group);
         return "redirect:/groups";
     }
 

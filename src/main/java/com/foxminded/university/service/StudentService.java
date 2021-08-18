@@ -1,14 +1,8 @@
 package com.foxminded.university.service;
 
-import com.foxminded.university.dao.DaoException;
-import com.foxminded.university.dao.GroupDao;
-import com.foxminded.university.dao.StudentDao;
-import com.foxminded.university.models.Group;
-import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Student;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import com.foxminded.university.repository.RepositoryException;
+import com.foxminded.university.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,24 +11,26 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 @Slf4j
 public class StudentService {
-    private final StudentDao studentDao;
-    private final GroupDao groupDao;
+    private final StudentRepository studentRepository;
 
     @Autowired
-    public StudentService(StudentDao studentDao, GroupDao groupDao) {
-        this.studentDao = studentDao;
-        this.groupDao = groupDao;
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
     }
 
     public void create(Student student) {
         log.info("Create student: {}", student);
 
         try {
-            studentDao.create(student);
-        } catch (DaoException e) {
+            studentRepository.create(student);
+        } catch (RepositoryException e) {
             log.warn("Unable to create this student {}", student);
             throw new ServiceException("Unable to create this student.", e);
         }
@@ -45,8 +41,8 @@ public class StudentService {
 
         Student student;
         try {
-            student = studentDao.getById(id);
-        } catch (DaoException e) {
+            student = studentRepository.getById(id);
+        } catch (RepositoryException e) {
             log.warn("Can't get student with ID: {}", id);
             throw new ServiceException("Can't get student with ID " + id + ".", e);
         }
@@ -58,8 +54,8 @@ public class StudentService {
         log.info("Update student: {}", student);
 
         try {
-            studentDao.update(student);
-        } catch (DaoException e) {
+            studentRepository.update(student);
+        } catch (RepositoryException e) {
             log.warn("Unable to update student with ID: {}", student.getId());
             throw new ServiceException("Unable to update student with ID " + student.getId() + ".", e);
         }
@@ -69,55 +65,17 @@ public class StudentService {
         log.info("Delete student with ID: {}", id);
 
         try {
-            studentDao.delete(id);
-        } catch (DaoException e) {
+            studentRepository.delete(id);
+        } catch (RepositoryException e) {
             log.warn("Unable to delete student with ID: {}", id);
             throw new ServiceException("Unable to delete student with ID " + id + ".", e);
-        }
-    }
-
-    public void deleteByGroupName(String groupName) {
-        log.info("Delete student by group name: {}", groupName);
-
-        Group group;
-        try {
-            group = groupDao.getByGroupName(groupName);
-        } catch (DaoException e) {
-            log.warn("Unable to get group with name {} to this student", groupName);
-            throw new ServiceException("Unable to get group to this student.", e);
-        }
-
-        try {
-            studentDao.delete(group.getId());
-        } catch (DaoException e) {
-            log.warn("Unable to delete student with group ID: {}", group.getId());
-            throw new ServiceException("Unable to delete student with group ID " + group.getId() + ".", e);
-        }
-    }
-
-    public void changeGroup(int studentId, String groupName) {
-        log.info("Change student group: student ID - " + studentId + ", new group - " + groupName);
-
-        Group group;
-        try {
-            group = groupDao.getByGroupName(groupName);
-        } catch (DaoException e) {
-            log.warn("Unable to get group with name {} to this student", groupName);
-            throw new ServiceException("Unable to get group to this student.", e);
-        }
-
-        try {
-            studentDao.updateGroup(studentId, group.getId());
-        } catch (DaoException e) {
-            log.warn("Unable to change the group for student with ID: {}", studentId);
-            throw new ServiceException("Unable to change the group for student with ID " + studentId + ".", e);
         }
     }
 
     public Page<Student> findPaginated(Pageable pageable) {
         log.debug("Get students pages");
 
-        List<Student> students = studentDao.showAll();
+        List<Student> students = studentRepository.showAll();
 
         students.sort(Comparator.comparing(Student::getId));
 

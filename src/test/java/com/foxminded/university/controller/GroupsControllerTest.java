@@ -1,27 +1,31 @@
 package com.foxminded.university.controller;
 
-import com.foxminded.university.config.SpringConfigTest;
-import com.foxminded.university.dao.GroupDao;
 import com.foxminded.university.models.Group;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
+
+import com.foxminded.university.service.GroupService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
+
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -35,36 +39,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
-@ContextConfiguration(classes = SpringConfigTest.class)
-@WebAppConfiguration
 class GroupsControllerTest {
     private MockMvc mockMvc;
 
-    @Autowired
-    private GroupDao groupDaoMock;
+    @Mock
+    private GroupService groupService;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+    @InjectMocks
+    private GroupsController groupsController;
 
     @BeforeEach
-    public void setUp() {
-        Mockito.reset(groupDaoMock);
-
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    public void setup() {
+        mockMvc = MockMvcBuilders.standaloneSetup(groupsController).build();
     }
 
     @Test
-    void showAll_ShouldAddGroupsToModelAndRenderPaginatedGroupsListViewAndCallTheShowAllDaoMethodOnce() throws Exception {
+    void showAll_ShouldAddGroupsToModelAndRenderPaginatedGroupsListViewAndCallTheShowAllDaoMethodOnce()
+            throws Exception {
         Group firstGroup = new Group(1, "Backstreet Boys");
         Group secondGroup = new Group(2, "N Sync");
 
-        List<Group> groups = new ArrayList<>();
-        groups.add(firstGroup);
-        groups.add(secondGroup);
+        int currentPage = 1;
+        int pageSize = 12;
 
-        when(groupDaoMock.showAll()).thenReturn(groups);
+        List<Group> groups = Arrays.asList(firstGroup, secondGroup);
+
+        Page<Group> page = new PageImpl<>(groups, PageRequest.of(0, 2), groups.size());
+
+        when(groupService.findPaginated(isA(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/groups"))
                .andExpect(status().isOk())
@@ -73,30 +76,31 @@ class GroupsControllerTest {
                .andExpect(model().attribute("groupPage",
                        hasProperty("totalElements", equalTo(2L))));
 
-        verify(groupDaoMock, times(1)).showAll();
-        verifyNoMoreInteractions(groupDaoMock);
+        verify(groupService, times(1))
+                .findPaginated(PageRequest.of(currentPage - 1, pageSize));
+        verifyNoMoreInteractions(groupService);
     }
 
     @Test
     void showEach_ShouldAddGroupToModelAndRenderGroupEditViewAndCallTheGetByIdDaoMethodOnce() throws Exception {
         Group group = new Group(1, "5ive");
 
-        when(groupDaoMock.getById(1)).thenReturn(group);
+        when(groupService.getById(1)).thenReturn(group);
 
         mockMvc.perform(get("/groups/{id}/edit", 1L))
                .andExpect(status().isOk())
                .andExpect(view().name("groups/edit"))
                .andExpect(model().attribute("groupId", hasProperty("groupName", is("5ive"))));
 
-        verify(groupDaoMock, times(1)).getById(1);
-        verifyNoMoreInteractions(groupDaoMock);
+        verify(groupService, times(1)).getById(1);
+        verifyNoMoreInteractions(groupService);
     }
 
     @Test
     void update_ShouldAddGroupToModelAndRedirectToGroupsListViewAndCallTheUpdateDaoMethodOnce() throws Exception {
         Group group = new Group(1, "Spice Girls");
 
-        doNothing().when(groupDaoMock).update(group,1);
+        doNothing().when(groupService).update(group);
 
         mockMvc.perform(patch("/groups/{id}/edit", 1L)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -107,8 +111,8 @@ class GroupsControllerTest {
                 .andExpect(view().name("redirect:/groups"))
                 .andExpect(model().attribute("group", hasProperty("groupName", is("Spice Girls"))));
 
-        verify(groupDaoMock, times(1)).update(group, 1);
-        verifyNoMoreInteractions(groupDaoMock);
+        verify(groupService, times(1)).update(group);
+        verifyNoMoreInteractions(groupService);
     }
 
     @Test
@@ -123,7 +127,7 @@ class GroupsControllerTest {
     void create_ShouldAddGroupToModelAndRedirectToGroupsListViewAndCallTheCreateDaoMethodOnce() throws Exception {
         Group group = new Group(0, "Aqua");
 
-        doNothing().when(groupDaoMock).create(group);
+        doNothing().when(groupService).create(group);
 
         mockMvc.perform(post("/groups/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -134,21 +138,21 @@ class GroupsControllerTest {
                 .andExpect(view().name("redirect:/groups"))
                 .andExpect(model().attribute("group", hasProperty("groupName", is("Aqua"))));
 
-        verify(groupDaoMock, times(1)).create(group);
-        verifyNoMoreInteractions(groupDaoMock);
+        verify(groupService, times(1)).create(group);
+        verifyNoMoreInteractions(groupService);
     }
 
     @Test
     void delete_ShouldRedirectToGroupsListViewAndCallTheDeleteDaoMethodOnce() throws Exception {
         final int id = 1;
 
-        doNothing().when(groupDaoMock).delete(id);
+        doNothing().when(groupService).delete(id);
 
         mockMvc.perform(delete("/groups/{id}", 1L))
                 .andExpect(status().isFound())
                 .andExpect(view().name("redirect:/groups"));
 
-        verify(groupDaoMock, times(1)).delete(id);
-        verifyNoMoreInteractions(groupDaoMock);
+        verify(groupService, times(1)).delete(id);
+        verifyNoMoreInteractions(groupService);
     }
 }
