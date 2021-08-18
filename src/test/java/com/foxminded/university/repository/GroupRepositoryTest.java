@@ -1,4 +1,4 @@
-package com.foxminded.university.dao;
+package com.foxminded.university.repository;
 
 import com.foxminded.university.config.SpringConfigTest;
 import com.foxminded.university.generate.SqlRunner;
@@ -18,14 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = SpringConfigTest.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-class GroupDaoTest {
+class GroupRepositoryTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
     @Autowired
     private SqlRunner sqlRunner;
 
     @Autowired
-    private GroupDao groupDao;
+    private GroupRepository groupRepository;
 
     @BeforeEach
     private void setup() {
@@ -35,9 +35,9 @@ class GroupDaoTest {
     @Test
     void getGroupByIdShouldReturnActualGroupWithNameDreamTeam() {
         Group expected = new Group(1, "Dream team");
-        groupDao.create(expected);
+        groupRepository.create(expected);
 
-        Group actual = groupDao.getById(expected.getId());
+        Group actual = groupRepository.getById(expected.getId());
 
         assertEquals(expected, actual);
     }
@@ -45,12 +45,12 @@ class GroupDaoTest {
     @Test
     void updateGroupByIdShouldReturnActualGroupWithNameLambOfGodByUsingMethodGetById() {
         Group group = new Group(1, "Dream team");
-        groupDao.create(group);
+        groupRepository.create(group);
 
         Group expected = new Group(1, "Lamb Of God");
-        groupDao.update(expected);
+        groupRepository.update(expected);
 
-        Group actual = groupDao.getById(1);
+        Group actual = groupRepository.getById(1);
 
         assertEquals(expected, actual);
     }
@@ -60,9 +60,9 @@ class GroupDaoTest {
         Group expected = new Group(1, "Freak Angel");
 
         Group newGroup = new Group(1, "Freak Angel");
-        groupDao.create(newGroup);
+        groupRepository.create(newGroup);
 
-        Group actual = groupDao.getById(1);
+        Group actual = groupRepository.getById(1);
 
         assertEquals(expected, actual);
     }

@@ -1,4 +1,4 @@
-package com.foxminded.university.dao;
+package com.foxminded.university.repository;
 
 import com.foxminded.university.config.SpringConfigTest;
 import com.foxminded.university.generate.SqlRunner;
@@ -20,14 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 @WebAppConfiguration
 @Slf4j
-class TeacherDaoTest {
+class TeacherRepositoryTest {
     private static final String CREATE_SCRIPT = "create_university_tables.sql";
 
     @Autowired
     private SqlRunner sqlRunner;
 
     @Autowired
-    private TeacherDao teacherDao;
+    private TeacherRepository teacherRepository;
 
     @BeforeEach
     private void setup() {
@@ -37,9 +37,9 @@ class TeacherDaoTest {
     @Test
     void getTeacherByIdShouldReturnActualTeacherWithNameBronislav() {
         Teacher expected = new Teacher(1, "Bronislav", "Potemkin");
-        teacherDao.create(expected);
+        teacherRepository.create(expected);
 
-        Teacher actual = teacherDao.getById(1);
+        Teacher actual = teacherRepository.getById(1);
 
         assertEquals(expected, actual);
     }
@@ -47,13 +47,13 @@ class TeacherDaoTest {
     @Test
     void updateTeacherByIdShouldReturnActualTeacherWithNameSergeyByUsingMethodGetById() {
         Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
-        teacherDao.create(teacher);
+        teacherRepository.create(teacher);
 
         Teacher expected = new Teacher(1, "Sergey", "Nemchinskiy");
 
-        teacherDao.update(expected);
+        teacherRepository.update(expected);
 
-        Teacher actual = teacherDao.getById(1);
+        Teacher actual = teacherRepository.getById(1);
 
         assertEquals(expected, actual);
     }
@@ -61,9 +61,9 @@ class TeacherDaoTest {
     @Test
     void createTeacherShouldReturnActualTeacherWithNameIvanByUsingMethodGetById() {
         Teacher expected = new Teacher(1, "Ivan", "Ivanov");
-        teacherDao.create(expected);
+        teacherRepository.create(expected);
 
-        Teacher actual = teacherDao.getById(1);
+        Teacher actual = teacherRepository.getById(1);
 
         assertEquals(expected, actual);
     }

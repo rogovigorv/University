@@ -1,11 +1,8 @@
 package com.foxminded.university.service;
 
-import com.foxminded.university.dao.DaoException;
-import com.foxminded.university.dao.TeacherDao;
 import com.foxminded.university.models.Teacher;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import com.foxminded.university.repository.RepositoryException;
+import com.foxminded.university.repository.TeacherRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,22 +11,26 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 @Service
 @Slf4j
 public class TeacherService {
-    private final TeacherDao teacherDao;
+    private final TeacherRepository teacherRepository;
 
     @Autowired
-    public TeacherService(TeacherDao teacherDao) {
-        this.teacherDao = teacherDao;
+    public TeacherService(TeacherRepository teacherRepository) {
+        this.teacherRepository = teacherRepository;
     }
 
     public void create(Teacher teacher) {
         log.info("Create teacher: {}", teacher);
 
         try {
-            teacherDao.create(teacher);
-        } catch (DaoException e) {
+            teacherRepository.create(teacher);
+        } catch (RepositoryException e) {
             log.warn("Unable to create this teacher {}", teacher);
             throw new ServiceException("Unable to create this teacher.", e);
         }
@@ -40,8 +41,8 @@ public class TeacherService {
 
         Teacher teacher;
         try {
-            teacher = teacherDao.getById(id);
-        } catch (DaoException e) {
+            teacher = teacherRepository.getById(id);
+        } catch (RepositoryException e) {
             log.warn("Can't get teacher with ID: {}", id);
             throw new ServiceException("Can't get teacher with ID " + id + ".", e);
         }
@@ -53,8 +54,8 @@ public class TeacherService {
         log.info("Update teacher: {}", teacher);
 
         try {
-            teacherDao.update(teacher);
-        } catch (DaoException e) {
+            teacherRepository.update(teacher);
+        } catch (RepositoryException e) {
             log.warn("Unable to update teacher with ID: {}", teacher.getId());
             throw new ServiceException("Unable to update teacher with ID " + teacher.getId() + ".", e);
         }
@@ -64,8 +65,8 @@ public class TeacherService {
         log.info("Delete teacher with ID: {}", id);
 
         try {
-            teacherDao.delete(id);
-        } catch (DaoException e) {
+            teacherRepository.delete(id);
+        } catch (RepositoryException e) {
             log.warn("Unable to delete teacher with ID: {}", id);
             throw new ServiceException("Unable to delete teacher with ID " + id + ".", e);
         }
@@ -74,7 +75,7 @@ public class TeacherService {
     public Page<Teacher> findPaginated(Pageable pageable) {
         log.debug("Get teachers pages");
 
-        List<Teacher> teachers = teacherDao.showAll();
+        List<Teacher> teachers = teacherRepository.showAll();
 
         teachers.sort(Comparator.comparing(Teacher::getId));
 

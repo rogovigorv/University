@@ -1,8 +1,6 @@
-package com.foxminded.university.dao;
+package com.foxminded.university.repository;
 
-import com.foxminded.university.models.Student;
-import java.util.ArrayList;
-import java.util.List;
+import com.foxminded.university.models.Lecture;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,111 +8,114 @@ import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Slf4j
-public class StudentDao implements UniversityDao<Student>{
+public class LectureRepository implements UniversityRepository<Lecture> {
     private final SessionFactory sessionFactory;
 
     @Autowired
-    public StudentDao(SessionFactory sessionFactory) {
+    public LectureRepository(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public void create(Student student) throws DaoException {
-        log.debug("Create student: {}", student);
+    public void create(Lecture lecture) throws RepositoryException {
+        log.debug("Create lecture: {}", lecture);
 
         Session currentSession = sessionFactory.openSession();
 
         try {
-            currentSession.save(student);
+            currentSession.save(lecture);
         } catch (DataAccessException e) {
-            log.warn("Unable to create this student {}", student);
-            throw new DaoException(e);
+            log.warn("Unable to create this lecture {}", lecture);
+            throw new RepositoryException(e);
         }
     }
 
     @Override
-    public Student getById(int id) throws DaoException {
-        log.debug("Get student with ID: {}", id);
+    public Lecture getById(int id) throws RepositoryException {
+        log.debug("Get lecture with ID: {}", id);
 
-        Student student;
+        Lecture lecture;
         Session currentSession = sessionFactory.openSession();
 
         try {
-            student = currentSession.get(Student.class, id);
+            lecture = currentSession.get(Lecture.class, id);
         } catch (DataAccessException e) {
-            log.warn("Can't get student with ID: {}", id);
-            throw new DaoException(e);
+            log.warn("Can't get lecture with ID: {}", id);
+            throw new RepositoryException(e);
         }
 
-        return student;
+        return lecture;
     }
 
     @Override
-    public void update(Student student) throws DaoException {
-        log.debug("Update student: {}", student);
-
-        Session currentSession = sessionFactory.openSession();
-        Transaction transaction = currentSession.beginTransaction();
-
-        try {
-            currentSession.saveOrUpdate(student);
-            transaction.commit();
-            currentSession.close();
-        } catch (DataAccessException e) {
-            log.warn("Unable to update student with ID: {}", student.getId());
-            throw new DaoException(e);
-        }
-    }
-
-    @Override
-    public void delete(int id) throws DaoException {
-        log.debug("Delete student with ID: {}", id);
+    public void update(Lecture lecture) throws RepositoryException {
+        log.debug("Update lecture: {}", lecture);
 
         Session currentSession = sessionFactory.openSession();
         Transaction transaction = currentSession.beginTransaction();
 
         try {
+            currentSession.saveOrUpdate(lecture);
             transaction.commit();
             currentSession.close();
-            currentSession.delete(currentSession.byId(Student.class).load(id));
         } catch (DataAccessException e) {
-            log.warn("Unable to delete student with ID: {}", id);
-            throw new DaoException(e);
+            log.warn("Unable to update lecture with ID: {}", lecture.getId());
+            throw new RepositoryException(e);
         }
     }
 
     @Override
-    public List<Student> showAll() throws DaoException {
-        log.debug("Get all students");
+    public void delete(int id) throws RepositoryException {
+        log.debug("Delete lecture with ID: {}", id);
+
+        Session currentSession = sessionFactory.openSession();
+        Transaction transaction = currentSession.beginTransaction();
+
+        try {
+            currentSession.delete(currentSession.byId(Lecture.class).load(id));
+            transaction.commit();
+            currentSession.close();
+        } catch (DataAccessException e) {
+            log.warn("Unable to delete lecture with ID: {}", id);
+            throw new RepositoryException(e);
+        }
+    }
+
+    @Override
+    public List<Lecture> showAll() throws RepositoryException {
+        log.debug("Get all lectures");
 
         Session session = sessionFactory.openSession();
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
-        List<Student> students = new ArrayList<>();
+        List<Lecture> lectures = new ArrayList<>();
 
         try {
-            CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);
-            Root<Student> root = criteriaQuery.from(Student.class);
+            CriteriaQuery<Lecture> criteriaQuery = criteriaBuilder.createQuery(Lecture.class);
+            Root<Lecture> root = criteriaQuery.from(Lecture.class);
             criteriaQuery.select(root);
             Query query = session.createQuery(criteriaQuery);
             List<?> results = query.getResultList();
             results.forEach(r -> {
                 if(r != null) {
-                    students.add((Student) r);
+                    lectures.add((Lecture) r);
                 }
             });
         } catch (DataAccessException e) {
-            log.warn("Unable to get all students");
-            throw new DaoException(e);
+            log.warn("Unable to get all lectures");
+            throw new RepositoryException(e);
         }
 
-        return students;
+        return lectures;
     }
 }

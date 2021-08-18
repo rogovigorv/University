@@ -13,14 +13,12 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:database.properties")
 @EnableTransactionManagement
+@PropertySource("classpath:database.properties")
 @ComponentScan("com.foxminded.university")
 @Slf4j
 public class HibernateConfig {
@@ -28,18 +26,18 @@ public class HibernateConfig {
     private static final String DATA_SCRIPT = "insert_test_data.sql";
 
     private final Environment environment;
-    private final DatasourceConfig datasourceConfig;
+    private final DataSource dataSource;
 
     @Autowired
-    public HibernateConfig(Environment environment, DatasourceConfig datasourceConfig) {
+    public HibernateConfig(Environment  environment, DataSource dataSource) {
         this.environment = environment;
-        this.datasourceConfig = datasourceConfig;
+        this.dataSource = dataSource;
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() throws NamingException {
+    public LocalSessionFactoryBean sessionFactory() {
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setDataSource(dataSource);
         sessionFactory.setPackagesToScan("com.foxminded.university.models");
         sessionFactory.setHibernateProperties(hibernateProperties());
         return sessionFactory;
@@ -55,20 +53,18 @@ public class HibernateConfig {
     }
 
     @Bean
-    public TransactionManager transactionManager() throws NamingException {
+    public TransactionManager transactionManager() {
         HibernateTransactionManager transactionManager = new HibernateTransactionManager();
         transactionManager.setSessionFactory(sessionFactory().getObject());
         return transactionManager;
     }
 
-    public DataSource dataSource() throws NamingException {
-        return datasourceConfig.setup();
-    }
+
 
     @Bean
-    public JdbcTemplate jdbcTemplate() throws NamingException {
+    public JdbcTemplate jdbcTemplate() {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        jdbcTemplate.setDataSource(dataSource());
+        jdbcTemplate.setDataSource(dataSource);
 
         log.info("JdbcTemplate bean created");
 
@@ -76,7 +72,7 @@ public class HibernateConfig {
     }
 
     @Bean
-    public void mainSqlRunner() throws NamingException {
+    public void mainSqlRunner() {
         SqlRunner sqlRunner = new SqlRunner(jdbcTemplate());
         sqlRunner.runScript(CREATE_SCRIPT);
         sqlRunner.runScript(DATA_SCRIPT);

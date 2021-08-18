@@ -2,17 +2,19 @@ package com.foxminded.university.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.stereotype.Component;
 
-import javax.naming.NamingException;
 import javax.sql.DataSource;
 
-@Component
+@Configuration
 @PropertySource("classpath:h2.properties")
+@Profile("test")
 @Slf4j
-public class TestDatasourceConfig implements DatasourceConfig {
+public class TestDataSourceConfig {
     @Value("${h2.driver}")
     String driver;
 
@@ -25,8 +27,8 @@ public class TestDatasourceConfig implements DatasourceConfig {
     @Value("${h2.password}")
     String password;
 
-    @Override
-    public DataSource setup() throws NamingException {
+    @Bean
+    public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driver);
         dataSource.setUrl(url);

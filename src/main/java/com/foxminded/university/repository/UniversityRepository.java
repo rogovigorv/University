@@ -1,8 +1,8 @@
-package com.foxminded.university.dao;
+package com.foxminded.university.repository;
 
 import java.util.List;
 
-public interface UniversityDao<T> {
+public interface UniversityRepository<T> {
 
     void create(T t);
 

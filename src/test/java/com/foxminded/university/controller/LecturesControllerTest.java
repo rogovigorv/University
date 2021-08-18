@@ -1,29 +1,30 @@
 package com.foxminded.university.controller;
 
-import com.foxminded.university.config.SpringConfigTest;
-import com.foxminded.university.dao.LectureDao;
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.models.Teacher;
+import com.foxminded.university.service.LectureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -37,28 +38,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-@ExtendWith(SpringExtension.class)
 @ExtendWith(MockitoExtension.class)
-@ContextConfiguration(classes = SpringConfigTest.class)
-@WebAppConfiguration
 public class LecturesControllerTest {
     private MockMvc mockMvc;
 
-    @Autowired
-    private LectureDao lectureDaoMock;
+    @Mock
+    private LectureService lectureService;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+    @InjectMocks
+    private LecturesController lecturesController;
 
     @BeforeEach
     public void setUp() {
-        Mockito.reset(lectureDaoMock);
-
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(lecturesController).build();
     }
 
     @Test
-    void showAll_ShouldAddLecturesToModelAndRenderPaginatedLecturesListViewAndCallTheShowAllDaoMethodOnce() throws Exception {
+    void showAll_ShouldAddLecturesToModelAndRenderPaginatedLecturesListViewAndCallTheShowAllDaoMethodOnce()
+            throws Exception {
         Teacher teacher = new Teacher(1, "Ivan", "Ivanov");
         Group group = new Group(1, "Backstreet Boys");
         Lecture firstLecture =
@@ -68,11 +65,14 @@ public class LecturesControllerTest {
                 new Lecture(2, teacher, "Beekeeping lessons",
                         "Show how to breed bees for honey", group);
 
-        List<Lecture> lectures = new ArrayList<>();
-        lectures.add(firstLecture);
-        lectures.add(secondLecture);
+        int currentPage = 1;
+        int pageSize = 12;
 
-        when(lectureDaoMock.showAll()).thenReturn(lectures);
+        List<Lecture> lectures = Arrays.asList(firstLecture, secondLecture);
+
+        Page<Lecture> page = new PageImpl<>(lectures, PageRequest.of(0, 2), lectures.size());
+
+        when(lectureService.findPaginated(isA(Pageable.class))).thenReturn(page);
 
         mockMvc.perform(get("/lectures"))
                 .andExpect(status().isOk())
@@ -81,8 +81,9 @@ public class LecturesControllerTest {
                 .andExpect(model().attribute("lecturePage",
                         hasProperty("totalElements", equalTo(2L))));
 
-        verify(lectureDaoMock, times(1)).showAll();
-        verifyNoMoreInteractions(lectureDaoMock);
+        verify(lectureService, times(1))
+                .findPaginated(PageRequest.of(currentPage - 1, pageSize));
+        verifyNoMoreInteractions(lectureService);
     }
 
     @Test
@@ -93,7 +94,7 @@ public class LecturesControllerTest {
                 new Lecture(1, teacher, "Admiring nature",
                         "Show how to admire nature", group);
 
-        when(lectureDaoMock.getById(1)).thenReturn(lecture);
+        when(lectureService.getById(1)).thenReturn(lecture);
 
         mockMvc.perform(get("/lectures/{id}/edit", 1L))
                 .andExpect(status().isOk())
@@ -107,8 +108,8 @@ public class LecturesControllerTest {
                 .andExpect(model().attribute("lectureId",
                         hasProperty("group", is(group))));
 
-        verify(lectureDaoMock, times(1)).getById(1);
-        verifyNoMoreInteractions(lectureDaoMock);
+        verify(lectureService, times(1)).getById(1);
+        verifyNoMoreInteractions(lectureService);
     }
 
     @Test
@@ -119,7 +120,7 @@ public class LecturesControllerTest {
                 new Lecture(1, teacher, "Theory and practice of cyber warfare",
                         "Show how to fight", group);
 
-        doNothing().when(lectureDaoMock).update(lecture);
+        doNothing().when(lectureService).update(lecture);
 
         mockMvc.perform(patch("/lectures/{id}/edit", 1L)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -136,8 +137,8 @@ public class LecturesControllerTest {
                 .andExpect(model().attribute("lecture", hasProperty("description",
                         is("Show how to fight"))));
 
-        verify(lectureDaoMock, times(1)).update(lecture);
-        verifyNoMoreInteractions(lectureDaoMock);
+        verify(lectureService, times(1)).update(lecture);
+        verifyNoMoreInteractions(lectureService);
     }
 
     @Test
@@ -155,7 +156,7 @@ public class LecturesControllerTest {
         Lecture lecture =
                 new Lecture(0, teacher, "Practical magic", "Foxminded mentoring", group);
 
-        doNothing().when(lectureDaoMock).create(lecture);
+        doNothing().when(lectureService).create(lecture);
 
         mockMvc.perform(post("/lectures/new")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -172,21 +173,21 @@ public class LecturesControllerTest {
                 .andExpect(model().attribute("lecture", hasProperty("description",
                         is("Foxminded mentoring"))));
 
-        verify(lectureDaoMock, times(1)).create(lecture);
-        verifyNoMoreInteractions(lectureDaoMock);
+        verify(lectureService, times(1)).create(lecture);
+        verifyNoMoreInteractions(lectureService);
     }
 
     @Test
     void delete_ShouldRedirectToLecturesListViewAndCallTheDeleteDaoMethodOnce() throws Exception {
         final int id = 1;
 
-        doNothing().when(lectureDaoMock).delete(id);
+        doNothing().when(lectureService).delete(id);
 
         mockMvc.perform(delete("/lectures/{id}", 1L))
                 .andExpect(status().isFound())
                 .andExpect(view().name("redirect:/lectures"));
 
-        verify(lectureDaoMock, times(1)).delete(id);
-        verifyNoMoreInteractions(lectureDaoMock);
+        verify(lectureService, times(1)).delete(id);
+        verifyNoMoreInteractions(lectureService);
     }
 }
