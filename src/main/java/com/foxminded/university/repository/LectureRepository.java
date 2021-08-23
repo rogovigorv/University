@@ -2,38 +2,36 @@ package com.foxminded.university.repository;
 
 import com.foxminded.university.models.Lecture;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 @Slf4j
 public class LectureRepository implements UniversityRepository<Lecture> {
-    private final SessionFactory sessionFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    public LectureRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public LectureRepository(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
     public void create(Lecture lecture) throws RepositoryException {
         log.debug("Create lecture: {}", lecture);
 
-        Session currentSession = sessionFactory.openSession();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
-            currentSession.save(lecture);
+            entityManager.getTransaction().begin();
+            entityManager.merge(lecture);
+            entityManager.getTransaction().commit();
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Unable to create this lecture {}", lecture);
             throw new RepositoryException(e);
@@ -45,10 +43,11 @@ public class LectureRepository implements UniversityRepository<Lecture> {
         log.debug("Get lecture with ID: {}", id);
 
         Lecture lecture;
-        Session currentSession = sessionFactory.openSession();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
-            lecture = currentSession.get(Lecture.class, id);
+            lecture = entityManager.find(Lecture.class, id);
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Can't get lecture with ID: {}", id);
             throw new RepositoryException(e);
@@ -61,13 +60,13 @@ public class LectureRepository implements UniversityRepository<Lecture> {
     public void update(Lecture lecture) throws RepositoryException {
         log.debug("Update lecture: {}", lecture);
 
-        Session currentSession = sessionFactory.openSession();
-        Transaction transaction = currentSession.beginTransaction();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
-            currentSession.saveOrUpdate(lecture);
-            transaction.commit();
-            currentSession.close();
+            entityManager.getTransaction().begin();
+            entityManager.merge(lecture);
+            entityManager.getTransaction().commit();
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Unable to update lecture with ID: {}", lecture.getId());
             throw new RepositoryException(e);
@@ -78,13 +77,14 @@ public class LectureRepository implements UniversityRepository<Lecture> {
     public void delete(int id) throws RepositoryException {
         log.debug("Delete lecture with ID: {}", id);
 
-        Session currentSession = sessionFactory.openSession();
-        Transaction transaction = currentSession.beginTransaction();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Lecture lecture = entityManager.find(Lecture.class, id);
 
         try {
-            currentSession.delete(currentSession.byId(Lecture.class).load(id));
-            transaction.commit();
-            currentSession.close();
+            entityManager.getTransaction().begin();
+            entityManager.remove(lecture);
+            entityManager.getTransaction().commit();
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Unable to delete lecture with ID: {}", id);
             throw new RepositoryException(e);
@@ -95,22 +95,17 @@ public class LectureRepository implements UniversityRepository<Lecture> {
     public List<Lecture> showAll() throws RepositoryException {
         log.debug("Get all lectures");
 
-        Session session = sessionFactory.openSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Lecture> lectures = new ArrayList<>();
 
         try {
-            CriteriaQuery<Lecture> criteriaQuery = criteriaBuilder.createQuery(Lecture.class);
-            Root<Lecture> root = criteriaQuery.from(Lecture.class);
-            criteriaQuery.select(root);
-            Query query = session.createQuery(criteriaQuery);
-            List<?> results = query.getResultList();
+            List<?> results = entityManager.createQuery("Select l from Lecture l").getResultList();
             results.forEach(r -> {
                 if(r != null) {
                     lectures.add((Lecture) r);
                 }
             });
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Unable to get all lectures");
             throw new RepositoryException(e);

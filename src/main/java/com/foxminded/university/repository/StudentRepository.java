@@ -2,38 +2,36 @@ package com.foxminded.university.repository;
 
 import com.foxminded.university.models.Student;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 @Slf4j
 public class StudentRepository implements UniversityRepository<Student> {
-    private final SessionFactory sessionFactory;
+    private final EntityManagerFactory entityManagerFactory;
 
     @Autowired
-    public StudentRepository(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
+    public StudentRepository(EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
     }
 
     @Override
     public void create(Student student) throws RepositoryException {
         log.debug("Create student: {}", student);
 
-        Session currentSession = sessionFactory.openSession();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
-            currentSession.save(student);
+            entityManager.getTransaction().begin();
+            entityManager.merge(student);
+            entityManager.getTransaction().commit();
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Unable to create this student {}", student);
             throw new RepositoryException(e);
@@ -45,10 +43,11 @@ public class StudentRepository implements UniversityRepository<Student> {
         log.debug("Get student with ID: {}", id);
 
         Student student;
-        Session currentSession = sessionFactory.openSession();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
-            student = currentSession.get(Student.class, id);
+            student = entityManager.find(Student.class, id);
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Can't get student with ID: {}", id);
             throw new RepositoryException(e);
@@ -61,13 +60,13 @@ public class StudentRepository implements UniversityRepository<Student> {
     public void update(Student student) throws RepositoryException {
         log.debug("Update student: {}", student);
 
-        Session currentSession = sessionFactory.openSession();
-        Transaction transaction = currentSession.beginTransaction();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
 
         try {
-            currentSession.saveOrUpdate(student);
-            transaction.commit();
-            currentSession.close();
+            entityManager.getTransaction().begin();
+            entityManager.merge(student);
+            entityManager.getTransaction().commit();
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Unable to update student with ID: {}", student.getId());
             throw new RepositoryException(e);
@@ -78,13 +77,14 @@ public class StudentRepository implements UniversityRepository<Student> {
     public void delete(int id) throws RepositoryException {
         log.debug("Delete student with ID: {}", id);
 
-        Session currentSession = sessionFactory.openSession();
-        Transaction transaction = currentSession.beginTransaction();
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Student student = entityManager.find(Student.class, id);
 
         try {
-            currentSession.delete(currentSession.byId(Student.class).load(id));
-            transaction.commit();
-            currentSession.close();
+            entityManager.getTransaction().begin();
+            entityManager.remove(student);
+            entityManager.getTransaction().commit();
+            entityManager.close();
         } catch (DataAccessException e) {
             log.warn("Unable to delete student with ID: {}", id);
             throw new RepositoryException(e);
@@ -95,17 +95,11 @@ public class StudentRepository implements UniversityRepository<Student> {
     public List<Student> showAll() throws RepositoryException {
         log.debug("Get all students");
 
-        Session session = sessionFactory.openSession();
-        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         List<Student> students = new ArrayList<>();
 
         try {
-            CriteriaQuery<Student> criteriaQuery = criteriaBuilder.createQuery(Student.class);
-            Root<Student> root = criteriaQuery.from(Student.class);
-            criteriaQuery.select(root);
-            Query query = session.createQuery(criteriaQuery);
-            List<?> results = query.getResultList();
+            List<?> results = entityManager.createQuery("Select s from Student s").getResultList();
             results.forEach(r -> {
                 if(r != null) {
                     students.add((Student) r);
