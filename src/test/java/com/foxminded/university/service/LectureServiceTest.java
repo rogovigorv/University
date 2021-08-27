@@ -1,4 +1,4 @@
-package com.foxminded.university.repository;
+package com.foxminded.university.service;
 
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Lecture;
@@ -7,35 +7,37 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class LectureRepositoryTest {
+@Transactional
+class LectureServiceTest {
 
     @Autowired
-    private LectureRepository lectureRepository;
+    private LectureService lectureService;
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private TeacherService teacherService;
 
     @Autowired
-    private GroupRepository groupRepository;
+    private GroupService groupService;
 
     @Test
     void getLectureByIdShouldReturnActualLectureWithNameMath() {
         Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
-        teacherRepository.create(teacher);
+        teacherService.create(teacher);
 
         Group group = new Group(1, "Geeks");
-        groupRepository.create(group);
+        groupService.create(group);
 
         Lecture expected = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureRepository.create(expected);
+        lectureService.create(expected);
 
-        Lecture actual = lectureRepository.getById(1);
+        Lecture actual = lectureService.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
     }
@@ -43,21 +45,21 @@ class LectureRepositoryTest {
     @Test
     void updateLectureByIdShouldReturnActualLectureWithNameSleddingByUsingMethodGetById() {
         Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
-        teacherRepository.create(teacher);
+        teacherService.create(teacher);
 
         Group group = new Group(1, "Geeks");
-        groupRepository.create(group);
+        groupService.create(group);
 
         Lecture lecture = new Lecture(1, teacher, "Math", "Simple math", group);
-        lectureRepository.create(lecture);
+        lectureService.create(lecture);
 
         Lecture expected = new Lecture(1, teacher, "Sledding", "Sledding drift", group);
 
         Lecture lectureWithDifferentName =
                 new Lecture(1, teacher, "Sledding", "Sledding drift", group);
-        lectureRepository.update(lectureWithDifferentName);
+        lectureService.update(lectureWithDifferentName);
 
-        Lecture actual = lectureRepository.getById(1);
+        Lecture actual = lectureService.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
     }
@@ -65,19 +67,19 @@ class LectureRepositoryTest {
     @Test
     void createGroupShouldReturnActualLectureWithNameHowToTossPancakesCorrectlyByUsingMethodGetById() {
         Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
-        teacherRepository.create(teacher);
+        teacherService.create(teacher);
 
         Group group = new Group(1, "Geeks");
-        groupRepository.create(group);
+        groupService.create(group);
 
         Lecture expected = new Lecture(1, teacher,
                 "How to toss pancakes correctly", "Simple Tossing pancakes", group);
 
         Lecture newLecture = new Lecture(1, teacher,
                 "How to toss pancakes correctly", "Simple Tossing pancakes", group);
-        lectureRepository.create(newLecture);
+        lectureService.create(newLecture);
 
-        Lecture actual = lectureRepository.getById(1);
+        Lecture actual = lectureService.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
     }

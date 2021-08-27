@@ -1,26 +1,28 @@
-package com.foxminded.university.repository;
+package com.foxminded.university.service;
 
 import com.foxminded.university.models.Teacher;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class TeacherRepositoryTest {
+@Transactional
+class TeacherServiceTest {
 
     @Autowired
-    private TeacherRepository teacherRepository;
+    private TeacherService teacherService;
 
     @Test
     void getTeacherByIdShouldReturnActualTeacherWithNameBronislav() {
         Teacher expected = new Teacher(1, "Bronislav", "Potemkin");
-        teacherRepository.create(expected);
+        teacherService.create(expected);
 
-        Teacher actual = teacherRepository.getById(1);
+        Teacher actual = teacherService.getById(1);
 
         assertEquals(expected, actual);
     }
@@ -28,13 +30,13 @@ class TeacherRepositoryTest {
     @Test
     void updateTeacherByIdShouldReturnActualTeacherWithNameSergeyByUsingMethodGetById() {
         Teacher teacher = new Teacher(1, "Bronislav", "Potemkin");
-        teacherRepository.create(teacher);
+        teacherService.create(teacher);
 
         Teacher expected = new Teacher(1, "Sergey", "Nemchinskiy");
 
-        teacherRepository.update(expected);
+        teacherService.update(expected);
 
-        Teacher actual = teacherRepository.getById(1);
+        Teacher actual = teacherService.getById(1);
 
         assertEquals(expected, actual);
     }
@@ -42,9 +44,9 @@ class TeacherRepositoryTest {
     @Test
     void createTeacherShouldReturnActualTeacherWithNameIvanByUsingMethodGetById() {
         Teacher expected = new Teacher(1, "Ivan", "Ivanov");
-        teacherRepository.create(expected);
+        teacherService.create(expected);
 
-        Teacher actual = teacherRepository.getById(1);
+        Teacher actual = teacherService.getById(1);
 
         assertEquals(expected, actual);
     }

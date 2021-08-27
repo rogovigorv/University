@@ -1,26 +1,28 @@
-package com.foxminded.university.repository;
+package com.foxminded.university.service;
 
 import com.foxminded.university.models.Group;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class GroupRepositoryTest {
+@Transactional
+class GroupServiceTest {
 
     @Autowired
-    private GroupRepository groupRepository;
+    private GroupService groupService;
 
     @Test
     void getGroupByIdShouldReturnActualGroupWithNameDreamTeam() {
         Group expected = new Group(1, "Dream team");
-        groupRepository.create(expected);
+        groupService.create(expected);
 
-        Group actual = groupRepository.getById(expected.getId());
+        Group actual = groupService.getById(expected.getId());
 
         assertEquals(expected, actual);
     }
@@ -28,12 +30,12 @@ class GroupRepositoryTest {
     @Test
     void updateGroupByIdShouldReturnActualGroupWithNameLambOfGodByUsingMethodGetById() {
         Group group = new Group(1, "Dream team");
-        groupRepository.create(group);
+        groupService.create(group);
 
         Group expected = new Group(1, "Lamb Of God");
-        groupRepository.update(expected);
+        groupService.update(expected);
 
-        Group actual = groupRepository.getById(1);
+        Group actual = groupService.getById(1);
 
         assertEquals(expected, actual);
     }
@@ -43,9 +45,9 @@ class GroupRepositoryTest {
         Group expected = new Group(1, "Freak Angel");
 
         Group newGroup = new Group(1, "Freak Angel");
-        groupRepository.create(newGroup);
+        groupService.create(newGroup);
 
-        Group actual = groupRepository.getById(1);
+        Group actual = groupService.getById(1);
 
         assertEquals(expected, actual);
     }

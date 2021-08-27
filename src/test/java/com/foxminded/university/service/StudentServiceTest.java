@@ -1,4 +1,4 @@
-package com.foxminded.university.repository;
+package com.foxminded.university.service;
 
 import com.foxminded.university.models.Group;
 import com.foxminded.university.models.Student;
@@ -6,29 +6,31 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.samePropertyValuesAs;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class StudentRepositoryTest {
+@Transactional
+class StudentServiceTest {
 
     @Autowired
-    private StudentRepository studentRepository;
+    private StudentService studentService;
 
     @Autowired
-    private GroupRepository groupRepository;
+    private GroupService groupService;
 
     @Test
     void getStudentByIdShouldReturnActualStudentWithNameOleg() {
         Group group = new Group(1, "Dream team");
-        groupRepository.create(group);
+        groupService.create(group);
 
         Student expected = new Student(1, "Oleg", "Silovich", group);
-        studentRepository.create(expected);
+        studentService.create(expected);
 
-        Student actual = studentRepository.getById(expected.getId());
+        Student actual = studentService.getById(expected.getId());
 
         assertThat(expected, samePropertyValuesAs(actual));
     }
@@ -36,17 +38,17 @@ class StudentRepositoryTest {
     @Test
     void updateStudentByIdShouldReturnActualStudentWithNameKolyaByUsingMethodGetById() {
         Group group = new Group(1, "Dream team");
-        groupRepository.create(group);
+        groupService.create(group);
 
         Student student = new Student(1, "Oleg", "Silovich", group);
-        studentRepository.create(student);
+        studentService.create(student);
 
         Student expected = new Student(1, "Kolya", "Balalaikin", group);
 
         Student studentWithDifferentName = new Student(1, "Kolya", "Balalaikin", group);
-        studentRepository.update(studentWithDifferentName);
+        studentService.update(studentWithDifferentName);
 
-        Student actual = studentRepository.getById(1);
+        Student actual = studentService.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
     }
@@ -54,14 +56,14 @@ class StudentRepositoryTest {
     @Test
     void createStudentShouldReturnActualStudentWithNameBorisByUsingMethodGetById() {
         Group group = new Group(1, "Dream team");
-        groupRepository.create(group);
+        groupService.create(group);
 
         Student newStudent = new Student(1, "Boris", "The Blade", group);
-        studentRepository.create(newStudent);
+        studentService.create(newStudent);
 
         Student expected = new Student(1, "Boris", "The Blade", group);
 
-        Student actual = studentRepository.getById(1);
+        Student actual = studentService.getById(1);
 
         assertThat(expected, samePropertyValuesAs(actual));
     }

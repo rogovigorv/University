@@ -2,10 +2,6 @@ package com.foxminded.university.controller;
 
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.service.LectureService;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +15,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/lectures")
@@ -51,7 +52,7 @@ public class LecturesController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEach(@PathVariable("id") int id, Model model) {
+    public String showEach(@PathVariable("id") long id, Model model) {
         model.addAttribute("lectureId", lectureService.getById(id));
         return "lectures/edit";
     }
@@ -75,7 +76,7 @@ public class LecturesController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") long id) {
         lectureService.delete(id);
         return "redirect:/lectures";
     }

@@ -19,7 +19,7 @@ public class Lecture {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, targetEntity = Teacher.class)
     @JoinColumn(name = "lecture_teacher_id")
@@ -39,7 +39,7 @@ public class Lecture {
 
     }
 
-    public Lecture(int id, Teacher teacher, String lectureName,
+    public Lecture(long id, Teacher teacher, String lectureName,
                    String description, Group group) {
         this.id = id;
         this.teacher = teacher;
@@ -48,11 +48,11 @@ public class Lecture {
         this.group = group;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -2,20 +2,21 @@ package com.foxminded.university.service;
 
 import com.foxminded.university.models.Lecture;
 import com.foxminded.university.repository.LectureRepository;
-import com.foxminded.university.repository.RepositoryException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
+@Transactional
 @Slf4j
 public class LectureService {
     private final LectureRepository lectureRepository;
@@ -29,20 +30,20 @@ public class LectureService {
         log.info("Create lecture: {}", lecture);
 
         try {
-            lectureRepository.create(lecture);
-        } catch (RepositoryException e) {
+            lectureRepository.save(lecture);
+        } catch (Throwable e) {
             log.warn("Unable to create this lecture: {}", lecture);
             throw new ServiceException("Unable to create this lecture.", e);
         }
     }
 
-    public Lecture getById(int id) {
+    public Lecture getById(long id) {
         log.info("Get lecture with ID: {}", id);
 
         Lecture lecture;
         try {
-            lecture = lectureRepository.getById(id);
-        } catch (RepositoryException e) {
+            lecture = lectureRepository.getOne(id);
+        } catch (Throwable e) {
             log.warn("Can't get lecture with ID: {}", id);
             throw new ServiceException("Can't get lecture with ID " + id + ".", e);
         }
@@ -54,19 +55,24 @@ public class LectureService {
         log.info("Update lecture: {}", lecture.getLectureName());
 
         try {
-            lectureRepository.update(lecture);
-        } catch (RepositoryException e) {
+            Lecture lectureToUpdate = lectureRepository.getOne(lecture.getId());
+            lectureToUpdate.setLectureName(lecture.getLectureName());
+            lectureToUpdate.setDescription(lecture.getDescription());
+            lectureToUpdate.setGroup(lecture.getGroup());
+            lectureToUpdate.setTeacher(lecture.getTeacher());
+            lectureRepository.save(lectureToUpdate);
+        } catch (Throwable e) {
             log.warn("Unable to update lecture with name: {}", lecture.getLectureName());
             throw new ServiceException("Unable to update lecture with name " + lecture.getLectureName() + ".", e);
         }
     }
 
-    public void delete(int id) {
+    public void delete(long id) {
         log.info("Delete lecture with ID: {}", id);
 
         try {
-            lectureRepository.delete(id);
-        } catch (RepositoryException e) {
+            lectureRepository.deleteById(id);
+        } catch (Throwable e) {
             log.warn("Unable to delete lecture with ID: {}", id);
             throw new ServiceException("Unable to delete lecture with ID " + id + ".", e);
         }
@@ -75,9 +81,13 @@ public class LectureService {
     public Page<Lecture> findPaginated(Pageable pageable) {
         log.debug("Get lectures pages");
 
-        List<Lecture> lectures = lectureRepository.showAll();
-
-        lectures.sort(Comparator.comparing(Lecture::getId));
+        List<Lecture> lectures;
+        try {
+            lectures = lectureRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        } catch (Throwable e) {
+            log.warn("Unable to get lectures list");
+            throw new ServiceException("Unable to get lectures list.", e);
+        }
 
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();

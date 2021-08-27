@@ -52,7 +52,7 @@ public class TeachersController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEach(@PathVariable("id") int id, Model model) {
+    public String showEach(@PathVariable("id") long id, Model model) {
         model.addAttribute("teacherId", teacherService.getById(id));
         return "teachers/edit";
     }
@@ -76,7 +76,7 @@ public class TeachersController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") long id) {
         teacherService.delete(id);
         return "redirect:/teachers";
     }

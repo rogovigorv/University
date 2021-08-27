@@ -52,7 +52,7 @@ public class GroupsController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showEach(@PathVariable("id") int id, Model model) {
+    public String showEach(@PathVariable("id") long id, Model model) {
         model.addAttribute("groupId", groupService.getById(id));
         return "groups/edit";
     }
@@ -76,7 +76,7 @@ public class GroupsController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable("id") int id) {
+    public String delete(@PathVariable("id") long id) {
         groupService.delete(id);
         return "redirect:/groups";
     }

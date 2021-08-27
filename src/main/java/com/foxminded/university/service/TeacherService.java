@@ -1,7 +1,6 @@
 package com.foxminded.university.service;
 
 import com.foxminded.university.models.Teacher;
-import com.foxminded.university.repository.RepositoryException;
 import com.foxminded.university.repository.TeacherRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +8,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
+@Transactional
 @Slf4j
 public class TeacherService {
     private final TeacherRepository teacherRepository;
@@ -29,20 +30,20 @@ public class TeacherService {
         log.info("Create teacher: {}", teacher);
 
         try {
-            teacherRepository.create(teacher);
-        } catch (RepositoryException e) {
+            teacherRepository.save(teacher);
+        } catch (Throwable e) {
             log.warn("Unable to create this teacher {}", teacher);
             throw new ServiceException("Unable to create this teacher.", e);
         }
     }
 
-    public Teacher getById(int id) {
+    public Teacher getById(long id) {
         log.info("Get teacher with ID: {}", id);
 
         Teacher teacher;
         try {
-            teacher = teacherRepository.getById(id);
-        } catch (RepositoryException e) {
+            teacher = teacherRepository.getOne(id);
+        } catch (Throwable e) {
             log.warn("Can't get teacher with ID: {}", id);
             throw new ServiceException("Can't get teacher with ID " + id + ".", e);
         }
@@ -54,19 +55,22 @@ public class TeacherService {
         log.info("Update teacher: {}", teacher);
 
         try {
-            teacherRepository.update(teacher);
-        } catch (RepositoryException e) {
+            Teacher teacherToUpdate = teacherRepository.getOne(teacher.getId());
+            teacherToUpdate.setFirstName(teacher.getFirstName());
+            teacherToUpdate.setLastName(teacher.getLastName());
+            teacherRepository.save(teacherToUpdate);
+        } catch (Throwable e) {
             log.warn("Unable to update teacher with ID: {}", teacher.getId());
             throw new ServiceException("Unable to update teacher with ID " + teacher.getId() + ".", e);
         }
     }
 
-    public void delete(int id) {
+    public void delete(long id) {
         log.info("Delete teacher with ID: {}", id);
 
         try {
-            teacherRepository.delete(id);
-        } catch (RepositoryException e) {
+            teacherRepository.deleteById(id);
+        } catch (Throwable e) {
             log.warn("Unable to delete teacher with ID: {}", id);
             throw new ServiceException("Unable to delete teacher with ID " + id + ".", e);
         }
@@ -75,9 +79,13 @@ public class TeacherService {
     public Page<Teacher> findPaginated(Pageable pageable) {
         log.debug("Get teachers pages");
 
-        List<Teacher> teachers = teacherRepository.showAll();
-
-        teachers.sort(Comparator.comparing(Teacher::getId));
+        List<Teacher> teachers;
+        try {
+            teachers = teacherRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        } catch (Throwable e) {
+            log.warn("Unable to get teachers list");
+            throw new ServiceException("Unable to get teachers list.", e);
+        }
 
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();

@@ -1,7 +1,6 @@
 package com.foxminded.university.service;
 
 import com.foxminded.university.models.Student;
-import com.foxminded.university.repository.RepositoryException;
 import com.foxminded.university.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +8,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
+@Transactional
 @Slf4j
 public class StudentService {
     private final StudentRepository studentRepository;
@@ -29,20 +30,20 @@ public class StudentService {
         log.info("Create student: {}", student);
 
         try {
-            studentRepository.create(student);
-        } catch (RepositoryException e) {
+            studentRepository.save(student);
+        } catch (Throwable e) {
             log.warn("Unable to create this student {}", student);
             throw new ServiceException("Unable to create this student.", e);
         }
     }
 
-    public Student getById(int id) {
+    public Student getById(long id) {
         log.info("Get student with ID: {}", id);
 
         Student student;
         try {
-            student = studentRepository.getById(id);
-        } catch (RepositoryException e) {
+            student = studentRepository.getOne(id);
+        } catch (Throwable e) {
             log.warn("Can't get student with ID: {}", id);
             throw new ServiceException("Can't get student with ID " + id + ".", e);
         }
@@ -54,19 +55,23 @@ public class StudentService {
         log.info("Update student: {}", student);
 
         try {
-            studentRepository.update(student);
-        } catch (RepositoryException e) {
+            Student studentToUpdate = studentRepository.getOne(student.getId());
+            studentToUpdate.setFirstName(student.getFirstName());
+            studentToUpdate.setLastName(student.getLastName());
+            studentToUpdate.setGroup(student.getGroup());
+            studentRepository.save(student);
+        } catch (Throwable e) {
             log.warn("Unable to update student with ID: {}", student.getId());
             throw new ServiceException("Unable to update student with ID " + student.getId() + ".", e);
         }
     }
 
-    public void delete(int id) {
+    public void delete(long id) {
         log.info("Delete student with ID: {}", id);
 
         try {
-            studentRepository.delete(id);
-        } catch (RepositoryException e) {
+            studentRepository.deleteById(id);
+        } catch (Throwable e) {
             log.warn("Unable to delete student with ID: {}", id);
             throw new ServiceException("Unable to delete student with ID " + id + ".", e);
         }
@@ -75,9 +80,13 @@ public class StudentService {
     public Page<Student> findPaginated(Pageable pageable) {
         log.debug("Get students pages");
 
-        List<Student> students = studentRepository.showAll();
-
-        students.sort(Comparator.comparing(Student::getId));
+        List<Student> students;
+        try {
+            students = studentRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        } catch (Throwable e) {
+            log.warn("Unable to get students list");
+            throw new ServiceException("Unable to get students list.", e);
+        }
 
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();

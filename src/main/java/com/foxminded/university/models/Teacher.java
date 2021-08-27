@@ -19,7 +19,7 @@ public class Teacher{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private long id;
 
     @Column(name = "firstname")
     private String firstName;
@@ -34,17 +34,17 @@ public class Teacher{
 
     }
 
-    public Teacher(int id, String firstName, String lastName) {
+    public Teacher(long id, String firstName, String lastName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
