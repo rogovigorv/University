@@ -1,6 +1,8 @@
 package com.foxminded.university.service;
 
+import com.foxminded.university.mapper.GroupMapper;
 import com.foxminded.university.models.Group;
+import com.foxminded.university.models.GroupDto;
 import com.foxminded.university.repository.GroupRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,12 @@ import java.util.List;
 @Slf4j
 public class GroupService {
     private final GroupRepository groupRepository;
+    private final GroupMapper mapper;
 
     @Autowired
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, GroupMapper mapper) {
         this.groupRepository = groupRepository;
+        this.mapper = mapper;
     }
 
     public void create(Group group) {
@@ -53,14 +57,14 @@ public class GroupService {
 
     public void update(Group group) {
         log.info("Update group: {} and ID: {}", group, group.getId());
-
+        GroupDto dto = group.convertToDto(group);
         try {
-            Group groupToUpdate = groupRepository.getOne(group.getId());
-            groupToUpdate.setGroupName(group.getGroupName());
+            Group groupToUpdate = groupRepository.getOne(dto.getId());
+            mapper.updateGroupFromDto(dto, groupToUpdate);
             groupRepository.save(groupToUpdate);
         } catch (Throwable e) {
-            log.warn("Unable to update group with ID: {}", group.getId());
-            throw new ServiceException("Unable to update group with ID " + group.getId() + ".", e);
+            log.warn("Unable to update group with ID: {}", dto.getId());
+            throw new ServiceException("Unable to update group with ID " + dto.getId() + ".", e);
         }
     }
 

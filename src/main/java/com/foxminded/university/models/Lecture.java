@@ -88,6 +88,11 @@ public class Lecture {
         return group;
     }
 
+    public LectureDto convertToDto(Lecture lecture) {
+        return new LectureDto(lecture.getId(), lecture.getTeacher(),
+                lecture.getLectureName(), lecture.getDescription(), lecture.getGroup());
+    }
+
     @Override
     public boolean equals(Object otherLecture) {
         if (this == otherLecture) {

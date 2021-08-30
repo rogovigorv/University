@@ -1,6 +1,8 @@
 package com.foxminded.university.service;
 
+import com.foxminded.university.mapper.TeacherMapper;
 import com.foxminded.university.models.Teacher;
+import com.foxminded.university.models.TeacherDto;
 import com.foxminded.university.repository.TeacherRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,12 @@ import java.util.List;
 @Slf4j
 public class TeacherService {
     private final TeacherRepository teacherRepository;
+    private final TeacherMapper mapper;
 
     @Autowired
-    public TeacherService(TeacherRepository teacherRepository) {
+    public TeacherService(TeacherRepository teacherRepository, TeacherMapper mapper) {
         this.teacherRepository = teacherRepository;
+        this.mapper = mapper;
     }
 
     public void create(Teacher teacher) {
@@ -53,11 +57,10 @@ public class TeacherService {
 
     public void update(Teacher teacher) {
         log.info("Update teacher: {}", teacher);
-
+        TeacherDto dto = teacher.convertToDto(teacher);
         try {
-            Teacher teacherToUpdate = teacherRepository.getOne(teacher.getId());
-            teacherToUpdate.setFirstName(teacher.getFirstName());
-            teacherToUpdate.setLastName(teacher.getLastName());
+            Teacher teacherToUpdate = teacherRepository.getOne(dto.getId());
+            mapper.updateTeacherFromDto(dto, teacherToUpdate);
             teacherRepository.save(teacherToUpdate);
         } catch (Throwable e) {
             log.warn("Unable to update teacher with ID: {}", teacher.getId());

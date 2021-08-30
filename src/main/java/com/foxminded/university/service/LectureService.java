@@ -1,6 +1,8 @@
 package com.foxminded.university.service;
 
+import com.foxminded.university.mapper.LectureMapper;
 import com.foxminded.university.models.Lecture;
+import com.foxminded.university.models.LectureDto;
 import com.foxminded.university.repository.LectureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,12 @@ import java.util.List;
 @Slf4j
 public class LectureService {
     private final LectureRepository lectureRepository;
+    private final LectureMapper mapper;
 
     @Autowired
-    public LectureService(LectureRepository lectureRepository) {
+    public LectureService(LectureRepository lectureRepository, LectureMapper mapper) {
         this.lectureRepository = lectureRepository;
+        this.mapper = mapper;
     }
 
     public void create(Lecture lecture) {
@@ -53,13 +57,10 @@ public class LectureService {
 
     public void update(Lecture lecture) {
         log.info("Update lecture: {}", lecture.getLectureName());
-
+        LectureDto dto = lecture.convertToDto(lecture);
         try {
-            Lecture lectureToUpdate = lectureRepository.getOne(lecture.getId());
-            lectureToUpdate.setLectureName(lecture.getLectureName());
-            lectureToUpdate.setDescription(lecture.getDescription());
-            lectureToUpdate.setGroup(lecture.getGroup());
-            lectureToUpdate.setTeacher(lecture.getTeacher());
+            Lecture lectureToUpdate = lectureRepository.getOne(dto.getId());
+            mapper.updateLectureFromDto(dto, lectureToUpdate);
             lectureRepository.save(lectureToUpdate);
         } catch (Throwable e) {
             log.warn("Unable to update lecture with name: {}", lecture.getLectureName());

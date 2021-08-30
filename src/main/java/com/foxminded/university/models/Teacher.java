@@ -72,6 +72,10 @@ public class Teacher{
         this.lectures = lectures;
     }
 
+    public TeacherDto convertToDto(Teacher teacher) {
+        return new TeacherDto(teacher.getId(), teacher.getFirstName(), teacher.getLastName());
+    }
+
     @Override
     public boolean equals(Object otherTeacher) {
         if (this == otherTeacher) {

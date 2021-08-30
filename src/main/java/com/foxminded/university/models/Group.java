@@ -71,6 +71,10 @@ public class Group {
         this.students = students;
     }
 
+    public GroupDto convertToDto(Group group) {
+        return new GroupDto(group.getId(), group.getGroupName());
+    }
+
     @Override
     public boolean equals(Object otherGroup) {
         if (this == otherGroup) {
